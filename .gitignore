@@ -1,0 +1,29 @@
+# 影片與剪輯（太大，不要進 GitHub）
+*.mp4
+*.mov
+*.mkv
+*.avi
+*.m4v
+*.mts
+*.m2ts
+*.wav
+*.aif
+*.aiff
+*.psd
+*.prproj
+*.aep
+*.fcpxmld
+*.fcpxml
+*.drp
+*.backup
+
+# 本機／系統
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+.vscode/
+
+# 機密（護照、訂房確認信、金鑰）
+secrets/
+*.env
