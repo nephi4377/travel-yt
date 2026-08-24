@@ -17,6 +17,9 @@
 *.drp
 *.backup
 
+# Firebase 本機快取
+.firebase/
+
 # 本機／系統
 .DS_Store
 Thumbs.db

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>旅遊偏好問卷</title>
+  <style>
+    :root {
+      --bg: #f4f1ec;
+      --card: #fffdf9;
+      --ink: #1c1917;
+      --muted: #57534e;
+      --line: #e7e5e4;
+      --pick: #0f766e;
+      --pick-bg: #ecfdf5;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      background:
+        radial-gradient(ellipse 80% 50% at 10% 0%, #dbeafe 0%, transparent 55%),
+        radial-gradient(ellipse 60% 40% at 100% 10%, #fde68a55 0%, transparent 50%),
+        var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+    main { max-width: 640px; margin: 0 auto; padding: 24px 16px 48px; }
+    h1 { font-size: 1.35rem; margin: 0 0 8px; line-height: 1.35; }
+    .sub { color: var(--muted); margin: 0 0 20px; line-height: 1.55; font-size: 0.95rem; }
+    .progress {
+      height: 6px; background: var(--line); border-radius: 999px; margin-bottom: 8px; overflow: hidden;
+    }
+    .progress > span {
+      display: block; height: 100%; width: 0; background: var(--pick); transition: width .25s ease;
+    }
+    .count { font-size: 0.85rem; color: var(--muted); margin-bottom: 16px; }
+    .q {
+      background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+      padding: 16px; margin-bottom: 14px;
+    }
+    .q h2 { font-size: 1.05rem; margin: 0 0 12px; line-height: 1.45; font-weight: 700; }
+    .opts { display: flex; flex-direction: column; gap: 8px; }
+    label.opt {
+      display: flex; gap: 10px; align-items: flex-start;
+      border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px;
+      cursor: pointer; background: #fff; min-height: 48px; line-height: 1.45;
+      transition: border-color .15s, background .15s;
+    }
+    label.opt:hover { border-color: #99f6e4; }
+    label.opt:has(input:checked) {
+      border-color: var(--pick); background: var(--pick-bg);
+      box-shadow: 0 0 0 2px #ccfbf1;
+    }
+    label.opt input { margin-top: 3px; accent-color: var(--pick); flex-shrink: 0; }
+    label.opt .key {
+      flex: 0 0 auto; font-weight: 700; color: var(--pick); min-width: 1.2em;
+    }
+    .actions { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+    button {
+      border: none; border-radius: 12px; padding: 14px 16px; font-size: 1rem;
+      font-weight: 700; cursor: pointer; min-height: 48px;
+      font-family: inherit;
+    }
+    button.go { background: var(--pick); color: #fff; }
+    button.go:disabled { opacity: .4; cursor: not-allowed; }
+    button.ghost { background: #fff; border: 1px solid var(--line); color: var(--ink); }
+    #result {
+      display: none; background: var(--card); border: 1px solid var(--line);
+      border-radius: 16px; padding: 16px; margin-top: 8px;
+    }
+    #result.show { display: block; }
+    #result h2 { font-size: 1.1rem; margin: 0 0 10px; }
+    #result pre {
+      white-space: pre-wrap; word-break: break-word; background: #f5f5f4;
+      border-radius: 12px; padding: 12px; font-size: 0.9rem; line-height: 1.55;
+      margin: 0 0 12px;
+    }
+    .hint { color: var(--muted); font-size: 0.9rem; margin: 0 0 12px; line-height: 1.5; }
+    .toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      background: #1c1917; color: #fff; padding: 10px 16px; border-radius: 999px;
+      font-size: 0.9rem; opacity: 0; pointer-events: none; transition: opacity .2s;
+    }
+    .toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>旅遊偏好問卷</h1>
+    <p class="sub">每題點一個答案。全部選完按下方按鈕，會產出可複製的結果給我整理成偏好檔。</p>
+    <div class="progress" aria-hidden="true"><span id="bar"></span></div>
+    <p class="count" id="count">已選 0／10</p>
+    <form id="quiz"></form>
+    <div class="actions">
+      <button type="button" class="go" id="submit" disabled>看結果並複製給 AI</button>
+      <button type="button" class="ghost" id="reset">清空重選</button>
+    </div>
+    <div id="result">
+      <h2>你的選擇</h2>
+      <p class="hint">把下面整段複製貼回對話即可；或按「複製」。</p>
+      <pre id="out"></pre>
+      <div class="actions">
+        <button type="button" class="go" id="copy">複製結果</button>
+      </div>
+    </div>
+  </main>
+  <div class="toast" id="toast">已複製</div>
+  <script>
+    const QUESTIONS = [
+      {
+        id: 1,
+        title: "「深層次」對你比較像？",
+        opts: {
+          A: "同一區待久一點，把日常節奏摸清楚",
+          B: "找當地人真的在用、遊客較少的點",
+          C: "理解這地方為什麼長成這樣（產業、歷史、生活）",
+          D: "少景點、多感受（氣味、聲音、走路）"
+        }
+      },
+      {
+        id: 2,
+        title: "大眾景點你通常怎麼處理？",
+        opts: {
+          A: "能避就避",
+          B: "順路可以去，但不當主軸、不多拍",
+          C: "去，但用不一樣的角度（邊角、非尖峰、不打卡位）",
+          D: "該去還是去，不然會覺得漏掉"
+        }
+      },
+      {
+        id: 3,
+        title: "「CP 值高」你最在意？",
+        opts: {
+          A: "錢少但體驗密度高",
+          B: "時間少但印象深刻",
+          C: "體力／情緒划得來（不累、不趕）",
+          D: "拍出來／寫出來有料，值得留"
+        }
+      },
+      {
+        id: 4,
+        title: "「獨特性」你比較想要？",
+        opts: {
+          A: "別人行程很少排到",
+          B: "同一地點，你注意到的東西不一樣",
+          C: "跟你個性／興趣對得上（不是為了特別而特別）",
+          D: "當下不可複製（天氣、人、剛好撞上的事）"
+        }
+      },
+      {
+        id: 5,
+        title: "五人同行時，你比較想？",
+        opts: {
+          A: "跟大家玩大眾行程，自己私下記感受",
+          B: "協調出「一半熱門、一半你想走的線」",
+          C: "主動帶一條較冷門但好走的路",
+          D: "能分開就分開半日，再會合"
+        }
+      },
+      {
+        id: 6,
+        title: "吃飯你偏好？",
+        opts: {
+          A: "在地日常食堂／市場周圍，不追網紅店",
+          B: "有故事或特殊做法的店（就算稍貴）",
+          C: "看當天動線，餓了有空位就進",
+          D: "願意研究，但要「值得」，不是為了打卡"
+        }
+      },
+      {
+        id: 7,
+        title: "一天節奏你比較舒服？",
+        opts: {
+          A: "一條線慢慢走，少切換區域",
+          B: "上午一個主題、下午另一個，中間可鬆",
+          C: "留白很多，臨時決定",
+          D: "有明確目標（例如只搞懂一個市場／一條港）"
+        }
+      },
+      {
+        id: 8,
+        title: "行前你願意準備到哪？",
+        opts: {
+          A: "大致方向就好，現場感覺走",
+          B: "關鍵 2–3 個點＋備案，細節現場補",
+          C: "願意查在地脈絡（產業、歷史、怎麼生活）",
+          D: "吃與交通要先釘死，其餘隨性"
+        }
+      },
+      {
+        id: 9,
+        title: "拍／記錄跟旅行，誰優先？",
+        opts: {
+          A: "旅行本身；有感才拍",
+          B: "兩邊並行，但不為鏡頭改行程",
+          C: "偶爾為了一個畫面多停一下下",
+          D: "這趟若決定拍，記錄品質可以稍微優先"
+        }
+      },
+      {
+        id: 10,
+        title: "若只能帶走一種「回來值得」的感覺？",
+        opts: {
+          A: "「我比較懂這個地方了」",
+          B: "「走過一條別人沒這樣走的路」",
+          C: "「花的錢／時間很值」",
+          D: "「以後重看／重講，還記得細節」"
+        }
+      }
+    ];
+
+    const form = document.getElementById("quiz");
+    const bar = document.getElementById("bar");
+    const countEl = document.getElementById("count");
+    const submit = document.getElementById("submit");
+    const reset = document.getElementById("reset");
+    const result = document.getElementById("result");
+    const out = document.getElementById("out");
+    const copyBtn = document.getElementById("copy");
+    const toast = document.getElementById("toast");
+
+    function render() {
+      form.innerHTML = QUESTIONS.map((q) => {
+        const opts = Object.entries(q.opts).map(([k, text]) => `
+          <label class="opt">
+            <input type="radio" name="q${q.id}" value="${k}" />
+            <span class="key">${k}</span>
+            <span>${text}</span>
+          </label>
+        `).join("");
+        return `<section class="q" data-qid="${q.id}">
+          <h2>${q.id}. ${q.title}</h2>
+          <div class="opts">${opts}</div>
+        </section>`;
+      }).join("");
+    }
+
+    function answers() {
+      const map = {};
+      QUESTIONS.forEach((q) => {
+        const el = form.querySelector(`input[name="q${q.id}"]:checked`);
+        if (el) map[q.id] = el.value;
+      });
+      return map;
+    }
+
+    function update() {
+      const a = answers();
+      const n = Object.keys(a).length;
+      countEl.textContent = `已選 ${n}／10`;
+      bar.style.width = `${(n / 10) * 100}%`;
+      submit.disabled = n < 10;
+    }
+
+    function buildText(a) {
+      const lines = QUESTIONS.map((q) => {
+        const k = a[q.id];
+        return `${q.id}${k}　${q.title}\n　→ ${q.opts[k]}`;
+      });
+      const code = QUESTIONS.map((q) => `${q.id}${a[q.id]}`).join(" ");
+      return `【旅遊偏好問卷結果】\n速記：${code}\n\n${lines.join("\n\n")}`;
+    }
+
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 1600);
+    }
+
+    form.addEventListener("change", update);
+    submit.addEventListener("click", () => {
+      const a = answers();
+      if (Object.keys(a).length < 10) return;
+      out.textContent = buildText(a);
+      result.classList.add("show");
+      result.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    reset.addEventListener("click", () => {
+      form.reset();
+      result.classList.remove("show");
+      update();
+    });
+    copyBtn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(out.textContent);
+        showToast("已複製，貼回對話即可");
+      } catch {
+        const range = document.createRange();
+        range.selectNodeContents(out);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        showToast("請手動複製選取文字");
+      }
+    });
+
+    render();
+    update();
+  </script>
+</body>
+</html>
