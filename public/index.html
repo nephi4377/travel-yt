@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>釜山行程地圖指南</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
   <style>
     :root { --bg: #f7f7f5; --card: #fff; --ink: #1c1917; --muted: #57534e; --line: #e7e5e4; --go: #1d4ed8; --eat: #c2410c; --ok: #166534; }
     * { box-sizing: border-box; }
@@ -24,9 +24,15 @@
     #map { height: 38vh; min-height: 220px; border-radius: 16px; border: 1px solid var(--line); background: #e7e5e4; }
     .map-wait {
       position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-      background: rgba(247,247,245,.72); border-radius: 16px; font-size: 0.95rem; color: var(--muted); pointer-events: none;
+      text-align: center; padding: 16px; background: rgba(247,247,245,.86); border-radius: 16px;
+      font-size: 0.95rem; color: var(--muted); pointer-events: none;
     }
     .map-wait.gone { display: none; }
+    .map-wait.err { color: #9a3412; background: rgba(255,247,237,.92); pointer-events: auto; }
+    .map-wait button {
+      margin-top: 10px; border: 1px solid #fed7aa; background: #fff; color: #c2410c;
+      border-radius: 12px; padding: 10px 14px; font-weight: 600; cursor: pointer; min-height: 44px;
+    }
     .guide { margin: 12px 16px 32px; }
     .guide h2 { font-size: 1.1rem; margin: 0 0 6px; }
     .lead { color: var(--muted); margin: 0 0 12px; line-height: 1.55; }
@@ -86,9 +92,9 @@
     <div class="map-wait" id="mapWait">地圖載入中…街道圖要一點時間</div>
   </div>
   <section class="guide" id="guide"></section>
-  <p class="note">店會公休、會搬家。出發前用地圖看「現在有沒有開」。街道圖來自 OpenStreetMap，餐廳位置可能差幾十公尺，導航請用韓文店名。</p>
+  <p class="note">店會公休、會搬家。出發前用地圖看「現在有沒有開」。街道圖來自 OpenStreetMap／備援圖層，餐廳位置可能差幾十公尺，導航請用韓文店名。沒網路時行程文字仍可看，只是地圖可能空白。</p>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="vendor/leaflet/leaflet.js"></script>
   <script>
     function sayKo(text) {
       if (!text || !window.speechSynthesis) return;
@@ -608,21 +614,101 @@
         "</div><p class=\"zh\">達-搜-明-唷。歐-嫩 著-娘 一-勾-時-唷。</p></div>";
     }
 
-    const map = L.map("map");
-    const tiles = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: "&copy; OpenStreetMap"
-    }).addTo(map);
-    tiles.on("load", function () {
-      document.getElementById("mapWait").classList.add("gone");
-    });
-    setTimeout(function () { document.getElementById("mapWait").classList.add("gone"); }, 8000);
+    const mapWait = document.getElementById("mapWait");
+    const hasLeaflet = !!window.L;
+    let map = null;
+    let layer = null;
+    let orangeIcon = null;
+    let defaultIcon = null;
+    let tileOk = false;
+    let tileFailTimer = null;
 
-    const orangeIcon = new L.DivIcon({
-      className: "",
-      html: '<div style="width:18px;height:18px;background:#c2410c;border:2px solid #fff;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,.35)"></div>',
-      iconSize: [18, 18], iconAnchor: [9, 9]
-    });
-    let layer = L.layerGroup().addTo(map);
+    function showMapErr(msg) {
+      mapWait.className = "map-wait err";
+      mapWait.innerHTML = msg + '<br><button type="button" id="mapRetry">再試一次地圖</button>';
+      const btn = document.getElementById("mapRetry");
+      if (btn) btn.onclick = function () { location.reload(); };
+    }
+
+    function hideMapWait() {
+      mapWait.className = "map-wait gone";
+      mapWait.textContent = "";
+    }
+
+    function attachTiles(mapObj) {
+      const sources = [
+        {
+          url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+          opts: { subdomains: "abcd", attribution: "&copy; OpenStreetMap &copy; CARTO", maxZoom: 20 }
+        },
+        {
+          url: "https://tile.openstreetmap.de/{z}/{x}/{y}.png",
+          opts: { attribution: "&copy; OpenStreetMap", maxZoom: 19 }
+        },
+        {
+          url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+          opts: { attribution: "&copy; OpenStreetMap", maxZoom: 19 }
+        }
+      ];
+      let idx = 0;
+      let current = null;
+      let errors = 0;
+
+      function useSource(i) {
+        if (current) mapObj.removeLayer(current);
+        idx = i;
+        errors = 0;
+        const src = sources[i];
+        current = L.tileLayer(src.url, src.opts).addTo(mapObj);
+        current.on("load", function () {
+          tileOk = true;
+          hideMapWait();
+          if (tileFailTimer) clearTimeout(tileFailTimer);
+        });
+        current.on("tileerror", function () {
+          errors += 1;
+          if (tileOk) return;
+          if (errors >= 3 && idx + 1 < sources.length) {
+            useSource(idx + 1);
+          }
+        });
+      }
+
+      useSource(0);
+      tileFailTimer = setTimeout(function () {
+        if (tileOk) return;
+        if (idx + 1 < sources.length) {
+          useSource(idx + 1);
+          tileFailTimer = setTimeout(function () {
+            if (!tileOk) {
+              showMapErr("街道圖連不上（可能沒網路或圖磚被擋）。下面行程文字仍可看、可點開。");
+            }
+          }, 6000);
+        } else {
+          showMapErr("街道圖連不上（可能沒網路或圖磚被擋）。下面行程文字仍可看、可點開。");
+        }
+      }, 5000);
+    }
+
+    if (!hasLeaflet) {
+      showMapErr("地圖程式載不進來。請檢查網路後重新整理；下面行程文字仍可看。");
+    } else {
+      L.Icon.Default.mergeOptions({
+        iconUrl: "vendor/leaflet/images/marker-icon.png",
+        iconRetinaUrl: "vendor/leaflet/images/marker-icon-2x.png",
+        shadowUrl: "vendor/leaflet/images/marker-shadow.png"
+      });
+      map = L.map("map");
+      attachTiles(map);
+      orangeIcon = new L.DivIcon({
+        className: "",
+        html: '<div style="width:18px;height:18px;background:#c2410c;border:2px solid #fff;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,.35)"></div>',
+        iconSize: [18, 18], iconAnchor: [9, 9]
+      });
+      defaultIcon = new L.Icon.Default();
+      layer = L.layerGroup().addTo(map);
+    }
+
     const nav = document.getElementById("days");
     const guideEl = document.getElementById("guide");
     const statusEl = document.getElementById("status");
@@ -650,13 +736,16 @@
     }
 
     function drawMap(day, focusKey) {
+      if (!map || !layer) return;
       layer.clearLayers();
       const latlngs = [];
       (day.points || []).forEach(function (key) {
         const p = P[key];
         if (!p) return;
         latlngs.push([p.lat, p.lng]);
-        const mark = L.marker([p.lat, p.lng], { icon: p.kind === "eat" ? orangeIcon : new L.Icon.Default() }).addTo(layer);
+        const mark = L.marker([p.lat, p.lng], {
+          icon: p.kind === "eat" ? orangeIcon : defaultIcon
+        }).addTo(layer);
         mark.bindPopup("<b>" + p.name + "</b>");
         mark.on("click", function () {
           const hit = (day.items || []).find(function (it) {
@@ -708,7 +797,7 @@
       openId = openId === id ? null : id;
       const it = (current.items || []).find(function (x) { return x.id === id; });
       render(current, false);
-      if (openId && it && it.point) {
+      if (map && openId && it && it.point) {
         map.setView([P[it.point].lat, P[it.point].lng], 15);
       }
       const el = document.querySelector('[data-item="' + id + '"]');
