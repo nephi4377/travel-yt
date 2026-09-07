@@ -35,14 +35,39 @@ jobs:
           from pathlib import Path
           p = Path('_site/index.html')
           s = p.read_text(encoding='utf-8')
+
+          # Map failure must never break tabs/content.
           old = "let day='d8',mode='travel',map=L.map('map').setView([35.16,129.09],11);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);let marks=[];"
           new = "let day='d8',mode='travel',map=null,marks=[];const tabs=document.getElementById('tabs'),travelBtn=document.getElementById('travelBtn'),shootBtn=document.getElementById('shootBtn'),content=document.getElementById('content'),mapEl=document.getElementById('map');if(window.L){try{map=L.map('map').setView([35.16,129.09],11);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map)}catch(e){map=null;if(mapEl)mapEl.style.display='none'}}else{if(mapEl)mapEl.style.display='none'}"
-          if old not in s:
-              raise SystemExit('expected map init snippet not found')
-          s = s.replace(old, new, 1)
+          if old in s:
+              s = s.replace(old, new, 1)
           s = s.replace("marks.forEach(m=>map.removeLayer(m));marks=[];", "if(map)marks.forEach(m=>map.removeLayer(m));marks=[];", 1)
           s = s.replace("if(p&&p[0]!=null){let m=L.marker([p[0],p[1]]).addTo(map)", "if(map&&p&&p[0]!=null){let m=L.marker([p[0],p[1]]).addTo(map)", 1)
           s = s.replace("if(ll.length>1)map.fitBounds(ll,{padding:[25,25]});else if(ll.length)map.setView(ll[0],14)", "if(map&&ll.length>1)map.fitBounds(ll,{padding:[25,25]});else if(map&&ll.length)map.setView(ll[0],14)", 1)
+
+          # Mobile-friendly second-level accordion.
+          css = """
+          <style>
+          details.subitem{background:#fff;border:1px solid var(--line);border-radius:13px;margin:8px 0;overflow:hidden}
+          details.subitem>summary{list-style:none;cursor:pointer;padding:12px 42px 12px 12px;position:relative;font-weight:800;line-height:1.4;-webkit-tap-highlight-color:transparent}
+          details.subitem>summary::-webkit-details-marker{display:none}
+          details.subitem>summary:after{content:'＋';position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:1.2rem;color:var(--blue)}
+          details.subitem[open]>summary:after{content:'−'}
+          details.subitem[open]>summary{border-bottom:1px solid var(--line)}
+          .subbody{padding:0 12px 12px}
+          .subbody p{line-height:1.58}
+          .sumtime{display:block;font-size:.8rem;color:var(--blue);margin-bottom:2px}
+          details.infoitem>summary{color:var(--ink)}
+          </style>
+          """
+          s = s.replace('</head>', css + '</head>', 1)
+
+          old_stops = "h+=d.stops.map(s=>`<div class=\"stop\"><div class=\"time\">${s[0]}</div><b>${s[1]}</b><p>${s[2]}</p>${place(s[3])}</div>`).join('')+`<div class=\"card\"><h3>Plan B／現場決策</h3><p>${d.planB}</p></div>`+(d.contact?`<div class=\"card\"><h3>電話／提醒</h3><ul>${d.contact.map(x=>`<li>${x}</li>`).join('')}</ul></div>`:'')+`<div class=\"card\"><h3>韓文求生</h3><p class=\"small\">五位同桌：<b>다섯 명인데 같이 앉을 수 있어요?</b><br>不吃生魚片：<b>저희는 회를 안 먹어요.</b><br>海鮮全熟：<b>해산물은 완전히 익혀 주세요.</b><br>少辣：<b>덜 맵게 해 주세요.</b><br>大型計程車：<b>다섯 명인데 대형택시 호출 가능해요?</b></p></div>`"
+          new_stops = "h+=d.stops.map((s,i)=>`<details class=\"subitem\" ${i===0?'open':''}><summary><span class=\"sumtime\">${s[0]}</span>${s[1]}</summary><div class=\"subbody\"><p>${s[2]}</p>${place(s[3])}</div></details>`).join('')+`<details class=\"subitem infoitem\"><summary>Plan B／現場決策</summary><div class=\"subbody\"><p>${d.planB}</p></div></details>`+(d.contact?`<details class=\"subitem infoitem\"><summary>電話／提醒</summary><div class=\"subbody\"><ul>${d.contact.map(x=>`<li>${x}</li>`).join('')}</ul></div></details>`:'')+`<details class=\"subitem infoitem\"><summary>韓文求生</summary><div class=\"subbody\"><p class=\"small\">五位同桌：<b>다섯 명인데 같이 앉을 수 있어요?</b><br>不吃生魚片：<b>저희는 회를 안 먹어요.</b><br>海鮮全熟：<b>해산물은 완전히 익혀 주세요.</b><br>少辣：<b>덜 맵게 해 주세요.</b><br>大型計程車：<b>다섯 명인데 대형택시 호출 가능해요?</b></p></div></details>`"
+          if old_stops not in s:
+              raise SystemExit('expected travel section snippet not found')
+          s = s.replace(old_stops, new_stops, 1)
+
           p.write_text(s, encoding='utf-8')
           PY
 
