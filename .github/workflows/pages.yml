@@ -58,12 +58,29 @@ jobs:
           .subbody p{line-height:1.58}
           .sumtime{display:block;font-size:.8rem;color:var(--blue);margin-bottom:2px}
           details.infoitem>summary{color:var(--ink)}
+          .foodrow{padding:9px 0;border-bottom:1px dashed var(--line)}
+          .foodrow:last-child{border-bottom:0}
+          .foodrow b{display:block;margin-bottom:3px}
           </style>
           """
           s = s.replace('</head>', css + '</head>', 1)
 
+          # Daily food recommendations are a permanent part of the itinerary spec.
+          food_js = """const FOOD={
+          d7:[['首選｜別味清豬肉湯飯','有體力、時間還早才吃；若今晚吃了，整趟豬肉湯飯額度即使用完。'],['備案｜飯店周邊便利商店','晚到或太累直接買熟食／飯糰／蛋／飲料，不追店。']],
+          d8:[['午餐｜南浦同區密麵','候位超過 40 分就換同區熟食，不跨區追名店。'],['晚餐首選｜고기본 高基本','五人先問能否同桌；可先點 4 人套餐再視食量追加。'],['備案｜南浦／札嘎其同區熟食','避開生魚片；海鮮要求全熟。']],
+          d9:[['午餐首選｜더 명품 해물탕 조개구이 회 곰장어 중동점','以全熟海鮮鍋為主，直接說 해산물은 완전히 익혀 주세요.'],['備案｜海雲台同區熟食','臨休或候位超過 40 分就在海雲台換，不為餐廳離開主線。']],
+          d10:[['午餐｜Busan Premium Outlets 館內','以逛街節奏為優先，館內直接解決午餐，避免多一次交通。'],['晚餐首選｜누리마을감자탕 서면점','女兒指定馬鈴薯排骨湯；五人先問大份一鍋是否足夠，再追加。'],['備案｜西面同區 감자탕','首選失效只在西面換店。']],
+          d11:[['晚餐首選｜고짚 서면본점','先確認五人座位；保留胃口給最後一晚。'],['午餐／備案｜西面商圈清爽熟食','避免再排重口味豬肉湯鍋；候位超過 40 分同區換。']],
+          d12:[['早餐／早午餐｜飯店周邊或機場','返程日不追店；以不影響 08:45–09:00 出發為原則。'],['備案｜金海機場內熟食','過安檢前後依時間決定，先確保登機。']]
+          };"""
+          if 'const FOOD={' not in s:
+              if "function render(){" not in s:
+                  raise SystemExit('render function not found')
+              s = s.replace("function render(){", food_js + "function render(){", 1)
+
           old_stops = "h+=d.stops.map(s=>`<div class=\"stop\"><div class=\"time\">${s[0]}</div><b>${s[1]}</b><p>${s[2]}</p>${place(s[3])}</div>`).join('')+`<div class=\"card\"><h3>Plan B／現場決策</h3><p>${d.planB}</p></div>`+(d.contact?`<div class=\"card\"><h3>電話／提醒</h3><ul>${d.contact.map(x=>`<li>${x}</li>`).join('')}</ul></div>`:'')+`<div class=\"card\"><h3>韓文求生</h3><p class=\"small\">五位同桌：<b>다섯 명인데 같이 앉을 수 있어요?</b><br>不吃生魚片：<b>저희는 회를 안 먹어요.</b><br>海鮮全熟：<b>해산물은 완전히 익혀 주세요.</b><br>少辣：<b>덜 맵게 해 주세요.</b><br>大型計程車：<b>다섯 명인데 대형택시 호출 가능해요?</b></p></div>`"
-          new_stops = "h+=d.stops.map((s,i)=>`<details class=\"subitem\" ${i===0?'open':''}><summary><span class=\"sumtime\">${s[0]}</span>${s[1]}</summary><div class=\"subbody\"><p>${s[2]}</p>${place(s[3])}</div></details>`).join('')+`<details class=\"subitem infoitem\"><summary>Plan B／現場決策</summary><div class=\"subbody\"><p>${d.planB}</p></div></details>`+(d.contact?`<details class=\"subitem infoitem\"><summary>電話／提醒</summary><div class=\"subbody\"><ul>${d.contact.map(x=>`<li>${x}</li>`).join('')}</ul></div></details>`:'')+`<details class=\"subitem infoitem\"><summary>韓文求生</summary><div class=\"subbody\"><p class=\"small\">五位同桌：<b>다섯 명인데 같이 앉을 수 있어요?</b><br>不吃生魚片：<b>저희는 회를 안 먹어요.</b><br>海鮮全熟：<b>해산물은 완전히 익혀 주세요.</b><br>少辣：<b>덜 맵게 해 주세요.</b><br>大型計程車：<b>다섯 명인데 대형택시 호출 가능해요?</b></p></div></details>`"
+          new_stops = "h+=d.stops.map((s,i)=>`<details class=\"subitem\" ${i===0?'open':''}><summary><span class=\"sumtime\">${s[0]}</span>${s[1]}</summary><div class=\"subbody\"><p>${s[2]}</p>${place(s[3])}</div></details>`).join('')+`<details class=\"subitem infoitem\"><summary>🍽 吃飯推薦</summary><div class=\"subbody\">${(FOOD[day]||[]).map(x=>`<div class=\"foodrow\"><b>${x[0]}</b><div class=\"small\">${x[1]}</div></div>`).join('')}</div></details>`+`<details class=\"subitem infoitem\"><summary>Plan B／現場決策</summary><div class=\"subbody\"><p>${d.planB}</p></div></details>`+(d.contact?`<details class=\"subitem infoitem\"><summary>電話／提醒</summary><div class=\"subbody\"><ul>${d.contact.map(x=>`<li>${x}</li>`).join('')}</ul></div></details>`:'')+`<details class=\"subitem infoitem\"><summary>韓文求生</summary><div class=\"subbody\"><p class=\"small\">五位同桌：<b>다섯 명인데 같이 앉을 수 있어요?</b><br>不吃生魚片：<b>저희는 회를 안 먹어요.</b><br>海鮮全熟：<b>해산물은 완전히 익혀 주세요.</b><br>少辣：<b>덜 맵게 해 주세요.</b><br>大型計程車：<b>다섯 명인데 대형택시 호출 가능해요?</b></p></div></details>`"
           if old_stops not in s:
               raise SystemExit('expected travel section snippet not found')
           s = s.replace(old_stops, new_stops, 1)
