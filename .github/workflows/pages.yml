@@ -31,6 +31,20 @@ jobs:
         run: |
           mkdir -p _site
           cp '企劃/2026-09-釜山/地圖指南.html' _site/index.html
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('_site/index.html')
+          s = p.read_text(encoding='utf-8')
+          old = "let day='d8',mode='travel',map=L.map('map').setView([35.16,129.09],11);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);let marks=[];"
+          new = "let day='d8',mode='travel',map=null,marks=[];const tabs=document.getElementById('tabs'),travelBtn=document.getElementById('travelBtn'),shootBtn=document.getElementById('shootBtn'),content=document.getElementById('content'),mapEl=document.getElementById('map');if(window.L){try{map=L.map('map').setView([35.16,129.09],11);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map)}catch(e){map=null;if(mapEl)mapEl.style.display='none'}}else{if(mapEl)mapEl.style.display='none'}"
+          if old not in s:
+              raise SystemExit('expected map init snippet not found')
+          s = s.replace(old, new, 1)
+          s = s.replace("marks.forEach(m=>map.removeLayer(m));marks=[];", "if(map)marks.forEach(m=>map.removeLayer(m));marks=[];", 1)
+          s = s.replace("if(p&&p[0]!=null){let m=L.marker([p[0],p[1]]).addTo(map)", "if(map&&p&&p[0]!=null){let m=L.marker([p[0],p[1]]).addTo(map)", 1)
+          s = s.replace("if(ll.length>1)map.fitBounds(ll,{padding:[25,25]});else if(ll.length)map.setView(ll[0],14)", "if(map&&ll.length>1)map.fitBounds(ll,{padding:[25,25]});else if(map&&ll.length)map.setView(ll[0],14)", 1)
+          p.write_text(s, encoding='utf-8')
+          PY
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
