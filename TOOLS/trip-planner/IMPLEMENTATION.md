@@ -1,5 +1,7 @@
 # AI Travel Planner V0.2 Prototype
 
+2026-09-23 rain-adjustment clarity update: Transport legs next to a mock rain replacement now show a visible warning that their time and fare still come from the original stop and require recalculation. The leg data includes `estimateNeedsRecheck` for future Routes adapter handling.
+
 2026-09-23 multi-day budget update: The active-day budget card now also shows the selected transport estimate for the entire trip against the sum of all daily limits. Changing any day's route or applying an adjustment recalculates this trip total.
 
 2026-09-23 draft validation update: Restored session drafts now require a real calendar date, including leap-year checks. Invalid saved dates are discarded instead of producing broken day labels.

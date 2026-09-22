@@ -21,6 +21,9 @@ test('selected route changes total and adjustments stay valid',()=>{
   assert.equal(revised.legs.length,revised.stops.length-1);
   assert.ok(revised.legs.every(leg=>leg.options.every(route=>route.mode!=='地鐵'&&route.walking_min<=9)));
   assert.ok(revised.stops.some(stop=>stop.name.includes('室內')));
+  assert.equal(revised.legs.filter(leg=>leg.estimateNeedsRecheck).length,1);
+  const rainyFirstDay=buildDemoDay(0,input,dna,{rain:true});
+  assert.equal(rainyFirstDay.legs.filter(leg=>leg.estimateNeedsRecheck).length,2);
 });
 test('multi-day transport total follows each day selection',()=>{
   const input={destination:'釜山',travelers:2};const dna=tripDNA([]);

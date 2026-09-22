@@ -60,12 +60,12 @@ export function buildDemoDay(index,input,dna,adjustment={}){
   const changes=typeof adjustment==='string'?parseAdjustment(adjustment):adjustment;
   const isBusan=/^(釜山|busan)$/i.test(input.destination?.trim()||'');
   const stops=template.stops.map((stop,stopIndex)=>isBusan?{...stop}:{...stop,name:genericNames[index][stopIndex],note:'非該目的地真實景點；僅展示規劃流程'});
-  if(changes.rain){const target=stops.find(stop=>stop.outdoor||stop.id==='market');if(target){target.name='同區室內展示空間（示範替代）';target.note='雨天替代點尚待查證';target.priority='可取消';}}
+  if(changes.rain){const target=stops.find(stop=>stop.outdoor||stop.id==='market');if(target){target.name='同區室內展示空間（示範替代）';target.note='雨天替代點尚待查證';target.priority='可取消';target.mockReplacement=true;}}
   if(changes.tired&&stops.at(-1)?.priority==='可取消')stops.pop();
   const legs=template.legs.slice(0,stops.length-1).map((list,i)=>{
     let options=list.filter(route=>(!changes.noMetro||route.mode!=='地鐵')&&(!changes.tired||route.walking_min<=9));
     options=[...options].sort((a,b)=>routeScore(a,input.travelers,dna)-routeScore(b,input.travelers,dna));
-    return {from:stops[i].id,to:stops[i+1].id,options:options.slice(0,3)};
+    return {from:stops[i].id,to:stops[i+1].id,options:options.slice(0,3),estimateNeedsRecheck:!!(stops[i].mockReplacement||stops[i+1].mockReplacement)};
   });
   return {index,title:template.title,stops,legs,mock:true};
 }
