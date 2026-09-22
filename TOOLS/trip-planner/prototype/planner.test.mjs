@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {tripDNA} from './engine.js';
-import {buildDemoDay,maxDemoDays,selectedTransportTotal} from './planner.js';
+import {buildDemoDay,maxDemoDays,selectedTransportTotal,recommendRoutesForBudget} from './planner.js';
 
 test('all advertised demo days have aligned stops and route choices',()=>{
   const input={travelers:2};const dna=tripDNA(['舒服']);
@@ -26,4 +26,14 @@ test('other destinations never show named Busan places',()=>{
   const day=buildDemoDay(0,{destination:'河內',travelers:2},tripDNA([]));
   assert.ok(day.stops.every(stop=>stop.name.includes('示範')));
   assert.ok(day.stops.every(stop=>!stop.name.includes('釜山')));
+});
+test('initial route recommendation respects a feasible group budget',()=>{
+  const input={destination:'釜山',travelers:2};const dna=tripDNA(['舒服']);
+  const day=buildDemoDay(1,input,dna);
+  const feasible=recommendRoutesForBudget(day,2,dna,0);
+  assert.equal(feasible.withinBudget,true);
+  assert.equal(selectedTransportTotal(day,2,feasible.choices),0);
+  const impossible=recommendRoutesForBudget(buildDemoDay(0,input,dna),2,dna,0);
+  assert.equal(impossible.withinBudget,false);
+  assert.equal(impossible.cost,3000);
 });

@@ -1,6 +1,6 @@
 import {dimensions,adjectives,tripDNA,parseAdjustment} from './engine.js';
 import {groupRouteCost} from './budget.js';
-import {buildDemoDay,maxDemoDays,selectedTransportTotal} from './planner.js';
+import {buildDemoDay,maxDemoDays,selectedTransportTotal,recommendRoutesForBudget} from './planner.js';
 
 const $=id=>document.getElementById(id);
 const selectedWords=new Set();
@@ -39,7 +39,8 @@ $('tripForm').addEventListener('submit',event=>{
   const form=event.currentTarget;if(!form.reportValidity())return;
   trip={destination:$('destination').value.trim(),date:$('date').value,days:Number($('days').value),travelers:Number($('travelers').value),budget:Number($('budget').value)};
   if(!trip.destination||trip.days<1||trip.days>maxDemoDays)return;
-  activeDay=0;adjustments=Array.from({length:trip.days},()=>({}));routeChoices=Array.from({length:trip.days},()=>({}));
+  activeDay=0;adjustments=Array.from({length:trip.days},()=>({}));
+  routeChoices=Array.from({length:trip.days},(_,index)=>recommendRoutesForBudget(buildDemoDay(index,trip,tripDNA(selectedWords)),trip.travelers,tripDNA(selectedWords),trip.budget).choices);
   $('resultTitle').textContent=`${trip.destination} · ${trip.date} 起 ${trip.days} 天`;
   $('summary').textContent=`${trip.travelers} 人 · 每日交通上限 ${trip.budget.toLocaleString()} KRW／團 · 偏好：${[...selectedWords].join('、')||'預設均衡'}。${/^(釜山|busan)$/i.test(trip.destination)?'釜山 mock 行程。':'此目的地只顯示通用 mock 站點，並非真實行程。'}`;
   renderTabs();renderDay();show('result');
@@ -63,7 +64,7 @@ function renderDay(){
   for(const [index,leg] of day.legs.entries())if((choices[index]??0)>=leg.options.length)choices[index]=0;
   const heading=make('div','day-heading');heading.append(make('span','eyebrow',`DAY ${activeDay+1} · ${dayDate(activeDay)}`),make('h3','',day.title));box.append(heading);
   const total=selectedTransportTotal(day,trip.travelers,choices),difference=trip.budget-total;
-  const budget=make('div',`budget-card${difference<0?' over-budget':''}`);budget.append(make('strong','',`當天交通合計：${total.toLocaleString()} KRW／團`),make('p','',difference>=0?`比每日上限少 ${difference.toLocaleString()} KRW`:`超過每日上限 ${(-difference).toLocaleString()} KRW；可換選其他交通。`));box.append(budget);
+  const budget=make('div',`budget-card${difference<0?' over-budget':''}`);budget.append(make('strong','',`當天交通合計：${total.toLocaleString()} KRW／團`),make('p','',difference>=0?`比每日上限少 ${difference.toLocaleString()} KRW；初始方案已考慮預算，可自行換選。`:`超過每日上限 ${(-difference).toLocaleString()} KRW；目前 mock 方案無法符合預算。`));box.append(budget);
   day.stops.forEach((stop,index)=>{
     const card=make('article','stop');card.append(make('time','',stop.time),make('h3','',stop.name),make('p','',`${stop.priority} · ${stop.note}`));box.append(card);
     if(index>=day.legs.length)return;

@@ -70,3 +70,21 @@ export function buildDemoDay(index,input,dna,adjustment={}){
   return {index,title:template.title,stops,legs,mock:true};
 }
 export function selectedTransportTotal(day,travelers,selected={}){return day.legs.reduce((sum,leg,i)=>sum+groupRouteCost(leg.options[selected[i]??0],travelers),0);}
+export function recommendRoutesForBudget(day,travelers,dna,budget){
+  let bestWithin=null,bestFallback=null;
+  function visit(index,choices,cost,score){
+    if(index===day.legs.length){
+      const candidate={choices:{...choices},cost,score};
+      if(cost<=budget&&(!bestWithin||score<bestWithin.score))bestWithin=candidate;
+      if(!bestFallback||cost<bestFallback.cost||(cost===bestFallback.cost&&score<bestFallback.score))bestFallback=candidate;
+      return;
+    }
+    day.legs[index].options.forEach((route,optionIndex)=>{
+      choices[index]=optionIndex;
+      visit(index+1,choices,cost+groupRouteCost(route,travelers),score+routeScore(route,travelers,dna));
+    });
+  }
+  visit(0,{},0,0);
+  const chosen=bestWithin||bestFallback;
+  return {...chosen,withinBudget:!!bestWithin};
+}

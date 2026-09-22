@@ -1,5 +1,7 @@
 # AI Travel Planner V0.2 Prototype
 
+2026-09-22 budget-aware routing update: On initial generation, the mock planner now evaluates all available route combinations per day and chooses the lowest TripDNA cost combination that fits the daily group transport budget. If none fits, it selects the cheapest available combination and visibly states that the mock options cannot meet the limit. Manual route changes are still allowed and update the total.
+
 2026-09-22 destination safety update: Non-Busan destinations now render clearly generic demonstration stops instead of showing named Busan places under another city. Prices/routes remain KRW mock values, so this does not add genuine destination coverage.
 
 2026-09-22 multi-day update: The browser now generates 1–6 distinct mock days, exposes day tabs, lets users choose each leg's transport option, and recalculates the selected day's group transport total. Natural-language mock adjustments apply only to the active day. This replaces the previous day-1-only display. The 6-day limit is intentional until more reliable content is available.
