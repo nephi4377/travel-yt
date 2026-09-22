@@ -1,6 +1,7 @@
 import {dimensions,adjectives,tripDNA,parseAdjustment} from './engine.js';
 import {groupRouteCost} from './budget.js';
 import {buildDemoDay,maxDemoDays,selectedTransportTotal,recommendRoutesForBudget} from './planner.js';
+import {draftKey,normalizeDraft} from './draft.js';
 
 const $=id=>document.getElementById(id);
 const selectedWords=new Set();
@@ -9,6 +10,7 @@ let activeDay=0;
 let adjustments=[];
 let routeChoices=[];
 let expandedRoutes=[];
+function saveDraft(){if(!trip)return;try{sessionStorage.setItem(draftKey,JSON.stringify({trip,words:[...selectedWords],activeDay,adjustments,routeChoices}));}catch{}}
 const make=(tag,className='',label)=>{const node=document.createElement(tag);node.className=className;if(label!==undefined)node.textContent=label;return node;};
 
 for(const word of Object.keys(adjectives)){
@@ -31,7 +33,7 @@ function show(section){
 }
 $('next').addEventListener('click',()=>show('conditions'));
 $('back').addEventListener('click',()=>show('feel'));
-$('restart').addEventListener('click',()=>show('feel'));
+$('restart').addEventListener('click',()=>{trip=null;try{sessionStorage.removeItem(draftKey);}catch{}show('feel');});
 const nextDate=new Date(Date.now()+86400000);$('date').value=`${nextDate.getFullYear()}-${String(nextDate.getMonth()+1).padStart(2,'0')}-${String(nextDate.getDate()).padStart(2,'0')}`;
 function dayDate(index){const date=new Date(`${trip.date}T12:00:00`);date.setDate(date.getDate()+index);return `${date.getMonth()+1}/${date.getDate()}`;}
 
@@ -45,14 +47,14 @@ $('tripForm').addEventListener('submit',event=>{
   expandedRoutes=Array.from({length:trip.days},()=>({}));
   $('resultTitle').textContent=`${trip.destination} · ${trip.date} 起 ${trip.days} 天`;
   $('summary').textContent=`${trip.travelers} 人 · 每日交通上限 ${trip.budget.toLocaleString()} KRW／團 · 偏好：${[...selectedWords].join('、')||'預設均衡'}。${/^(釜山|busan)$/i.test(trip.destination)?'釜山 mock 行程。':'此目的地只顯示通用 mock 站點，並非真實行程。'}`;
-  renderTabs();renderDay();show('result');
+  renderTabs();renderDay();saveDraft();show('result');
 });
 
 function renderTabs(){
   const tabs=$('dayTabs');tabs.replaceChildren();
   for(let i=0;i<trip.days;i++){
     const button=make('button','day-tab',`第 ${i+1} 天 · ${dayDate(i)}`);button.type='button';button.setAttribute('aria-pressed',String(i===activeDay));
-    button.addEventListener('click',()=>{activeDay=i;$('preview').replaceChildren();renderTabs();renderDay();});tabs.append(button);
+    button.addEventListener('click',()=>{activeDay=i;$('preview').replaceChildren();renderTabs();renderDay();saveDraft();});tabs.append(button);
   }
 }
 function costBadges(route){
@@ -78,7 +80,7 @@ function renderDay(){
       if(!expanded&&routeIndex!==selectedIndex)return;
       const label=make('label',`route-option${(choices[index]??0)===routeIndex?' selected':''}`);
       const input=make('input');input.type='radio';input.name=`day-${activeDay}-leg-${index}`;input.value=String(routeIndex);input.checked=(choices[index]??0)===routeIndex;
-      input.addEventListener('change',()=>{choices[index]=routeIndex;renderDay();});
+      input.addEventListener('change',()=>{choices[index]=routeIndex;renderDay();saveDraft();});
       const details=make('span','route-body');details.append(make('strong','',`${route.mode} · ${route.duration_min} 分鐘`),costBadges(route),make('small','',`步行 ${route.walking_min} 分 · 轉乘 ${route.transfers} 次`));
       label.append(input,details);list.append(label);
     });
@@ -106,7 +108,19 @@ $('adjustForm').addEventListener('submit',event=>{
     adjustments[activeDay]={...adjustments[activeDay],...change};
     const after=buildDemoDay(activeDay,trip,tripDNA(selectedWords),adjustments[activeDay]);
     routeChoices[activeDay]=Object.fromEntries(after.legs.map((leg,index)=>[index,Math.max(0,leg.options.findIndex(route=>route.mode===selectedModes[index]))]));
-    renderDay();preview.replaceChildren(make('p','preview',`已調整第 ${activeDay+1} 天；其他天不變。`));
+    renderDay();saveDraft();preview.replaceChildren(make('p','preview',`已調整第 ${activeDay+1} 天；其他天不變。`));
   });preview.append(button);
 });
 renderDNA();
+try{
+  const restored=normalizeDraft(JSON.parse(sessionStorage.getItem(draftKey)),maxDemoDays);
+  if(restored){
+    trip=restored.trip;activeDay=restored.activeDay;adjustments=restored.adjustments;routeChoices=restored.routeChoices;expandedRoutes=Array.from({length:trip.days},()=>({}));
+    for(const word of restored.words)if(Object.hasOwn(adjectives,word))selectedWords.add(word);
+    for(const chip of $('chips').children)chip.setAttribute('aria-pressed',String(selectedWords.has(chip.textContent)));
+    $('destination').value=trip.destination;$('date').value=trip.date;$('days').value=String(trip.days);$('travelers').value=String(trip.travelers);$('budget').value=String(trip.budget);
+    $('resultTitle').textContent=`${trip.destination} · ${trip.date} 起 ${trip.days} 天`;
+    $('summary').textContent=`${trip.travelers} 人 · 每日交通上限 ${trip.budget.toLocaleString()} KRW／團 · 偏好：${[...selectedWords].join('、')||'預設均衡'}。${/^(釜山|busan)$/i.test(trip.destination)?'釜山 mock 行程。':'此目的地只顯示通用 mock 站點，並非真實行程。'}`;
+    renderDNA();renderTabs();renderDay();show('result');
+  }
+}catch{}

@@ -1,5 +1,7 @@
 # AI Travel Planner V0.2 Prototype
 
+2026-09-22 draft recovery update: The prototype now keeps the current trip, selected day, transport choices, and per-day mock adjustments in browser `sessionStorage`, so reloading the same tab restores the work. The draft is local to that browser tab and is removed when the user chooses "重新設定旅程"; it is not sent to a server or saved as an account profile.
+
 2026-09-22 progressive disclosure update: Each transport leg now shows only its selected option by default; a comparison control reveals the remaining options (at most two). This restores the mobile-first disclosure rule in PRODUCT-SPEC.md while keeping manual choices and daily cost recalculation available.
 
 2026-09-22 budget-aware routing update: On initial generation, the mock planner now evaluates all available route combinations per day and chooses the lowest TripDNA cost combination that fits the daily group transport budget. If none fits, it selects the cheapest available combination and visibly states that the mock options cannot meet the limit. Manual route changes are still allowed and update the total.
