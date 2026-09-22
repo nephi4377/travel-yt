@@ -69,7 +69,7 @@ function renderDay(){
   for(const [index,leg] of day.legs.entries())if((choices[index]??0)>=leg.options.length)choices[index]=0;
   const heading=make('div','day-heading');heading.append(make('span','eyebrow',`DAY ${activeDay+1} · ${dayDate(activeDay)}`),make('h3','',day.title));box.append(heading);
   const total=selectedTransportTotal(day,trip.travelers,choices),difference=trip.budget-total;
-  const budget=make('div',`budget-card${difference<0?' over-budget':''}`);budget.append(make('strong','',`當天交通合計：${total.toLocaleString()} KRW／團`),make('p','',difference>=0?`比每日上限少 ${difference.toLocaleString()} KRW；初始方案已考慮預算，可自行換選。`:`超過每日上限 ${(-difference).toLocaleString()} KRW；目前 mock 方案無法符合預算。`));box.append(budget);
+  const budget=make('div',`budget-card${difference<0?' over-budget':''}`);budget.append(make('strong','',`當天交通合計：${total.toLocaleString()} KRW／團`),make('p','',difference>=0?`目前選擇比每日上限少 ${difference.toLocaleString()} KRW；可自行換選交通。`:`目前選擇超過每日上限 ${(-difference).toLocaleString()} KRW；可試選其他方案。`));box.append(budget);
   day.stops.forEach((stop,index)=>{
     const card=make('article','stop');card.append(make('time','',stop.time),make('h3','',stop.name),make('p','',`${stop.priority} · ${stop.note}`));box.append(card);
     if(index>=day.legs.length)return;
