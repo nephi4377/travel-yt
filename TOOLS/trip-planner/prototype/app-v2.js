@@ -1,6 +1,6 @@
 import {dimensions,adjectives,tripDNA,parseAdjustment} from './engine.js';
 import {groupRouteCost} from './budget.js';
-import {buildDemoDay,maxDemoDays,selectedTransportTotal,recommendRoutesForBudget} from './planner.js';
+import {buildDemoDay,maxDemoDays,selectedTransportTotal,selectedTripTransportTotal,recommendRoutesForBudget} from './planner.js';
 import {draftKey,normalizeDraft} from './draft.js';
 import {describeRouteTradeoff} from './reasons.js';
 
@@ -69,7 +69,9 @@ function renderDay(){
   for(const [index,leg] of day.legs.entries())if((choices[index]??0)>=leg.options.length)choices[index]=0;
   const heading=make('div','day-heading');heading.append(make('span','eyebrow',`DAY ${activeDay+1} · ${dayDate(activeDay)}`),make('h3','',day.title));box.append(heading);
   const total=selectedTransportTotal(day,trip.travelers,choices),difference=trip.budget-total;
-  const budget=make('div',`budget-card${difference<0?' over-budget':''}`);budget.append(make('strong','',`當天交通合計：${total.toLocaleString()} KRW／團`),make('p','',difference>=0?`目前選擇比每日上限少 ${difference.toLocaleString()} KRW；可自行換選交通。`:`目前選擇超過每日上限 ${(-difference).toLocaleString()} KRW；可試選其他方案。`));box.append(budget);
+  const allDays=Array.from({length:trip.days},(_,index)=>buildDemoDay(index,trip,tripDNA(selectedWords),adjustments[index]));
+  const tripTotal=selectedTripTransportTotal(allDays,trip.travelers,routeChoices),tripLimit=trip.budget*trip.days;
+  const budget=make('div',`budget-card${difference<0?' over-budget':''}`);budget.append(make('strong','',`當天交通合計：${total.toLocaleString()} KRW／團`),make('p','',difference>=0?`目前選擇比每日上限少 ${difference.toLocaleString()} KRW；可自行換選交通。`:`目前選擇超過每日上限 ${(-difference).toLocaleString()} KRW；可試選其他方案。`),make('p','',`全程交通估計：${tripTotal.toLocaleString()}／${tripLimit.toLocaleString()} KRW（${trip.days} 天上限）`));box.append(budget);
   day.stops.forEach((stop,index)=>{
     const card=make('article','stop');card.append(make('time','',stop.time),make('h3','',stop.name),make('p','',`${stop.priority} · ${stop.note}`));box.append(card);
     if(index>=day.legs.length)return;

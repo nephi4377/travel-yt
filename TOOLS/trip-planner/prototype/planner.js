@@ -70,6 +70,7 @@ export function buildDemoDay(index,input,dna,adjustment={}){
   return {index,title:template.title,stops,legs,mock:true};
 }
 export function selectedTransportTotal(day,travelers,selected={}){return day.legs.reduce((sum,leg,i)=>sum+groupRouteCost(leg.options[selected[i]??0],travelers),0);}
+export function selectedTripTransportTotal(days,travelers,selections=[]){return days.reduce((sum,day,index)=>sum+selectedTransportTotal(day,travelers,selections[index]),0);}
 export function recommendRoutesForBudget(day,travelers,dna,budget){
   let bestWithin=null,bestFallback=null;
   function visit(index,choices,cost,score){

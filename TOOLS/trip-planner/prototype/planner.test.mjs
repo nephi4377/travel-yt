@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {tripDNA} from './engine.js';
-import {buildDemoDay,maxDemoDays,selectedTransportTotal,recommendRoutesForBudget} from './planner.js';
+import {buildDemoDay,maxDemoDays,selectedTransportTotal,selectedTripTransportTotal,recommendRoutesForBudget} from './planner.js';
 
 test('all advertised demo days have aligned stops and route choices',()=>{
   const input={travelers:2};const dna=tripDNA(['舒服']);
@@ -21,6 +21,12 @@ test('selected route changes total and adjustments stay valid',()=>{
   assert.equal(revised.legs.length,revised.stops.length-1);
   assert.ok(revised.legs.every(leg=>leg.options.every(route=>route.mode!=='地鐵'&&route.walking_min<=9)));
   assert.ok(revised.stops.some(stop=>stop.name.includes('室內')));
+});
+test('multi-day transport total follows each day selection',()=>{
+  const input={destination:'釜山',travelers:2};const dna=tripDNA([]);
+  const days=[buildDemoDay(0,input,dna),buildDemoDay(1,input,dna)];
+  const selections=[{0:0},{0:1}];
+  assert.equal(selectedTripTransportTotal(days,2,selections),selectedTransportTotal(days[0],2,selections[0])+selectedTransportTotal(days[1],2,selections[1]));
 });
 test('other destinations never show named Busan places',()=>{
   const day=buildDemoDay(0,{destination:'河內',travelers:2},tripDNA([]));
