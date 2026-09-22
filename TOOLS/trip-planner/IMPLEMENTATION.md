@@ -1,5 +1,7 @@
 # AI Travel Planner V0.2 Prototype
 
+2026-09-23 browser walkthrough: Checked a three-day trip in the local browser, switched to day 2, previewed and applied a rain adjustment, and confirmed the replacement stop and cost caveat appear. Corrected the leg warning to cover routes both to and from the replacement stop.
+
 2026-09-23 trip-total caveat update: When any day has a mock rain replacement, the full-trip transport estimate now carries a visible reminder that affected leg prices have not been recalculated, even while viewing another day.
 
 2026-09-23 rain-adjustment clarity update: Transport legs next to a mock rain replacement now show a visible warning that their time and fare still come from the original stop and require recalculation. The leg data includes `estimateNeedsRecheck` for future Routes adapter handling.

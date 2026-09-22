@@ -78,7 +78,7 @@ function renderDay(){
     const card=make('article','stop');card.append(make('time','',stop.time),make('h3','',stop.name),make('p','',`${stop.priority} · ${stop.note}`));box.append(card);
     if(index>=day.legs.length)return;
     const leg=day.legs[index],section=make('section','leg');section.append(make('h4','',`前往下一站 · 選擇交通`));
-    if(leg.estimateNeedsRecheck)section.append(make('p','warning','此段通往雨天替代點；下方交通時間與費用沿用原站點示範值，尚未重新估算。'));
+    if(leg.estimateNeedsRecheck)section.append(make('p','warning','此段與雨天替代點相連；下方交通時間與費用沿用原站點示範值，尚未重新估算。'));
     const list=make('div','route-list');
     const selectedIndex=choices[index]??0;
     const expanded=!!expandedRoutes[activeDay][index];
