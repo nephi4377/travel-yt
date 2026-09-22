@@ -1,5 +1,7 @@
 # AI Travel Planner V0.2 Prototype
 
+2026-09-22 explanation update: The selected route now shows a short, deterministic tradeoff explanation based on the available mock alternatives (lowest group fare, fastest duration, least walking, or a compromise). This describes visible data, not AI-generated rationale or verified real-world superiority.
+
 2026-09-22 draft recovery update: The prototype now keeps the current trip, selected day, transport choices, and per-day mock adjustments in browser `sessionStorage`, so reloading the same tab restores the work. The draft is local to that browser tab and is removed when the user chooses "重新設定旅程"; it is not sent to a server or saved as an account profile.
 
 2026-09-22 progressive disclosure update: Each transport leg now shows only its selected option by default; a comparison control reveals the remaining options (at most two). This restores the mobile-first disclosure rule in PRODUCT-SPEC.md while keeping manual choices and daily cost recalculation available.

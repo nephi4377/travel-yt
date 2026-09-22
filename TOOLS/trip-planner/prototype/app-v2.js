@@ -2,6 +2,7 @@ import {dimensions,adjectives,tripDNA,parseAdjustment} from './engine.js';
 import {groupRouteCost} from './budget.js';
 import {buildDemoDay,maxDemoDays,selectedTransportTotal,recommendRoutesForBudget} from './planner.js';
 import {draftKey,normalizeDraft} from './draft.js';
+import {describeRouteTradeoff} from './reasons.js';
 
 const $=id=>document.getElementById(id);
 const selectedWords=new Set();
@@ -82,6 +83,7 @@ function renderDay(){
       const input=make('input');input.type='radio';input.name=`day-${activeDay}-leg-${index}`;input.value=String(routeIndex);input.checked=(choices[index]??0)===routeIndex;
       input.addEventListener('change',()=>{choices[index]=routeIndex;renderDay();saveDraft();});
       const details=make('span','route-body');details.append(make('strong','',`${route.mode} · ${route.duration_min} 分鐘`),costBadges(route),make('small','',`步行 ${route.walking_min} 分 · 轉乘 ${route.transfers} 次`));
+      if((choices[index]??0)===routeIndex)details.append(make('small','route-reason',`方案特色：${describeRouteTradeoff(route,leg.options,trip.travelers)}`));
       label.append(input,details);list.append(label);
     });
     section.append(list);
