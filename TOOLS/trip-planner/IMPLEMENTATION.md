@@ -1,5 +1,7 @@
 # AI Travel Planner V0.2 Prototype
 
+2026-09-22 hourly follow-up: Day 1 now shows the estimated total for the recommended transport choices against the entered daily group transport budget. This is a transparent comparison, not a hard budget constraint; route ranking remains driven by TripDNA. Later versions should optimize options across the whole day and enforce hard budget limits only after reliable route pricing is available.
+
 ## 啟動與查看
 
 完全靜態、無需安裝依賴或 API key。進入 `TOOLS/trip-planner/prototype/` 後執行 `npm run dev`，開啟 `http://localhost:8000/`。請透過 HTTP 伺服器開啟；直接雙擊 HTML 可能因 ES modules 的瀏覽器安全限制失敗。示範伺服器只綁定本機 `127.0.0.1`，不對外開放。
