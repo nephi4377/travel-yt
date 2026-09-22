@@ -1,5 +1,7 @@
 # AI Travel Planner V0.2 Prototype
 
+2026-09-23 trip-total caveat update: When any day has a mock rain replacement, the full-trip transport estimate now carries a visible reminder that affected leg prices have not been recalculated, even while viewing another day.
+
 2026-09-23 rain-adjustment clarity update: Transport legs next to a mock rain replacement now show a visible warning that their time and fare still come from the original stop and require recalculation. The leg data includes `estimateNeedsRecheck` for future Routes adapter handling.
 
 2026-09-23 multi-day budget update: The active-day budget card now also shows the selected transport estimate for the entire trip against the sum of all daily limits. Changing any day's route or applying an adjustment recalculates this trip total.
