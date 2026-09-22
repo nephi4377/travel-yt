@@ -8,6 +8,7 @@ let trip=null;
 let activeDay=0;
 let adjustments=[];
 let routeChoices=[];
+let expandedRoutes=[];
 const make=(tag,className='',label)=>{const node=document.createElement(tag);node.className=className;if(label!==undefined)node.textContent=label;return node;};
 
 for(const word of Object.keys(adjectives)){
@@ -41,6 +42,7 @@ $('tripForm').addEventListener('submit',event=>{
   if(!trip.destination||trip.days<1||trip.days>maxDemoDays)return;
   activeDay=0;adjustments=Array.from({length:trip.days},()=>({}));
   routeChoices=Array.from({length:trip.days},(_,index)=>recommendRoutesForBudget(buildDemoDay(index,trip,tripDNA(selectedWords)),trip.travelers,tripDNA(selectedWords),trip.budget).choices);
+  expandedRoutes=Array.from({length:trip.days},()=>({}));
   $('resultTitle').textContent=`${trip.destination} · ${trip.date} 起 ${trip.days} 天`;
   $('summary').textContent=`${trip.travelers} 人 · 每日交通上限 ${trip.budget.toLocaleString()} KRW／團 · 偏好：${[...selectedWords].join('、')||'預設均衡'}。${/^(釜山|busan)$/i.test(trip.destination)?'釜山 mock 行程。':'此目的地只顯示通用 mock 站點，並非真實行程。'}`;
   renderTabs();renderDay();show('result');
@@ -70,14 +72,23 @@ function renderDay(){
     if(index>=day.legs.length)return;
     const leg=day.legs[index],section=make('section','leg');section.append(make('h4','',`前往下一站 · 選擇交通`));
     const list=make('div','route-list');
+    const selectedIndex=choices[index]??0;
+    const expanded=!!expandedRoutes[activeDay][index];
     leg.options.forEach((route,routeIndex)=>{
+      if(!expanded&&routeIndex!==selectedIndex)return;
       const label=make('label',`route-option${(choices[index]??0)===routeIndex?' selected':''}`);
       const input=make('input');input.type='radio';input.name=`day-${activeDay}-leg-${index}`;input.value=String(routeIndex);input.checked=(choices[index]??0)===routeIndex;
       input.addEventListener('change',()=>{choices[index]=routeIndex;renderDay();});
       const details=make('span','route-body');details.append(make('strong','',`${route.mode} · ${route.duration_min} 分鐘`),costBadges(route),make('small','',`步行 ${route.walking_min} 分 · 轉乘 ${route.transfers} 次`));
       label.append(input,details);list.append(label);
     });
-    section.append(list);box.append(section);
+    section.append(list);
+    if(leg.options.length>1){
+      const toggle=make('button','route-toggle',expanded?'收合其他交通':`比較其他 ${leg.options.length-1} 種交通`);
+      toggle.type='button';toggle.setAttribute('aria-expanded',String(expanded));
+      toggle.addEventListener('click',()=>{expandedRoutes[activeDay][index]=!expanded;renderDay();});section.append(toggle);
+    }
+    box.append(section);
   });
 }
 
