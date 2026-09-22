@@ -1,9 +1,14 @@
 export const draftKey='tripdna-v02-session-draft';
+export function isValidCalendarDate(value){
+  if(typeof value!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(value))return false;
+  const parsed=new Date(`${value}T12:00:00Z`);
+  return !Number.isNaN(parsed.getTime())&&parsed.toISOString().slice(0,10)===value;
+}
 export function normalizeDraft(value,maxDays){
   if(!value||typeof value!=='object')return null;
   const trip=value.trip;
   if(!trip||typeof trip.destination!=='string'||!trip.destination.trim()||trip.destination.length>100)return null;
-  if(typeof trip.date!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(trip.date)||Number.isNaN(Date.parse(`${trip.date}T12:00:00`)))return null;
+  if(!isValidCalendarDate(trip.date))return null;
   if(!Number.isInteger(trip.days)||trip.days<1||trip.days>maxDays)return null;
   if(!Number.isInteger(trip.travelers)||trip.travelers<1||trip.travelers>12)return null;
   if(!Number.isFinite(trip.budget)||trip.budget<0)return null;

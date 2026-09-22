@@ -1,5 +1,7 @@
 # AI Travel Planner V0.2 Prototype
 
+2026-09-23 draft validation update: Restored session drafts now require a real calendar date, including leap-year checks. Invalid saved dates are discarded instead of producing broken day labels.
+
 2026-09-22 budget message correction: The daily budget card now describes the currently selected transport combination after manual changes. Going over budget prompts another choice without claiming that every mock combination is unaffordable.
 
 2026-09-22 explanation update: The selected route now shows a short, deterministic tradeoff explanation based on the available mock alternatives (lowest group fare, fastest duration, least walking, or a compromise). This describes visible data, not AI-generated rationale or verified real-world superiority.
