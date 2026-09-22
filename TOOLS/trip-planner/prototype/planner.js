@@ -47,10 +47,19 @@ const templates=[
 ];
 
 export const maxDemoDays=templates.length;
+const genericNames=[
+  ['城市集合點（示範）','街區散步點（示範）','午餐地點（示範）','咖啡休息點（示範）'],
+  ['海岸或河岸點（示範）','午餐地點（示範）','室內展示點（示範）'],
+  ['文化街區（示範）','在地料理點（示範）','自由時間點（示範）'],
+  ['戶外散步點（示範）','午餐地點（示範）','藝文空間（示範）'],
+  ['城市街區（示範）','市場午餐點（示範）','書店休息點（示範）'],
+  ['附近散步點（示範）','回程前午餐點（示範）','回程緩衝（示範）']
+];
 export function buildDemoDay(index,input,dna,adjustment={}){
   const template=templates[index];if(!template)throw new RangeError('Demo day unavailable');
   const changes=typeof adjustment==='string'?parseAdjustment(adjustment):adjustment;
-  const stops=template.stops.map(stop=>({...stop}));
+  const isBusan=/^(釜山|busan)$/i.test(input.destination?.trim()||'');
+  const stops=template.stops.map((stop,stopIndex)=>isBusan?{...stop}:{...stop,name:genericNames[index][stopIndex],note:'非該目的地真實景點；僅展示規劃流程'});
   if(changes.rain){const target=stops.find(stop=>stop.outdoor||stop.id==='market');if(target){target.name='同區室內展示空間（示範替代）';target.note='雨天替代點尚待查證';target.priority='可取消';}}
   if(changes.tired&&stops.at(-1)?.priority==='可取消')stops.pop();
   const legs=template.legs.slice(0,stops.length-1).map((list,i)=>{

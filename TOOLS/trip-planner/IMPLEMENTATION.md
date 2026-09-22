@@ -1,5 +1,7 @@
 # AI Travel Planner V0.2 Prototype
 
+2026-09-22 destination safety update: Non-Busan destinations now render clearly generic demonstration stops instead of showing named Busan places under another city. Prices/routes remain KRW mock values, so this does not add genuine destination coverage.
+
 2026-09-22 multi-day update: The browser now generates 1–6 distinct mock days, exposes day tabs, lets users choose each leg's transport option, and recalculates the selected day's group transport total. Natural-language mock adjustments apply only to the active day. This replaces the previous day-1-only display. The 6-day limit is intentional until more reliable content is available.
 
 2026-09-22 hourly follow-up: Day 1 now shows the estimated total for the recommended transport choices against the entered daily group transport budget. This is a transparent comparison, not a hard budget constraint; route ranking remains driven by TripDNA. Later versions should optimize options across the whole day and enforce hard budget limits only after reliable route pricing is available.
@@ -24,4 +26,4 @@
 
 ## 限制與後續
 
-目前僅有釜山的 6 天示例資料，其他城市仍顯示釜山模板並警告；超過 6 天尚不支援。日期、營業、路線、預訂、匯率、餐飲/住宿、真實 AI 與完整預算約束尚未串接。調整只辨識三類關鍵字，替換地點後仍使用原段 mock 交通，不能用於實際導航。下一步：建立具地點座標和日期的資料契約與測試，加入真實 Places/Routes 後端 adapter、可驗證的預算與硬性限制，以及更完整的 AI 解析。
+目前僅有釜山的 6 天具名示例資料，其他城市僅顯示通用示範站點；超過 6 天尚不支援。日期、營業、路線、預訂、匯率、餐飲/住宿、真實 AI 與完整預算約束尚未串接。調整只辨識三類關鍵字，替換地點後仍使用原段 mock 交通，不能用於實際導航。下一步：建立具地點座標和日期的資料契約與測試，加入真實 Places/Routes 後端 adapter、可驗證的預算與硬性限制，以及更完整的 AI 解析。

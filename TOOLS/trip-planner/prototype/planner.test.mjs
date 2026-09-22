@@ -22,3 +22,8 @@ test('selected route changes total and adjustments stay valid',()=>{
   assert.ok(revised.legs.every(leg=>leg.options.every(route=>route.mode!=='地鐵'&&route.walking_min<=9)));
   assert.ok(revised.stops.some(stop=>stop.name.includes('室內')));
 });
+test('other destinations never show named Busan places',()=>{
+  const day=buildDemoDay(0,{destination:'河內',travelers:2},tripDNA([]));
+  assert.ok(day.stops.every(stop=>stop.name.includes('示範')));
+  assert.ok(day.stops.every(stop=>!stop.name.includes('釜山')));
+});

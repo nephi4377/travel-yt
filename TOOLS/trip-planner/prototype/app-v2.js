@@ -41,7 +41,7 @@ $('tripForm').addEventListener('submit',event=>{
   if(!trip.destination||trip.days<1||trip.days>maxDemoDays)return;
   activeDay=0;adjustments=Array.from({length:trip.days},()=>({}));routeChoices=Array.from({length:trip.days},()=>({}));
   $('resultTitle').textContent=`${trip.destination} · ${trip.date} 起 ${trip.days} 天`;
-  $('summary').textContent=`${trip.travelers} 人 · 每日交通上限 ${trip.budget.toLocaleString()} KRW／團 · 偏好：${[...selectedWords].join('、')||'預設均衡'}。${trip.destination==='釜山'?'':'目前仍以釜山模板展示，並非該目的地真實行程。'}`;
+  $('summary').textContent=`${trip.travelers} 人 · 每日交通上限 ${trip.budget.toLocaleString()} KRW／團 · 偏好：${[...selectedWords].join('、')||'預設均衡'}。${/^(釜山|busan)$/i.test(trip.destination)?'釜山 mock 行程。':'此目的地只顯示通用 mock 站點，並非真實行程。'}`;
   renderTabs();renderDay();show('result');
 });
 
