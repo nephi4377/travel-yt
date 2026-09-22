@@ -2,7 +2,7 @@
 
 ## 啟動與查看
 
-完全靜態、無需安裝依賴或 API key。在 repository 根目錄執行 `python -m http.server 8000`，開啟 `http://localhost:8000/TOOLS/trip-planner/prototype/`。請透過 HTTP 伺服器開啟；直接雙擊 HTML 可能因 ES modules 的瀏覽器安全限制失敗。可用手機瀏覽器連接同網路主機（視防火牆設定）。
+完全靜態、無需安裝依賴或 API key。進入 `TOOLS/trip-planner/prototype/` 後執行 `npm run dev`，開啟 `http://localhost:8000/`。請透過 HTTP 伺服器開啟；直接雙擊 HTML 可能因 ES modules 的瀏覽器安全限制失敗。示範伺服器只綁定本機 `127.0.0.1`，不對外開放。
 
 ## 架構與界線
 
