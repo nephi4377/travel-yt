@@ -1,5 +1,7 @@
 # AI Travel Planner V0.2 Prototype
 
+2026-09-23 provider contract update: `prototype/provider-contract.js` defines and checks the future dated Places/Routes day boundary: unique place IDs, coordinates, adjacent route endpoints, one to three options, currency, and four nonnegative cost dimensions. The existing mock builder does not claim these are real coordinates or routes. A future provider must pass this check before replacing mock data.
+
 2026-09-23 browser walkthrough: Checked a three-day trip in the local browser, switched to day 2, previewed and applied a rain adjustment, and confirmed the replacement stop and cost caveat appear. Corrected the leg warning to cover routes both to and from the replacement stop.
 
 2026-09-23 trip-total caveat update: When any day has a mock rain replacement, the full-trip transport estimate now carries a visible reminder that affected leg prices have not been recalculated, even while viewing another day.
@@ -46,4 +48,4 @@
 
 ## 限制與後續
 
-目前僅有釜山的 6 天具名示例資料，其他城市僅顯示通用示範站點；超過 6 天尚不支援。日期、營業、路線、預訂、匯率、餐飲/住宿、真實 AI 與完整預算約束尚未串接。調整只辨識三類關鍵字，替換地點後仍使用原段 mock 交通，不能用於實際導航。下一步：建立具地點座標和日期的資料契約與測試，加入真實 Places/Routes 後端 adapter、可驗證的預算與硬性限制，以及更完整的 AI 解析。
+目前僅有釜山的 6 天具名示例資料，其他城市僅顯示通用示範站點；超過 6 天尚不支援。日期、營業、路線、預訂、匯率、餐飲/住宿、真實 AI 與完整預算約束尚未串接。調整只辨識三類關鍵字，替換地點後仍使用原段 mock 交通，不能用於實際導航。具地點座標和日期的 provider 資料契約與測試已建立，但尚未接入現有 mock 流程。下一步：加入真實 Places/Routes 後端 adapter、可驗證的預算與硬性限制，以及更完整的 AI 解析。
