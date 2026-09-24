@@ -26,6 +26,13 @@
 .sectiontitle{font-size:1.08rem;margin:16px 2px 8px}
 .legend{display:flex;flex-wrap:wrap;gap:8px;font-size:.8rem;color:var(--muted);margin:8px 0 12px}.dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:4px}.d-place{background:#2563eb}.d-food{background:#c2410c}.d-base{background:#166534}
 .small{font-size:.82rem;color:var(--muted)}
+.detailbox{margin-top:10px;border-top:1px dashed var(--line);padding-top:9px}
+.detailbox summary{cursor:pointer;font-weight:800;font-size:.86rem;color:#333;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.detailbox summary::-webkit-details-marker{display:none}.detailbox summary:after{content:"＋";font-size:1rem;color:#777}.detailbox[open] summary:after{content:"−"}
+.detailbody{padding-top:9px;font-size:.87rem;line-height:1.62;color:#555}
+.detailbody strong{color:#292929}.detailbody ul{margin:6px 0 0;padding-left:18px}.detailbody li{margin:4px 0}
+.detailgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.detailmini{background:#f8f7f3;border-radius:11px;padding:9px}.detailmini b{display:block;font-size:.78rem;margin-bottom:3px;color:#444}
+@media(max-width:520px){.detailgrid{grid-template-columns:1fr}}
 @media(max-width:480px){#map{height:320px}.wrap{padding-left:12px;padding-right:12px}}
 
 .idea-fab{position:sticky;bottom:14px;margin-left:auto;display:flex;width:max-content;align-items:center;gap:8px;border:0;border-radius:999px;background:#1f2937;color:#fff;padding:12px 16px;font-weight:800;box-shadow:0 8px 22px rgba(0,0,0,.18);z-index:950;cursor:pointer}
@@ -92,6 +99,39 @@ const P={
  pho:{n:"河粉（當區找）",lat:21.0325,lng:105.8498,k:"food",q:"pho Hanoi Old Quarter"},
  banhmi:{n:"Bánh mì（當區找）",lat:21.0307,lng:105.8500,k:"food",q:"banh mi Hanoi Old Quarter"}
 };
+
+const DETAILS={
+ westlake:{intro:"住宿所在的西湖區適合當作每天出發與收尾基地。湖很大，不需要走一圈。",look:["湖岸生活感、住家與咖啡店混合","觀察非觀光核心區的河內生活節奏"],stay:"40–70 分鐘一小段就夠",tip:"以住宿附近一段湖岸為主，累了直接回房；下雨就縮短戶外時間。"},
+ cathedral:{intro:"河內代表性的哥德復興式教堂之一，周邊巷弄與咖啡店比單看正面更有意思。",look:["立面比例、尖拱、雙塔","教堂與狹窄街廓如何接在一起"],stay:"20–40 分鐘",tip:"外觀為主，不需要為了拍正面空景久等。"},
+ hoankiem:{intro:"河內中心最容易建立方位感的公共空間。湖本身不大，價值是把老城、法國區與主要街道串起來。",look:["龜塔、湖岸步行空間","北側往老城的轉換"],stay:"40–70 分鐘",tip:"把它當認路基準，不必重複安排多個時段。"},
+ oldquarter:{intro:"真正值得看的不是『36條街打卡』，而是狹長街屋、店面、物流與機車如何共同使用街道。",look:["tube house 狹長街屋","搬貨、騎樓、店面與住家混用","不同街段的行業差異"],stay:"2–3 小時含吃飯",tip:"挑仍在做生意的巷子走；不要只走紀念品最密的街。"},
+ dongxuan:{intro:"大型傳統市場與周邊批發街區，可以看到河內商品流動、採買與在地商業節奏。",look:["市場外圍卸貨與批發","乾貨、雜貨與街邊攤販"],stay:"60–90 分鐘",tip:"若有人不喜歡味道或擁擠，外圍就很夠；不用硬走生鮮最裡面。"},
+ longbien:{intro:"老橋、鐵道、機車與紅河同時出現在一條線上，是這趟很適合做城市結構觀察的點。",look:["鋼構橋體與軌道","紅河兩岸城市邊緣","機車流與行人動線"],stay:"45–75 分鐘",tip:"重點是走一小段看結構，不追求全程走完；注意車流與橋面安全。"},
+ temple:{intro:"文廟與國子監的空間序列完整，適合看院落、門、軸線、屋頂與尺度層次。",look:["入口到主殿的軸線","院落比例與屋頂形式","碑亭與庭園關係"],stay:"60–90 分鐘",tip:"這是一個偏建築參觀型景點，若當天走路量太大可以縮短。"},
+ french:{intro:"以河內歌劇院周邊為核心，看寬街、行道樹與殖民時期建築如何形成和老城完全不同的街廓。",look:["歌劇院外觀","寬街與樹蔭尺度","轉角建築與公共界面"],stay:"60–120 分鐘含咖啡",tip:"以街區慢走為主，不需要一棟棟進去。"},
+ train:{intro:"火車貼近住宅與咖啡店穿行的場景很特殊，但觀光化與管制都高。",look:["軌道與住宅的距離","巷弄尺度"],stay:"30–60 分鐘",tip:"只在順路且現場允許進入時去；不要為等一班火車犧牲半天。"},
+ giang:{intro:"河內蛋咖啡代表店之一。這趟喝一次即可，重點是體驗飲品本身。",recommend:["蛋咖啡 Cà phê trứng","若怕甜可先點一杯分著喝"],order:"2–4 人先點 1–2 杯共享，再決定要不要加",meal:"下午休息／飯後",tip:"不需要排成咖啡巡禮；若候位久就換附近同類。"},
+ chacathanglong:{intro:"河內代表性的 Chả Cá 魚料理，通常是魚肉與蒔蘿、香草一起在桌上加熱。",recommend:["Chả Cá 主餐","搭米線、花生、香草一起吃"],order:"四人可先按店家建議份量點，不要額外點太多配菜",meal:"午餐或晚餐",tip:"如果有人不喜歡大量香草或蒔蘿，先少量試。"},
+ huonglien:{intro:"Bún Chả 是河內最有代表性的日常料理之一：炭烤豬肉、米線、香草與魚露醬。",recommend:["Bún chả","可加炸春捲一起分食"],order:"每人一份主餐通常足夠；春捲另外合點",meal:"午餐優先",tip:"重點是炭烤香氣；若排太久，就在同區換另一家 bún chả。"},
+ xoiyen:{intro:"Xôi 是越南很生活化的糯米飯，適合當早餐、加餐或走累時快速補充。",recommend:["鹹味糯米飯","肉鬆／肉類配料版本"],order:"先一份分食看看口味與份量",meal:"早餐／點心",tip:"偏飽，不建議剛吃完正餐又硬塞。"},
+ pho:{intro:"河粉是這趟一定要吃到的基本款，但不用追第一名名店。",recommend:["Phở bò 牛肉河粉","不吃牛可改 Phở gà 雞肉河粉"],order:"早餐各自一碗最簡單；湯熱、肉別煮老就好",meal:"早餐最佳",tip:"附近在地人多、翻桌快、菜單短就可以進。"},
+ banhmi:{intro:"越南法國麵包適合當輕正餐或移動中的點心，重點是外殼脆、餡料有肉與醃菜。",recommend:["豬肉／烤肉 Bánh mì","綜合口味可先看店家招牌款"],order:"一人一個或兩人分一個當點心",meal:"早午餐／下午加餐",tip:"現做現吃，不要帶太久讓麵包受潮。"},
+ airport:{intro:"內排機場是抵達與回程節點。",look:["抵達後先完成入境、行李與叫車","回程預留國際線報到與安檢時間"],stay:"依航班",tip:"10/10 不加早市或舊城繞路。"}
+};
+function detailHtml(key){
+  const x=DETAILS[key]; if(!x)return "";
+  const bullets=(x.look||x.recommend||[]).map(v=>"<li>"+v+"</li>").join("");
+  const label=x.recommend?"推薦餐點":"看什麼";
+  return '<details class="detailbox"><summary>看細節'+(x.recommend?"／餐點推薦":"")+'</summary><div class="detailbody"><div>'+x.intro+'</div>'+
+    (bullets?'<strong>'+label+'</strong><ul>'+bullets+'</ul>':"")+
+    '<div class="detailgrid">'+
+      (x.stay?'<div class="detailmini"><b>建議停留</b>'+x.stay+'</div>':"")+
+      (x.order?'<div class="detailmini"><b>怎麼點</b>'+x.order+'</div>':"")+
+      (x.meal?'<div class="detailmini"><b>適合時段</b>'+x.meal+'</div>':"")+
+      (x.tip?'<div class="detailmini"><b>現場提醒</b>'+x.tip+'</div>':"")+
+    '</div></div></details>';
+}
+
 const days=[
 {id:"d5",lab:"10/5 飛機",title:"10/5｜搭機與入住",route:["airport","westlake"],items:[
  {p:"airport",t:"20:35 內排機場",d:"VJ947 抵達。入境、領行李後直接往西湖住宿。",tags:["交通"]},
