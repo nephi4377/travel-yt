@@ -85,6 +85,7 @@ const P={
  airport:{n:"內排國際機場",lat:21.2187,lng:105.8042,k:"base",q:"Noi Bai International Airport Hanoi"},
  westlake:{n:"住宿｜C18 Xuân La",lat:21.0596756,lng:105.8040796,k:"base",q:"Chung cu C18 Xuan La 655 Lac Long Quan Hanoi"},
  xuanlafood:{n:"C18／Xuân La 周邊早餐搜尋",lat:21.0596756,lng:105.8040796,k:"food",q:"pho banh mi breakfast near Chung cu C18 Xuan La 655 Lac Long Quan Hanoi"},
+ xuanlalunch:{n:"C18／Xuân La 周邊午餐搜尋",lat:21.0596756,lng:105.8040796,k:"food",q:"Vietnamese lunch near Chung cu C18 Xuan La 655 Lac Long Quan Hanoi"},
  tranquoc:{n:"鎮國寺",lat:21.0479,lng:105.8368,k:"place",q:"Tran Quoc Pagoda Hanoi"},
  quanthanh:{n:"Quan Thanh Temple／鎮武觀",lat:21.0436,lng:105.8360,k:"place",q:"Quan Thanh Temple Hanoi"},
  trucbach:{n:"竹帛湖／Ngũ Xã",lat:21.0449,lng:105.8420,k:"place",q:"Truc Bach Lake Hanoi"},
@@ -117,6 +118,7 @@ const P={
 const DETAILS={
  westlake:{intro:"住宿已確認在 C18 Building／ngõ 655 Lạc Long Quân，位於西湖北偏西側。舊版地圖曾把住宿點放在西湖中心附近，已修正。",look:["建築名稱：C18 Xuân La","導航：655 Lạc Long Quân, Tây Hồ, Hà Nội"],stay:"住宿／集合點",tip:"給司機：toà nhà chung cư C18, ngõ 655 Lạc Long Quân, quận Tây Hồ. 公開頁不顯示房號與房東電話。"},
  xuanlafood:{intro:"10/10 早上在 C18／Xuân La 周邊找現做熱早餐，吃完短走再回住宿取行李。",recommend:["Phở 河粉","Bánh mì 越南法國麵包"],order:"看當日營業與距離，不為名店搭車跨區",meal:"10/10 約 08:00–10:00",tip:"地圖點是 C18 附近的搜尋起點，不是已選定店家；較早班機者按機票及路況抓離開時間。"},
+ xuanlalunch:{intro:"10/10 洪同學較晚班機可在 C18／Xuân La 周邊吃午餐，前提是先處理退房與行李。",recommend:["當區現做熟食","尚未吃到的河內家常菜"],order:"看當日營業與出發時間，避免排隊過久",meal:"10/10 午餐",tip:"地圖點是住宿周邊搜尋起點；若不能寄放行李，可直接帶行李去機場用餐。"},
  tranquoc:{intro:"鎮國寺位在西湖小島上，是河內非常早期的佛寺之一；紅色多層塔與湖面關係比單獨拍塔更值得看。",look:["堤道進入寺院的空間轉換","紅色佛塔與湖面比例","寺院內仍是實際宗教空間"],stay:"30–45 分鐘",tip:"穿著遮肩膝、尊重禮佛者；不用為空景久等。"},
  quanthanh:{intro:"Quan Thanh Temple 位在西湖與竹帛湖交界，是河內重要道教古廟，跟鎮國寺可自然串成一條短線。",look:["入口、前院、主殿的尺度","大型銅像與木構細節","兩湖交界的城市位置"],stay:"25–40 分鐘",tip:"如果寺廟類已看夠，可縮成外觀＋短停留。"},
  trucbach:{intro:"竹帛湖比西湖小很多，Ngũ Xã 一帶更適合看日常街區與吃 Phở cuốn。",look:["小湖尺度與住宅街","Ngũ Xã 巷弄與在地餐館"],stay:"45–60 分鐘含散步",tip:"這裡的重點是午餐＋街區，不用環湖一圈。"},
@@ -190,7 +192,7 @@ const days=[
   {p:"citadel",t:"停航備案｜皇城或文廟擇一",d:"9/17 寧平官方因大雨公告 Tràng An 停航至另行通知；行前若未確認復航或天候不宜，留在河內選皇城或文廟一處入內。",tags:["備案","須查開航"]},
   {p:"temple",t:"備案選項｜文廟－國子監",d:"若偏好傳統建築院落，選文廟作當日主要參觀點；與皇城二選一。",tags:["備案","建築"]}
 ]},
-{id:"d9",lab:"10/9 全天",title:"10/9｜四人・龍邊＋紅河岸 → 法國區，玩整天",route:["westlake","longbien","french","huonglien","westlake"],items:[
+{id:"d9",lab:"10/9 全天",title:"10/9｜四人・龍邊＋紅河岸 → 法國區，玩整天",route:["westlake","longbien","french","westlake"],items:[
   {p:"westlake",t:"08:30｜C18 早餐後出發",d:"今天四人玩到晚餐；從 C18 搭車到龍邊橋一帶。",tags:["四人全天"]},
   {p:"longbien",t:"09:30–11:45｜龍邊橋與紅河岸",d:"看橋、鐵道與河岸生活；只走當日允許且安全可達的街段，不以走完整橋或下到河心農地為目標。",tags:["城市空間","在地生活"]},
   {p:"longbienfood",t:"11:45｜龍邊周邊午餐",d:"在當區找熟食；排隊太久就換同類，不為老城店折返。",tags:["餐飲"]},
@@ -201,8 +203,8 @@ const days=[
 ]},
 {id:"d10",lab:"10/10 上午",title:"10/10｜C18 周邊早餐短走・依航班分流",route:["westlake","airport"],items:[
   {p:"xuanlafood",t:"08:00–10:00｜附近早餐與短走",d:"四人在 C18／Xuân La 周邊吃 phở 或 bánh mì、散步喝咖啡；再回住宿拿行李。地圖點是搜尋起點。",tags:["早餐","上午可玩"]},
-  {p:"westlake",t:"較早班機｜約 10:30–10:45 離開 C18",d:"只適用於實際搭 14:35 班機者；以機票、當日路況和國際線報到時間調整。",tags:["交通"]},
-  {p:"xuanlafood",t:"洪同學｜可加附近午餐",d:"CI0794 17:50 起飛，約 13:45–14:00 出發作估算。午餐與行李安排先看退房／寄放條件。",tags:["午餐","分流"]},
+  {p:"airport",t:"較早班機｜約 10:30–10:45 離開 C18",d:"只適用於實際搭 14:35 班機者；以機票、當日路況和國際線報到時間調整。",tags:["交通"]},
+  {p:"xuanlalunch",t:"洪同學｜可加附近午餐",d:"CI0794 17:50 起飛，約 13:45–14:00 出發作估算。午餐與行李安排先看退房／寄放條件。",tags:["午餐","分流"]},
   {p:"airport",t:"內排國際機場",d:"不同航班分開計算車程；國際線仍預留報到與安檢時間。",tags:["回程"]}
  ]}
 ];
