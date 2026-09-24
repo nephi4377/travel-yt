@@ -27,6 +27,17 @@
 .legend{display:flex;flex-wrap:wrap;gap:8px;font-size:.8rem;color:var(--muted);margin:8px 0 12px}.dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:4px}.d-place{background:#2563eb}.d-food{background:#c2410c}.d-base{background:#166534}
 .small{font-size:.82rem;color:var(--muted)}
 @media(max-width:480px){#map{height:320px}.wrap{padding-left:12px;padding-right:12px}}
+
+.idea-fab{position:sticky;bottom:14px;margin-left:auto;display:flex;width:max-content;align-items:center;gap:8px;border:0;border-radius:999px;background:#1f2937;color:#fff;padding:12px 16px;font-weight:800;box-shadow:0 8px 22px rgba(0,0,0,.18);z-index:950;cursor:pointer}
+.idea-modal[hidden]{display:none}.idea-modal{position:fixed;inset:0;background:rgba(0,0,0,.42);z-index:1200;padding:18px;overflow:auto}
+.idea-box{max-width:620px;margin:4vh auto;background:#fff;border-radius:20px;padding:16px;border:1px solid var(--line)}
+.idea-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}.idea-head h2{margin:0;font-size:1.2rem}
+.closex{border:0;background:#eee;border-radius:50%;width:40px;height:40px;font-size:1.3rem;cursor:pointer}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}.field.full{grid-column:1/-1}
+.field label{font-size:.83rem;font-weight:800;color:#444}.field input,.field select,.field textarea{width:100%;font:inherit;border:1px solid #d7d4cd;border-radius:12px;padding:11px;background:#fff;color:#222}.field textarea{min-height:110px;resize:vertical}
+.submitidea{width:100%;border:0;border-radius:12px;background:#1f2937;color:#fff;padding:13px 15px;font-weight:800;font-size:1rem;cursor:pointer}
+.submitidea:disabled{opacity:.5}.sendmsg{margin-top:10px;font-size:.88rem;line-height:1.5}.sendmsg.ok{color:#24613e}.sendmsg.err{color:#9f2d20}
+.filehint{font-size:.76rem;color:var(--muted)}@media(max-width:540px){.formgrid{grid-template-columns:1fr}.idea-box{margin:0 auto}.idea-fab{bottom:10px}}
 </style>
 </head>
 <body><main class="wrap">
@@ -39,6 +50,26 @@
 <div id="map"></div>
 <p class="maphelp">藍色＝景點、橘色＝餐飲、綠色＝住宿／機場。線段是「大概怎麼走」的概略順序，不代表即時道路導航。</p>
 <section id="content"></section>
+
+<button class="idea-fab" id="ideaFab" type="button">＋ 新增想法</button>
+<div class="idea-modal" id="ideaModal" hidden>
+  <div class="idea-box" role="dialog" aria-modal="true" aria-labelledby="ideaTitle">
+    <div class="idea-head"><h2 id="ideaTitle">新增河內行程想法</h2><button class="closex" id="ideaClose" type="button" aria-label="關閉">×</button></div>
+    <p class="small">先記錄、預設採納；每小時排程會整理、查證並更新行程。只有重大衝突才會再找你確認。</p>
+    <form id="ideaForm">
+      <div class="formgrid">
+        <div class="field"><label for="submitter">提交者</label><select id="submitter" name="submitter"><option>豪哥</option><option>太太</option><option>郭同學</option><option>洪同學</option><option>其他</option></select></div>
+        <div class="field"><label for="targetDate">適用日期</label><select id="targetDate" name="target_date"><option>不指定</option><option>10/6</option><option>10/7</option><option>10/8</option><option>10/9</option></select></div>
+        <div class="field"><label for="ideaType">類型</label><select id="ideaType" name="type"><option>行程</option><option>景點</option><option>餐飲</option><option>交通</option><option>住宿</option><option>購物</option><option>費用</option><option>其他</option></select></div>
+        <div class="field"><label for="sourceUrl">網址</label><input id="sourceUrl" name="url" type="url" inputmode="url" placeholder="YouTube / Maps / Threads / 網站"></div>
+        <div class="field full"><label for="ideaText">想法</label><textarea id="ideaText" name="idea" placeholder="例如：這家看起來不錯，放 10/8 龍邊橋附近看看"></textarea></div>
+        <div class="field full"><label for="ideaFile">照片／截圖／PDF</label><input id="ideaFile" type="file" accept="image/*,.pdf,application/pdf"><div class="filehint">附件目前建議 2.5 MB 以內；會存到 Travel Planner Intake 附件資料夾。</div></div>
+      </div>
+      <button class="submitidea" id="ideaSubmit" type="submit">送出並先採納</button>
+      <div id="sendMsg" class="sendmsg" aria-live="polite"></div>
+    </form>
+  </div>
+</div>
 </main>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -127,5 +158,49 @@ function render(id){
 days.forEach(d=>{const b=document.createElement("button");b.type="button";b.textContent=d.lab;b.dataset.id=d.id;b.addEventListener("click",()=>render(d.id));tabs.appendChild(b)});
 content.addEventListener("click",e=>{const b=e.target.closest("[data-focus]");if(!b)return;draw(days.find(x=>x.id===current),b.dataset.focus);document.getElementById("map").scrollIntoView({behavior:"smooth",block:"center"})});
 render(current);
+
+const INTAKE_API="https://script.google.com/macros/s/AKfycbyMUavj63BTyS_GDU78mVUufakMhlyzegE0d1vde9DaTLVMad0Z37X9LtQDxyhzIqYi/exec";
+const TRIP_ID="2026-10-hanoi";
+const TRIP_SHEET="2026-10 河內";
+const ideaFab=document.getElementById("ideaFab"), ideaModal=document.getElementById("ideaModal"), ideaClose=document.getElementById("ideaClose"), ideaForm=document.getElementById("ideaForm"), ideaSubmit=document.getElementById("ideaSubmit"), sendMsg=document.getElementById("sendMsg");
+function openIdea(){ideaModal.hidden=false;document.body.style.overflow="hidden";document.getElementById("ideaText").focus()}
+function closeIdea(){ideaModal.hidden=true;document.body.style.overflow=""}
+ideaFab.addEventListener("click",openIdea); ideaClose.addEventListener("click",closeIdea);
+ideaModal.addEventListener("click",e=>{if(e.target===ideaModal)closeIdea()});
+async function fileToBase64(file){
+  return await new Promise((resolve,reject)=>{
+    const fr=new FileReader();
+    fr.onload=()=>resolve(String(fr.result||"").split(",")[1]||"");
+    fr.onerror=reject;fr.readAsDataURL(file);
+  });
+}
+ideaForm.addEventListener("submit",async e=>{
+  e.preventDefault(); sendMsg.className="sendmsg"; sendMsg.textContent="";
+  const idea=document.getElementById("ideaText").value.trim();
+  const url=document.getElementById("sourceUrl").value.trim();
+  const file=document.getElementById("ideaFile").files[0];
+  if(!idea&&!url&&!file){sendMsg.className="sendmsg err";sendMsg.textContent="至少填想法、網址或附件其中一項。";return}
+  if(file&&file.size>2.5*1024*1024){sendMsg.className="sendmsg err";sendMsg.textContent="附件先控制在 2.5 MB 內，避免手機上傳失敗。";return}
+  ideaSubmit.disabled=true; ideaSubmit.textContent="送出中…";
+  try{
+    const payload=new URLSearchParams();
+    payload.set("trip_id",TRIP_ID); payload.set("trip_sheet",TRIP_SHEET);
+    payload.set("submitter",document.getElementById("submitter").value);
+    payload.set("target_date",document.getElementById("targetDate").value);
+    payload.set("type",document.getElementById("ideaType").value);
+    payload.set("idea",idea); payload.set("url",url);
+    if(file){
+      payload.set("attachment_name",file.name);
+      payload.set("attachment_mime",file.type||"application/octet-stream");
+      payload.set("attachment_base64",await fileToBase64(file));
+    }
+    await fetch(INTAKE_API,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8"},body:payload.toString()});
+    sendMsg.className="sendmsg ok";sendMsg.textContent="✓ 已送出並記錄為 accepted。排程會自動整理進河內行程。";
+    ideaForm.reset(); document.getElementById("submitter").value="豪哥"; document.getElementById("targetDate").value="不指定"; document.getElementById("ideaType").value="行程";
+  }catch(err){
+    sendMsg.className="sendmsg err";sendMsg.textContent="送出失敗，請稍後再試。";
+  }finally{ideaSubmit.disabled=false;ideaSubmit.textContent="送出並先採納"}
+});
+
 </script>
 </body></html>
