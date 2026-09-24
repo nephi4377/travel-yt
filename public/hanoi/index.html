@@ -51,7 +51,7 @@
 <a class="back" href="../">← 所有旅程</a>
 <section class="hero"><div class="daymeta">2026/10/05–10/10 · 4 位成人</div><h1>🇻🇳 河內</h1><p class="sub">豪哥、太太、郭同學、洪同學。10/6 三人先行；10/7–9 四人正式主行程；10/10 回程。</p></section>
 
-<div class="notice">地圖直接內嵌在頁面。點下面日期會只顯示當天站點與概略路線；點「地圖聚焦」可把地圖拉到那一站。座標用於旅程概覽，導航仍以店名／地址開 Google Maps 為準。</div>
+<div class="notice">地圖直接內嵌在頁面。點下面日期會只顯示當天站點與概略路線；點「地圖聚焦」可把地圖拉到那一站。10/8 寧平線段只表示往返方向，不是道路導航；碼頭周邊用餐點是搜尋起點。導航仍以 Google Maps 搜尋結果為準。Tràng An 曾於 2026/9/17 因大雨公告停航至另行通知，行前務必查<a href="https://dulichninhbinh.com.vn/printer/3721" target="_blank" rel="noopener">寧平官方公告</a>並確認復航。</div>
 
 <nav class="tabs" id="tabs"></nav>
 <div id="map"></div>
@@ -93,6 +93,8 @@ const P={
  ocditu:{n:"Ốc Dì Tú",lat:21.0432,lng:105.8395,k:"food",q:"Ốc Dì Tú 144C Quan Thanh Hanoi"},
  cua1946:{n:"1946 Cửa Bắc",lat:21.04285,lng:105.84296,k:"food",q:"1946 Cua Bac 3 Yen Thanh Alley 61 Cua Bac Hanoi"},
  citadel:{n:"昇龍皇城",lat:21.0394,lng:105.8372,k:"place",q:"Imperial Citadel of Thang Long 19C Hoang Dieu Hanoi"},
+ trangan:{n:"Tràng An 乘船碼頭｜陸龍灣",lat:20.2534,lng:105.9188,k:"place",q:"Trang An Boat Pier Ninh Binh"},
+ tranganfood:{n:"Tràng An 碼頭周邊熟食",lat:20.2534,lng:105.9188,k:"food",q:"Vietnamese food near Trang An Boat Pier Ninh Binh"},
  templefood:{n:"文廟周邊熟食",lat:21.0277,lng:105.8355,k:"food",q:"pho bun cha near Temple of Literature Hanoi"},
  longbienfood:{n:"龍邊周邊熟食",lat:21.0438,lng:105.8585,k:"food",q:"Vietnamese food near Long Bien Bridge Hanoi"},
  hoankiem:{n:"還劍湖",lat:21.0285,lng:105.8521,k:"place",q:"Hoan Kiem Lake Hanoi"},
@@ -120,14 +122,16 @@ const DETAILS={
  cuabac:{intro:"Cửa Bắc Church 與 Phan Đình Phùng 就在 Quán Thánh／竹帛湖南側延伸線上，比特地往西去民族學博物館順很多。",look:["Cửa Bắc Church 不對稱的殖民時期教堂量體","Phan Đình Phùng 樹蔭大道與法式街屋","北門與街廓關係"],stay:"60–75 分鐘",tip:"以街區與建築外觀為主；教堂若遇禮拜或未開放，不硬闖。"},
  ocditu:{intro:"10/6 四人晚餐第一順位。MICHELIN Guide 收錄的螺／海鮮店，位置在 Quán Thánh，適合四人共享。",recommend:["烤 melo melo 螺","香茅辣椒蒸蛤","蝦／下龍灣魷魚"],order:"四人以 3–4 道海鮮共享，再依食量追加",meal:"10/6 四人會合後，約 19:30 起彈性",tip:"144C Quán Thánh；目前公開資訊 10:30–22:00，cash only。"},
  cua1946:{intro:"10/6 晚餐備案。MICHELIN Guide 收錄的越南家常菜，若不想吃螺／海鮮可直接換這家。",recommend:["青香蕉牛肉沙拉","蟹肉粥火鍋"],order:"四人共享，主菜不要一次點太多",meal:"10/6 晚餐備案",tip:"3 Ngõ Yên Thành, 61 Cửa Bắc；與當天下午路線同區。"},
- melbie:{intro:"位在 Thanh Niên 路、靠近鎮國寺與 Quan Thanh 一帶，適合下午回到湖邊坐下來等晚上的四人會合。",recommend:["Bạc xỉu 越式奶咖啡","蛋咖啡或甜點／麵包"],order:"下午茶不要吃太飽，晚上等洪同學一起正式用餐",meal:"16:15–17:30 下午茶",tip:"以休息、看湖景為主；若現場不合適，就沿 Thanh Niên 路找湖景咖啡替代。"},
+ melbie:{intro:"位在 Thanh Niên 路、靠近鎮國寺與 Quan Thanh 一帶，適合下午回到湖邊坐下來等晚上的四人會合。",recommend:["Bạc xỉu 越式奶咖啡","蛋咖啡或甜點／麵包"],order:"下午茶不要吃太飽，晚上等洪同學一起正式用餐",meal:"14:30–16:30 下午茶",tip:"以休息、看湖景為主；若現場不合適，就沿 Thanh Niên 路找湖景咖啡替代。"},
  cathedral:{intro:"河內代表性的哥德復興式教堂之一，周邊巷弄與咖啡店比單看正面更有意思。",look:["立面比例、尖拱、雙塔","教堂與狹窄街廓如何接在一起"],stay:"20–40 分鐘",tip:"外觀為主，不需要為了拍正面空景久等。"},
  hoankiem:{intro:"河內中心最容易建立方位感的公共空間。湖本身不大，價值是把老城、法國區與主要街道串起來。",look:["龜塔、湖岸步行空間","北側往老城的轉換"],stay:"40–70 分鐘",tip:"把它當認路基準，不必重複安排多個時段。"},
  oldquarter:{intro:"真正值得看的不是『36條街打卡』，而是狹長街屋、店面、物流與機車如何共同使用街道。",look:["tube house 狹長街屋","搬貨、騎樓、店面與住家混用","不同街段的行業差異"],stay:"2–3 小時含吃飯",tip:"挑仍在做生意的巷子走；不要只走紀念品最密的街。"},
  dongxuan:{intro:"大型傳統市場與周邊批發街區，可以看到河內商品流動、採買與在地商業節奏。",look:["市場外圍卸貨與批發","乾貨、雜貨與街邊攤販"],stay:"60–90 分鐘",tip:"若有人不喜歡味道或擁擠，外圍就很夠；不用硬走生鮮最裡面。"},
- citadel:{intro:"昇龍皇城位於 Ba Đình，從 C18 出發可接文廟成一條向南的歷史軸線。",look:["都城遺址、城門與庭園","Hoàng Diệu 街道及周邊尺度"],stay:"約 60–90 分鐘",tip:"入場與開放狀態出發前核對；若疲倦可縮短參觀。"},
+ citadel:{intro:"10/8 Tràng An 未開航或天候不宜時的河內備案之一。",look:["都城遺址、城門與庭園","Hoàng Diệu 街道及周邊尺度"],stay:"約 60–90 分鐘",tip:"與文廟擇一作主要入內參觀；出發前核對開放。"},
+ trangan:{intro:"10/8 四人陸龍灣主線。Tràng An 以石灰岩山、水道、洞穴和寺廟形成與河內街道不同的景觀。",look:["船上看山水與洞穴","沿線寺廟和自然景觀"],stay:"選當日開放的約 2–3 小時船線",tip:"2026/9/17 寧平官方因大雨公告停航至另行通知；出發前確認復航、當日路線與天氣。穿救生衣，帶水與防曬。"},
+ tranganfood:{intro:"10/8 乘船後在 Tràng An／Hoa Lư 當區吃熟食，不為單店繞遠。",recommend:["寧平羊肉料理（依四人口味）","鍋巴飯或一般越南熟食"],order:"看當日營業與排隊情況，久候就換同區店",meal:"10/8 乘船後午餐",tip:"地圖點是碼頭周邊搜尋起點，並非已選定餐廳；Google 導航以搜尋結果為準。"},
  longbien:{intro:"10/9 主區域。老橋、鐵道、機車與紅河同時出現在一條線上，適合觀察城市結構與河岸生活。",look:["鋼構橋體與軌道","紅河兩岸城市邊緣","機車流與行人動線"],stay:"45–75 分鐘",tip:"不追求走完整座橋；依當日管制、天氣與水位，只到安全可達處。"},
- temple:{intro:"文廟與國子監的空間序列完整，適合看院落、門、軸線、屋頂與尺度層次。",look:["入口到主殿的軸線","院落比例與屋頂形式","碑亭與庭園關係"],stay:"60–90 分鐘",tip:"這是一個偏建築參觀型景點，若當天走路量太大可以縮短。"},
+ temple:{intro:"10/8 Tràng An 未開航或天候不宜時的河內備案之一；院落、門、屋頂與庭園層次完整。",look:["入口到主殿的軸線","院落比例與屋頂形式","碑亭與庭園關係"],stay:"60–90 分鐘",tip:"與昇龍皇城擇一作主要入內參觀；出發前核對開放。"},
  french:{intro:"以河內歌劇院周邊為核心，看寬街、行道樹與殖民時期建築如何形成和老城完全不同的街廓。",look:["歌劇院外觀","寬街與樹蔭尺度","轉角建築與公共界面"],stay:"60–120 分鐘含咖啡",tip:"以街區慢走為主，不需要一棟棟進去。"},
  train:{intro:"火車貼近住宅與咖啡店穿行的場景很特殊，但觀光化與管制都高。",look:["軌道與住宅的距離","巷弄尺度"],stay:"30–60 分鐘",tip:"只在順路且現場允許進入時去；不要為等一班火車犧牲半天。"},
  giang:{intro:"河內蛋咖啡代表店之一。這趟喝一次即可，重點是體驗飲品本身。",recommend:["蛋咖啡 Cà phê trứng","若怕甜可先點一杯分著喝"],order:"2–4 人先點 1–2 杯共享，再決定要不要加",meal:"下午休息／飯後",tip:"不需要排成咖啡巡禮；若候位久就換附近同類。"},
@@ -176,13 +180,16 @@ const days=[
  {p:"chacathanglong",t:"同區餐飲候選｜Chả Cá Thăng Long",d:"熟製魚料理；現場若久候，就在老城改吃同區熟食。",tags:["餐飲","可選"]},
  {p:"giang",t:"順路才停｜Café Giảng",d:"蛋咖啡體驗一次即可；不為排隊折返。",tags:["可選"]}
 ]},
-{id:"d8",lab:"10/8 正式2",title:"10/8｜四人・皇城至文廟歷史軸線",route:["citadel","temple"],items:[
- {p:"citadel",t:"昇龍皇城／Hoàng Diệu 街廓",d:"從 C18 進入 Ba Đình，看遺址、軸線與城市尺度。",tags:["建築"]},
- {p:"temple",t:"文廟－國子監",d:"由皇城一帶向南接續；看院落、屋頂與庭園。",tags:["建築"]},
- {p:"templefood",t:"午餐｜文廟周邊當區找",d:"選 phở、bún chả 或家常飯。直接以 Google Maps 在文廟周邊搜尋，不為單店跨區。",tags:["餐飲"]}
+{id:"d8",lab:"10/8 陸龍灣",title:"10/8｜四人・寧平陸龍灣／Tràng An 一日",route:["westlake","trangan","westlake"],items:[
+  {p:"westlake",t:"約 07:00–07:30｜C18 出發",d:"四人同車往寧平；接送與票務尚未預訂。單程約 2–2.5 小時是規劃估算，依路況調整。",tags:["交通","規劃中"]},
+  {p:"trangan",t:"上午｜Tràng An 乘船",d:"先確認官方已恢復開航，再選當日開放的約 2–3 小時路線。山水、洞穴和寺廟是今天主角。",tags:["陸龍灣","四人主線"]},
+  {p:"tranganfood",t:"船後｜寧平當區午餐",d:"在碼頭／Hoa Lư 周邊找熟食；可試羊肉或鍋巴飯，排隊太久就換同區店。",tags:["餐飲","在地名物"]},
+  {p:"westlake",t:"傍晚｜回 C18",d:"午後只留一個短停或直接回河內，不加第二趟船及多個遠點。",tags:["休息"]},
+  {p:"citadel",t:"停航備案｜皇城或文廟擇一",d:"9/17 寧平官方因大雨公告 Tràng An 停航至另行通知；行前若未確認復航或天候不宜，留在河內選皇城或文廟一處入內。",tags:["備案","須查開航"]},
+  {p:"temple",t:"備案選項｜文廟－國子監",d:"若偏好傳統建築院落，選文廟作當日主要參觀點；與皇城二選一。",tags:["備案","建築"]}
 ]},
-{id:"d9",lab:"10/9 正式3",title:"10/9｜四人・龍邊與紅河岸",route:["westlake","longbien","westlake"],items:[
- {p:"longbien",t:"龍邊橋與紅河岸",d:"看橋體、鐵道、河岸與生活街區；只到當日允許且安全可達的位置。",tags:["城市空間","在地生活"]},
+{id:"d9",lab:"10/9 慢走",title:"10/9｜四人・龍邊與紅河岸輕鬆半日",route:["westlake","longbien","westlake"],items:[
+ {p:"longbien",t:"龍邊橋與紅河岸",d:"前一天寧平全日後放慢走；看橋體、鐵道、河岸與生活街區，只到當日允許且安全可達的位置。",tags:["城市空間","在地生活"]},
  {p:"longbienfood",t:"午餐｜龍邊當區找",d:"在當區找熟食，排隊太久就換同類，不折返老城。",tags:["餐飲"]},
  {p:"french",t:"整日替代｜法國區／Tràng Tiền",d:"若龍邊因雨勢、熱度或通行條件不適合，整日改走歌劇院一帶的建築街廓；不兩區都跑。",tags:["備案","建築"]},
  {p:"westlake",t:"午後回 C18 收行李",d:"早收、附近吃晚餐；核對四人各自的回程機票。",tags:["收尾"]}
