@@ -42,7 +42,7 @@ GAS 不把任何旅程名稱寫死。它依 `trip_sheet` 找到對應工作頁�
 
 ## 狀態流程
 
-`pending → accepted / candidate / rejected / need-review → processed`
+`accepted（預設） / candidate / rejected / need-review → processed`
 
 原始提交不得被 AI 覆寫。排程只能新增：
 - 判定
@@ -59,8 +59,8 @@ GAS 不把任何旅程名稱寫死。它依 `trip_sheet` 找到對應工作頁�
 4. 取得 Web App URL。
 5. 把 URL 寫入旅遊網站的共用設定。
 6. 每個旅程頁的「＋新增想法」表單提交時，帶自己的 `trip_id` 與 `trip_sheet`。
-7. GAS 先寫入對應旅程工作頁，狀態固定為 `pending`。
-8. 每小時排程讀取 pending，查證後判定。
+7. GAS 先寫入對應旅程工作頁，狀態預設為 `accepted`。
+8. 每小時排程讀取尚未處理的 accepted，查證後判定。
 9. accepted 才修改 GitHub 的正式行程與手機頁；candidate/rejected/need-review 只更新狀態與理由。
 10. 所有實際修改都同步追加到該旅程的「本趟處理紀錄」與 repo 迭代紀錄。
 
@@ -70,3 +70,15 @@ GAS 不把任何旅程名稱寫死。它依 `trip_sheet` 找到對應工作頁�
 - Google Sheet 是想法、狀態與費用的持久資料源。
 - GAS 是網站寫入 Sheet / Drive 的唯一入口。
 - AI 排程不能改寫使用者原始提交。
+
+
+## 採納原則（2026-09-24 更新）
+
+- 使用者從旅遊頁送出的新想法，預設狀態直接寫入 `accepted`。
+- 排程的任務不是重新審批，而是查證、整理、決定放入哪一天／哪個備案區，以及同步修改正式行程與網頁。
+- 只有下列情況才改成 `need-review`：
+  - 與已確認事實衝突。
+  - 會大幅重排行程或犧牲核心行程。
+  - 來源可信度不足或資訊互相矛盾。
+  - 涉及明顯額外大額費用、取消既有付款、重大交通／住宿變更。
+- 一般的小調整直接做，不需要逐筆詢問。
