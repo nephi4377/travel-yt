@@ -70,7 +70,7 @@ function submitIdea_(payload) {
     sourceUrl,
     attachmentUrl,
     attachmentType,
-    'pending',
+    'accepted',
     '',
     '',
     '',
@@ -82,7 +82,7 @@ function submitIdea_(payload) {
     id,
     trip_id: tripId,
     trip_sheet: tripSheet,
-    status: 'pending',
+    status: 'accepted',
     attachment_url: attachmentUrl
   };
 }
