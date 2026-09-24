@@ -62,15 +62,15 @@
 <div class="idea-modal" id="ideaModal" hidden>
   <div class="idea-box" role="dialog" aria-modal="true" aria-labelledby="ideaTitle">
     <div class="idea-head"><h2 id="ideaTitle">新增河內行程想法</h2><button class="closex" id="ideaClose" type="button" aria-label="關閉">×</button></div>
-    <p class="small">先記錄、預設採納；每小時排程會整理、查證並更新行程。只有重大衝突才會再找你確認。</p>
+    <p class="small">先記錄、預設採納；每小時排程會整理、查證，並把採納結果寫回 GitHub travel-yt 主稿與迭代紀錄。重大衝突才會再找你確認。</p>
     <form id="ideaForm">
       <div class="formgrid">
         <div class="field"><label for="submitter">提交者</label><select id="submitter" name="submitter"><option>豪哥</option><option>太太</option><option>郭同學</option><option>洪同學</option><option>其他</option></select></div>
         <div class="field"><label for="targetDate">適用日期</label><select id="targetDate" name="target_date"><option>不指定</option><option>10/6</option><option>10/7</option><option>10/8</option><option>10/9</option></select></div>
         <div class="field"><label for="ideaType">類型</label><select id="ideaType" name="type"><option>行程</option><option>景點</option><option>餐飲</option><option>交通</option><option>住宿</option><option>購物</option><option>費用</option><option>其他</option></select></div>
         <div class="field"><label for="sourceUrl">網址</label><input id="sourceUrl" name="url" type="url" inputmode="url" placeholder="YouTube / Maps / Threads / 網站"></div>
-        <div class="field full"><label for="ideaText">想法</label><textarea id="ideaText" name="idea" placeholder="例如：這家看起來不錯，放 10/8 龍邊橋附近看看"></textarea></div>
-        <div class="field full"><label for="ideaFile">照片／截圖／PDF</label><input id="ideaFile" type="file" accept="image/*,.pdf,application/pdf"><div class="filehint">附件目前建議 2.5 MB 以內；會存到 Travel Planner Intake 附件資料夾。</div></div>
+        <div class="field full"><label for="ideaText">想法</label><textarea id="ideaText" name="idea" placeholder="例如：10/9 龍邊橋附近有一段街道值得走嗎？"></textarea></div>
+        <div class="field full"><label for="ideaFile">照片／截圖／PDF</label><input id="ideaFile" type="file" accept="image/*,.pdf,application/pdf"><div class="filehint">附件目前建議 2.5 MB 以內；先進 Intake，正式採用的圖資須另存到 GitHub 並登記版本。</div></div>
       </div>
       <button class="submitidea" id="ideaSubmit" type="submit">送出並先採納</button>
       <div id="sendMsg" class="sendmsg" aria-live="polite"></div>
@@ -92,6 +92,9 @@ const P={
  melbie:{n:"Melbie Cafe & Bakery",lat:21.0458,lng:105.8381,k:"food",q:"Melbie Cafe Bakery 9 Thanh Nien Hanoi"},
  ocditu:{n:"Ốc Dì Tú",lat:21.0432,lng:105.8395,k:"food",q:"Ốc Dì Tú 144C Quan Thanh Hanoi"},
  cua1946:{n:"1946 Cửa Bắc",lat:21.04285,lng:105.84296,k:"food",q:"1946 Cua Bac 3 Yen Thanh Alley 61 Cua Bac Hanoi"},
+ citadel:{n:"昇龍皇城",lat:21.0394,lng:105.8372,k:"place",q:"Imperial Citadel of Thang Long 19C Hoang Dieu Hanoi"},
+ templefood:{n:"文廟周邊熟食",lat:21.0277,lng:105.8355,k:"food",q:"pho bun cha near Temple of Literature Hanoi"},
+ longbienfood:{n:"龍邊周邊熟食",lat:21.0438,lng:105.8585,k:"food",q:"Vietnamese food near Long Bien Bridge Hanoi"},
  hoankiem:{n:"還劍湖",lat:21.0285,lng:105.8521,k:"place",q:"Hoan Kiem Lake Hanoi"},
  cathedral:{n:"聖若瑟主教座堂",lat:21.0288,lng:105.8488,k:"place",q:"St Joseph Cathedral Hanoi"},
  oldquarter:{n:"河內老城／36古街",lat:21.0340,lng:105.8500,k:"place",q:"Hanoi Old Quarter"},
@@ -115,14 +118,15 @@ const DETAILS={
  trucbach:{intro:"竹帛湖比西湖小很多，Ngũ Xã 一帶更適合看日常街區與吃 Phở cuốn。",look:["小湖尺度與住宅街","Ngũ Xã 巷弄與在地餐館"],stay:"45–60 分鐘含散步",tip:"這裡的重點是午餐＋街區，不用環湖一圈。"},
  phocuon:{intro:"Phở cuốn 是竹帛湖／Ngũ Xã 很代表性的河內吃法，米皮包牛肉與香草，口感比湯河粉清爽。",recommend:["Phở cuốn 牛肉河粉捲","Phở chiên phồng 炸河粉可三人共享"],order:"三人先點一份河粉捲＋一份炸河粉共享，再看份量追加",meal:"10/6 午餐",tip:"Chinh Thắng 目前 MICHELIN Guide 列 10:00–21:00；若現場排太久，Ngũ Xã 同類店很多可直接換。"},
  cuabac:{intro:"Cửa Bắc Church 與 Phan Đình Phùng 就在 Quán Thánh／竹帛湖南側延伸線上，比特地往西去民族學博物館順很多。",look:["Cửa Bắc Church 不對稱的殖民時期教堂量體","Phan Đình Phùng 樹蔭大道與法式街屋","北門與街廓關係"],stay:"60–75 分鐘",tip:"以街區與建築外觀為主；教堂若遇禮拜或未開放，不硬闖。"},
- ocditu:{intro:"10/6 四人晚餐第一順位。MICHELIN Guide 收錄的螺／海鮮店，位置在 Quán Thánh，適合四人共享。",recommend:["烤 melo melo 螺","香茅辣椒蒸蛤","蝦／下龍灣魷魚"],order:"四人以 3–4 道海鮮共享，再依食量追加",meal:"10/6 19:00–20:30",tip:"144C Quán Thánh；目前公開資訊 10:30–22:00，cash only。"},
+ ocditu:{intro:"10/6 四人晚餐第一順位。MICHELIN Guide 收錄的螺／海鮮店，位置在 Quán Thánh，適合四人共享。",recommend:["烤 melo melo 螺","香茅辣椒蒸蛤","蝦／下龍灣魷魚"],order:"四人以 3–4 道海鮮共享，再依食量追加",meal:"10/6 四人會合後，約 19:30 起彈性",tip:"144C Quán Thánh；目前公開資訊 10:30–22:00，cash only。"},
  cua1946:{intro:"10/6 晚餐備案。MICHELIN Guide 收錄的越南家常菜，若不想吃螺／海鮮可直接換這家。",recommend:["青香蕉牛肉沙拉","蟹肉粥火鍋"],order:"四人共享，主菜不要一次點太多",meal:"10/6 晚餐備案",tip:"3 Ngõ Yên Thành, 61 Cửa Bắc；與當天下午路線同區。"},
  melbie:{intro:"位在 Thanh Niên 路、靠近鎮國寺與 Quan Thanh 一帶，適合下午回到湖邊坐下來等晚上的四人會合。",recommend:["Bạc xỉu 越式奶咖啡","蛋咖啡或甜點／麵包"],order:"下午茶不要吃太飽，晚上等洪同學一起正式用餐",meal:"16:15–17:30 下午茶",tip:"以休息、看湖景為主；若現場不合適，就沿 Thanh Niên 路找湖景咖啡替代。"},
  cathedral:{intro:"河內代表性的哥德復興式教堂之一，周邊巷弄與咖啡店比單看正面更有意思。",look:["立面比例、尖拱、雙塔","教堂與狹窄街廓如何接在一起"],stay:"20–40 分鐘",tip:"外觀為主，不需要為了拍正面空景久等。"},
  hoankiem:{intro:"河內中心最容易建立方位感的公共空間。湖本身不大，價值是把老城、法國區與主要街道串起來。",look:["龜塔、湖岸步行空間","北側往老城的轉換"],stay:"40–70 分鐘",tip:"把它當認路基準，不必重複安排多個時段。"},
  oldquarter:{intro:"真正值得看的不是『36條街打卡』，而是狹長街屋、店面、物流與機車如何共同使用街道。",look:["tube house 狹長街屋","搬貨、騎樓、店面與住家混用","不同街段的行業差異"],stay:"2–3 小時含吃飯",tip:"挑仍在做生意的巷子走；不要只走紀念品最密的街。"},
  dongxuan:{intro:"大型傳統市場與周邊批發街區，可以看到河內商品流動、採買與在地商業節奏。",look:["市場外圍卸貨與批發","乾貨、雜貨與街邊攤販"],stay:"60–90 分鐘",tip:"若有人不喜歡味道或擁擠，外圍就很夠；不用硬走生鮮最裡面。"},
- longbien:{intro:"老橋、鐵道、機車與紅河同時出現在一條線上，是這趟很適合做城市結構觀察的點。",look:["鋼構橋體與軌道","紅河兩岸城市邊緣","機車流與行人動線"],stay:"45–75 分鐘",tip:"重點是走一小段看結構，不追求全程走完；注意車流與橋面安全。"},
+ citadel:{intro:"昇龍皇城位於 Ba Đình，從 C18 出發可接文廟成一條向南的歷史軸線。",look:["都城遺址、城門與庭園","Hoàng Diệu 街道及周邊尺度"],stay:"約 60–90 分鐘",tip:"入場與開放狀態出發前核對；若疲倦可縮短參觀。"},
+ longbien:{intro:"10/9 主區域。老橋、鐵道、機車與紅河同時出現在一條線上，適合觀察城市結構與河岸生活。",look:["鋼構橋體與軌道","紅河兩岸城市邊緣","機車流與行人動線"],stay:"45–75 分鐘",tip:"不追求走完整座橋；依當日管制、天氣與水位，只到安全可達處。"},
  temple:{intro:"文廟與國子監的空間序列完整，適合看院落、門、軸線、屋頂與尺度層次。",look:["入口到主殿的軸線","院落比例與屋頂形式","碑亭與庭園關係"],stay:"60–90 分鐘",tip:"這是一個偏建築參觀型景點，若當天走路量太大可以縮短。"},
  french:{intro:"以河內歌劇院周邊為核心，看寬街、行道樹與殖民時期建築如何形成和老城完全不同的街廓。",look:["歌劇院外觀","寬街與樹蔭尺度","轉角建築與公共界面"],stay:"60–120 分鐘含咖啡",tip:"以街區慢走為主，不需要一棟棟進去。"},
  train:{intro:"火車貼近住宅與咖啡店穿行的場景很特殊，但觀光化與管制都高。",look:["軌道與住宅的距離","巷弄尺度"],stay:"30–60 分鐘",tip:"只在順路且現場允許進入時去；不要為等一班火車犧牲半天。"},
@@ -162,31 +166,29 @@ const days=[
  {p:"cuabac",t:"13:10｜Cửa Bắc Church＋Phan Đình Phùng",d:"取代民族學博物館；同區看建築、樹蔭街道與城市尺度，不再往西繞。",tags:["符合豪哥","建築"]},
  {p:"melbie",t:"14:30–16:30｜下午茶／休息",d:"在 Thanh Niên／竹帛湖一帶坐下來。洪同學 16:50 抵達 HAN，所以不再塞遠點。",tags:["下午茶","休息"]},
  {p:"westlake",t:"約 17:00｜回 C18 等洪同學",d:"預留洪同學入境、行李與進城時間；四人會合後再出門吃晚餐。",tags:["四人會合"]},
- {p:"ocditu",t:"19:00｜Ốc Dì Tú 四人晚餐",d:"144C Quán Thánh。螺／海鮮共享餐；若不想吃海鮮，備案改 1946 Cửa Bắc。",tags:["四人晚餐","MICHELIN","在地名物"]},
+ {p:"ocditu",t:"四人會合後｜Ốc Dì Tú 晚餐",d:"144C Quán Thánh。約 19:30 後依洪同學到 C18 的時間調整；螺／海鮮共享。備案 1946 Cửa Bắc。",tags:["四人晚餐","MICHELIN","在地名物"]},
  {p:"cua1946",t:"備案｜1946 Cửa Bắc",d:"3 Ngõ Yên Thành, 61 Cửa Bắc。越南家常共享菜；作為 Ốc Dì Tú 的同區備案。",tags:["備案","MICHELIN"]}
 ]},
-{id:"d7",lab:"10/7 正式1",title:"10/7｜四人正式 Day 1・老城核心",route:["hoankiem","oldquarter","dongxuan","giang","chacathanglong"],items:[
- {p:"hoankiem",t:"還劍湖",d:"四人一起用它認河內中心方向；不用當成長時間景點。",tags:["網紅常推","我私心推"]},
- {p:"oldquarter",t:"36 古街／老城慢走",d:"主角不是打卡，是街屋、tube house、店面尺度、進貨、人流與機車。",tags:["我私心推","符合豪哥"]},
- {p:"dongxuan",t:"同春市場",d:"看當地商業與物流。市場是看城市怎麼運作，不是伴手禮比價。",tags:["我私心推","符合豪哥"]},
- {p:"giang",t:"Café Giảng（若 10/6 沒喝）",d:"若先行三人已喝過，四人日可跳過，不強迫重複。",tags:["可選"]},
- {p:"chacathanglong",t:"Chả Cá Thăng Long",d:"河內特色魚料理。以 6B Đường Thành 這家為優先核對點。",tags:["我私心推","在地名物"]}
+{id:"d7",lab:"10/7 正式1",title:"10/7｜四人・還劍湖＋老城",route:["hoankiem","oldquarter","dongxuan"],items:[
+ {p:"hoankiem",t:"還劍湖",d:"四人一起認河內中心方向；短停後進入老城。",tags:["公共空間"]},
+ {p:"oldquarter",t:"36 古街／老城慢走",d:"看狹長街屋、店住混用、進貨與街道生活。",tags:["建築","在地生活"]},
+ {p:"dongxuan",t:"同春市場外圍",d:"看批發與物流；外圍已足夠，不必深入擁擠區。",tags:["在地生活"]},
+ {p:"chacathanglong",t:"同區餐飲候選｜Chả Cá Thăng Long",d:"熟製魚料理；現場若久候，就在老城改吃同區熟食。",tags:["餐飲","可選"]},
+ {p:"giang",t:"順路才停｜Café Giảng",d:"蛋咖啡體驗一次即可；不為排隊折返。",tags:["可選"]}
 ]},
-{id:"d8",lab:"10/8 正式2",title:"10/8｜四人正式 Day 2・橋、建築、法國區",route:["longbien","temple","french","huonglien"],items:[
- {p:"longbien",t:"龍邊橋",d:"老橋、鐵道、機車流、紅河與城市邊緣；很符合你看城市構造的方式。",tags:["我私心推","符合豪哥"]},
- {p:"temple",t:"文廟－國子監",d:"院落、軸線、屋頂比例與景觀層次值得看；目前資料顯示每日約 08:00–17:00。",tags:["網紅常推","建築"]},
- {p:"french",t:"法國區／歌劇院一帶",d:"用街廓、行道樹、殖民建築跟老城做對比，不做廣場打卡作業。",tags:["我私心推","符合豪哥"]},
- {p:"huonglien",t:"Bún Chả Hương Liên",d:"24 Lê Văn Hưu。名氣很大但菜本身就是河內代表；若排隊久就找附近同類。",tags:["網紅常推","在地名物"]}
+{id:"d8",lab:"10/8 正式2",title:"10/8｜四人・皇城至文廟歷史軸線",route:["citadel","temple"],items:[
+ {p:"citadel",t:"昇龍皇城／Hoàng Diệu 街廓",d:"從 C18 進入 Ba Đình，看遺址、軸線與城市尺度。",tags:["建築"]},
+ {p:"temple",t:"文廟－國子監",d:"由皇城一帶向南接續；看院落、屋頂與庭園。",tags:["建築"]},
+ {p:"templefood",t:"午餐｜文廟周邊當區找",d:"選 phở、bún chả 或家常飯。直接以 Google Maps 在文廟周邊搜尋，不為單店跨區。",tags:["餐飲"]}
 ]},
-{id:"d9",lab:"10/9 正式3",title:"10/9｜四人正式 Day 3・補味道、彈性收尾",route:["pho","banhmi","train","xoiyen","westlake"],items:[
- {p:"pho",t:"Phở 河粉",d:"缺河粉就補河粉；早餐優先，不需要為某一家排長隊。",tags:["必吃","符合豪哥"]},
- {p:"banhmi",t:"Bánh mì",d:"法國麵包夾肉與醃菜，當正餐或點心都可。",tags:["必吃"]},
- {p:"train",t:"火車街（可選）",d:"有獨特性但觀光化高。只在順路、管制允許時去，不為等火車綁死半天。",tags:["網紅常推","可選"]},
- {p:"xoiyen",t:"Xôi Yến",d:"35B Nguyễn Hữu Huân。糯米飯很生活化，可當順路加餐，不需專程。",tags:["我私心推","在地"]},
- {p:"westlake",t:"回西湖早收",d:"晚上回住宿區、整理行李；10/10 不再塞景點。",tags:["收尾"]}
+{id:"d9",lab:"10/9 正式3",title:"10/9｜四人・龍邊與紅河岸",route:["westlake","longbien","westlake"],items:[
+ {p:"longbien",t:"龍邊橋與紅河岸",d:"看橋體、鐵道、河岸與生活街區；只到當日允許且安全可達的位置。",tags:["城市空間","在地生活"]},
+ {p:"longbienfood",t:"午餐｜龍邊當區找",d:"在當區找熟食，排隊太久就換同類，不折返老城。",tags:["餐飲"]},
+ {p:"french",t:"整日替代｜法國區／Tràng Tiền",d:"若龍邊因雨勢、熱度或通行條件不適合，整日改走歌劇院一帶的建築街廓；不兩區都跑。",tags:["備案","建築"]},
+ {p:"westlake",t:"午後回 C18 收行李",d:"早收、附近吃晚餐；核對四人各自的回程機票。",tags:["收尾"]}
 ]},
 {id:"d10",lab:"10/10 回程",title:"10/10｜回程",route:["westlake","airport"],items:[
- {p:"westlake",t:"10:30–11:00 前離開住宿",d:"回程 VJ946 既有資料約 14:35 起飛，最終仍以機票為準。",tags:["交通"]},
+ {p:"westlake",t:"依各人機票離開 C18",d:"搭 VJ946 14:35 班機者保守抓 10:30–11:00 前出發；洪同學 CI0794 17:50 起飛，另算車程與報到緩衝。",tags:["交通"]},
  {p:"airport",t:"內排國際機場",d:"國際線預留時間，不排早市、不繞舊城。",tags:["回程"]}
 ]}
 ];
@@ -205,6 +207,7 @@ let current="d6";
 function draw(day,focus){
  layer.clearLayers(); const pts=[];
  day.route.forEach((key,i)=>{const p=P[key]; if(!p)return; pts.push([p.lat,p.lng]); const m=L.marker([p.lat,p.lng],{icon:icons[p.k]}).addTo(layer);m.bindPopup("<b>"+(i+1)+". "+p.n+"</b>")});
+ day.items.filter(it=>!day.route.includes(it.p)).forEach(it=>{const p=P[it.p];if(!p)return;L.marker([p.lat,p.lng],{icon:icons[p.k]}).addTo(layer).bindPopup("<b>"+p.n+"</b><br>當日可選／備案")});
  if(pts.length>1)L.polyline(pts,{color:"#475569",weight:4,opacity:.65,dashArray:"8 7"}).addTo(layer);
  if(focus&&P[focus]) map.setView([P[focus].lat,P[focus].lng],15);
  else if(pts.length) map.fitBounds(L.latLngBounds(pts).pad(.22));
