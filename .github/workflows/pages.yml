@@ -1,11 +1,10 @@
-name: Deploy Busan Guide to GitHub Pages
+name: Deploy Travel Guide to GitHub Pages
 
 on:
   push:
     branches: [main]
     paths:
-      - '企劃/2026-09-釜山/地圖指南.html'
-      - 'public/day10.html'
+      - 'public/**'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 
@@ -31,8 +30,7 @@ jobs:
       - name: Prepare site
         run: |
           mkdir -p _site
-          cp '企劃/2026-09-釜山/地圖指南.html' _site/index.html
-          cp 'public/day10.html' _site/day10.html
+          cp -R public/. _site/
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
