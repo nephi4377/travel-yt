@@ -58,11 +58,12 @@
 <p class="maphelp">藍色＝景點、橘色＝餐飲、綠色＝住宿／機場。線段是「大概怎麼走」的概略順序，不代表即時道路導航。</p>
 <section id="content"></section>
 
+<p class="notice" id="intakeClosedNotice" hidden>10/10 後已關閉上傳，只能查看</p>
 <button class="idea-fab" id="ideaFab" type="button">＋ 新增想法</button>
 <div class="idea-modal" id="ideaModal" hidden>
   <div class="idea-box" role="dialog" aria-modal="true" aria-labelledby="ideaTitle">
     <div class="idea-head"><h2 id="ideaTitle">新增河內行程想法</h2><button class="closex" id="ideaClose" type="button" aria-label="關閉">×</button></div>
-    <p class="small">先記錄、預設採納；每小時排程會整理、查證，並把採納結果寫回 GitHub travel-yt 主稿與迭代紀錄。重大衝突才會再找你確認。</p>
+    <p class="small" id="ideaIntro">先記錄、預設採納；每小時排程會整理、查證，並把採納結果寫回 GitHub travel-yt 主稿與迭代紀錄。重大衝突才會再找你確認。</p>
     <form id="ideaForm">
       <div class="formgrid">
         <div class="field"><label for="submitter">提交者</label><select id="submitter" name="submitter"><option>豪哥</option><option>太太</option><option>郭同學</option><option>洪同學</option><option>其他</option></select></div>
@@ -243,11 +244,38 @@ render(current);
 const INTAKE_API="https://script.google.com/macros/s/AKfycbyMUavj63BTyS_GDU78mVUufakMhlyzegE0d1vde9DaTLVMad0Z37X9LtQDxyhzIqYi/exec";
 const TRIP_ID="2026-10-hanoi";
 const TRIP_SHEET="2026-10 河內";
+// 與 GAS 一致：Asia/Taipei；10/10 當日可上傳，10/11 00:00 起關閉
+const INTAKE_LAST_ALLOWED="2026-10-10";
+const INTAKE_TZ="Asia/Taipei";
 const ideaFab=document.getElementById("ideaFab"), ideaModal=document.getElementById("ideaModal"), ideaClose=document.getElementById("ideaClose"), ideaForm=document.getElementById("ideaForm"), ideaSubmit=document.getElementById("ideaSubmit"), sendMsg=document.getElementById("sendMsg");
-function openIdea(){ideaModal.hidden=false;document.body.style.overflow="hidden";document.getElementById("ideaText").focus()}
+function taipeiYmd(d){
+  return new Intl.DateTimeFormat("en-CA",{timeZone:INTAKE_TZ,year:"numeric",month:"2-digit",day:"2-digit"}).format(d||new Date());
+}
+function isIntakeClosed(){ return taipeiYmd() > INTAKE_LAST_ALLOWED; }
+function applyIntakeCutoffUi(){
+  if(!isIntakeClosed()) return;
+  const notice=document.getElementById("intakeClosedNotice");
+  if(notice) notice.hidden=false;
+  ideaFab.hidden=true;
+  ideaFab.disabled=true;
+  ideaForm.querySelectorAll("input,select,textarea,button").forEach(el=>{el.disabled=true});
+  const file=document.getElementById("ideaFile");
+  if(file){ file.disabled=true; file.value=""; }
+  ideaSubmit.disabled=true;
+  ideaSubmit.textContent="已關閉上傳";
+  const intro=document.getElementById("ideaIntro");
+  if(intro) intro.textContent="10/10 後已關閉上傳，只能查看";
+  sendMsg.className="sendmsg err";
+  sendMsg.textContent="10/10 後已關閉上傳，只能查看";
+}
+function openIdea(){
+  if(isIntakeClosed()){ applyIntakeCutoffUi(); return; }
+  ideaModal.hidden=false;document.body.style.overflow="hidden";document.getElementById("ideaText").focus();
+}
 function closeIdea(){ideaModal.hidden=true;document.body.style.overflow=""}
 ideaFab.addEventListener("click",openIdea); ideaClose.addEventListener("click",closeIdea);
 ideaModal.addEventListener("click",e=>{if(e.target===ideaModal)closeIdea()});
+applyIntakeCutoffUi();
 async function fileToBase64(file){
   return await new Promise((resolve,reject)=>{
     const fr=new FileReader();
@@ -257,6 +285,11 @@ async function fileToBase64(file){
 }
 ideaForm.addEventListener("submit",async e=>{
   e.preventDefault(); sendMsg.className="sendmsg"; sendMsg.textContent="";
+  if(isIntakeClosed()){
+    applyIntakeCutoffUi();
+    sendMsg.className="sendmsg err";sendMsg.textContent="10/10 後已關閉上傳，只能查看";
+    return;
+  }
   const idea=document.getElementById("ideaText").value.trim();
   const url=document.getElementById("sourceUrl").value.trim();
   const file=document.getElementById("ideaFile").files[0];
@@ -280,7 +313,10 @@ ideaForm.addEventListener("submit",async e=>{
     ideaForm.reset(); document.getElementById("submitter").value="豪哥"; document.getElementById("targetDate").value="不指定"; document.getElementById("ideaType").value="行程";
   }catch(err){
     sendMsg.className="sendmsg err";sendMsg.textContent="送出失敗，請稍後再試。";
-  }finally{ideaSubmit.disabled=false;ideaSubmit.textContent="送出並先採納"}
+  }finally{
+    if(isIntakeClosed()){ applyIntakeCutoffUi(); }
+    else { ideaSubmit.disabled=false;ideaSubmit.textContent="送出並先採納"; }
+  }
 });
 
 </script>

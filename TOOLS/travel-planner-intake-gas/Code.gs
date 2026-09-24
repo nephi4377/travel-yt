@@ -1,21 +1,46 @@
 const CONFIG = {
   SPREADSHEET_ID: '1PYxDgLT9y7QXCQG5vKztLgWI_jfqR8gJCxBCgms-QeI',
   ROOT_ATTACHMENT_FOLDER_PROP: 'TRAVEL_INTAKE_ROOT_FOLDER_ID',
-  SERVICE_NAME: 'travel-planner-intake'
+  SERVICE_NAME: 'travel-planner-intake',
+  // 時區：Asia/Taipei。2026-10-10 當日整天仍可上傳；自 2026-10-11 00:00（台北）起拒寫。
+  INTAKE_TIMEZONE: 'Asia/Taipei',
+  INTAKE_LAST_ALLOWED_DATE: '2026-10-10'
 };
 
 function doGet() {
-  return json_({ ok: true, service: CONFIG.SERVICE_NAME });
+  const closed = isPastIntakeCutoff_();
+  return json_({
+    ok: true,
+    service: CONFIG.SERVICE_NAME,
+    intake_open: !closed,
+    cutoff_date: CONFIG.INTAKE_LAST_ALLOWED_DATE,
+    timezone: CONFIG.INTAKE_TIMEZONE
+  });
 }
 
 function doPost(e) {
   try {
+    if (isPastIntakeCutoff_()) {
+      return json_({
+        ok: false,
+        code: 'INTAKE_CLOSED',
+        error: '想法上傳已於 2026-10-10（Asia/Taipei）結束；目前僅供查看。',
+        cutoff_date: CONFIG.INTAKE_LAST_ALLOWED_DATE,
+        timezone: CONFIG.INTAKE_TIMEZONE
+      });
+    }
     const payload = parsePayload_(e);
     const result = submitIdea_(payload);
     return json_(result);
   } catch (err) {
     return json_({ ok: false, error: String(err && err.message ? err.message : err) });
   }
+}
+
+/** @return {boolean} true = 已過截止（台北日曆日 > 2026-10-10） */
+function isPastIntakeCutoff_() {
+  const today = Utilities.formatDate(new Date(), CONFIG.INTAKE_TIMEZONE, 'yyyy-MM-dd');
+  return today > CONFIG.INTAKE_LAST_ALLOWED_DATE;
 }
 
 function submitIdea_(payload) {

@@ -70,7 +70,35 @@ GAS 不把任何旅程名稱寫死。它依 `trip_sheet` 找到對應工作頁�
 - Google Sheet 是想法、狀態與費用的持久資料源。
 - GAS 是網站寫入 Sheet / Drive 的唯一入口。
 - AI 排程不能改寫使用者原始提交。
+- **不加 passphrase／LINE bot**；維持公開簡易收件，靠截止日關閉寫入。
 
+## 上傳截止政策（2026-09-24）
+
+- **時區：`Asia/Taipei`**
+- **最後可上傳日：`2026-10-10`（含當日整天）**
+- **自 `2026-10-11 00:00`（台北）起**：`doPost` 拒寫，回傳明確錯誤 JSON（`code: INTAKE_CLOSED`）
+- 截止後仍可瀏覽旅程頁；前端隱藏／停用送出與檔案上傳，並顯示「10/10 後已關閉上傳，只能查看」
+- 前端用同規則做即時 UX；**伺服器仍強制執行**（不可只靠前端）
+
+錯誤回應範例：
+
+```json
+{
+  "ok": false,
+  "code": "INTAKE_CLOSED",
+  "error": "想法上傳已於 2026-10-10（Asia/Taipei）結束；目前僅供查看。",
+  "cutoff_date": "2026-10-10",
+  "timezone": "Asia/Taipei"
+}
+```
+
+### 重新部署 GAS（改 `Code.gs` 後）
+
+1. 開啟 Apps Script 專案 **Travel Planner Intake API**
+2. 貼上／同步本資料夾最新 `Code.gs`
+3. **部署 → 管理部署 → 編輯（鉛筆）→ 版本選「新版本」→ 部署**
+4. 確認 Web App URL 與 `public/hanoi/index.html` 的 `INTAKE_API` 一致（通常同一部署 URL 不變）
+5. 用瀏覽器 GET 該 URL，應看到 `intake_open`／`cutoff_date` 欄位
 
 ## 採納原則（2026-09-24 更新）
 
