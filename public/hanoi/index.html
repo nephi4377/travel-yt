@@ -83,13 +83,15 @@
 <script>
 const P={
  airport:{n:"內排國際機場",lat:21.2187,lng:105.8042,k:"base",q:"Noi Bai International Airport Hanoi"},
- westlake:{n:"西湖／住宿區",lat:21.0588,lng:105.8185,k:"base",q:"West Lake Hanoi"},
+ westlake:{n:"住宿｜C18 Xuân La",lat:21.0596756,lng:105.8040796,k:"base",q:"Chung cu C18 Xuan La 655 Lac Long Quan Hanoi"},
  tranquoc:{n:"鎮國寺",lat:21.0479,lng:105.8368,k:"place",q:"Tran Quoc Pagoda Hanoi"},
  quanthanh:{n:"Quan Thanh Temple／鎮武觀",lat:21.0436,lng:105.8360,k:"place",q:"Quan Thanh Temple Hanoi"},
  trucbach:{n:"竹帛湖／Ngũ Xã",lat:21.0449,lng:105.8420,k:"place",q:"Truc Bach Lake Hanoi"},
  phocuon:{n:"Phở Cuốn Chinh Thắng",lat:21.0450,lng:105.8441,k:"food",q:"Pho Cuon Chinh Thang 7 Mac Dinh Chi Hanoi"},
- ethnology:{n:"越南民族學博物館",lat:21.0403,lng:105.7980,k:"place",q:"Vietnam Museum of Ethnology Hanoi"},
+ cuabac:{n:"Cửa Bắc Church／Phan Đình Phùng",lat:21.04145,lng:105.84051,k:"place",q:"Cua Bac Church Hanoi"},
  melbie:{n:"Melbie Cafe & Bakery",lat:21.0458,lng:105.8381,k:"food",q:"Melbie Cafe Bakery 9 Thanh Nien Hanoi"},
+ ocditu:{n:"Ốc Dì Tú",lat:21.0432,lng:105.8395,k:"food",q:"Ốc Dì Tú 144C Quan Thanh Hanoi"},
+ cua1946:{n:"1946 Cửa Bắc",lat:21.04285,lng:105.84296,k:"food",q:"1946 Cua Bac 3 Yen Thanh Alley 61 Cua Bac Hanoi"},
  hoankiem:{n:"還劍湖",lat:21.0285,lng:105.8521,k:"place",q:"Hoan Kiem Lake Hanoi"},
  cathedral:{n:"聖若瑟主教座堂",lat:21.0288,lng:105.8488,k:"place",q:"St Joseph Cathedral Hanoi"},
  oldquarter:{n:"河內老城／36古街",lat:21.0340,lng:105.8500,k:"place",q:"Hanoi Old Quarter"},
@@ -107,12 +109,14 @@ const P={
 };
 
 const DETAILS={
- westlake:{intro:"住宿所在的西湖區適合當作每天出發與收尾基地。湖很大，不需要走一圈；真正值得的是南側寺廟、竹帛湖與湖岸生活。",look:["湖岸生活感、住家與咖啡店混合","觀察非觀光核心區的河內生活節奏"],stay:"只走一小段，不安排完整環湖",tip:"把西湖當『區域』而不是單一景點；10/6 重點放南側歷史帶。"},
+ westlake:{intro:"住宿已確認在 C18 Building／ngõ 655 Lạc Long Quân，位於西湖北偏西側。舊版地圖曾把住宿點放在西湖中心附近，已修正。",look:["建築名稱：C18 Xuân La","導航：655 Lạc Long Quân, Tây Hồ, Hà Nội"],stay:"住宿／集合點",tip:"給司機：toà nhà chung cư C18, ngõ 655 Lạc Long Quân, quận Tây Hồ. 公開頁不顯示房號與房東電話。"},
  tranquoc:{intro:"鎮國寺位在西湖小島上，是河內非常早期的佛寺之一；紅色多層塔與湖面關係比單獨拍塔更值得看。",look:["堤道進入寺院的空間轉換","紅色佛塔與湖面比例","寺院內仍是實際宗教空間"],stay:"30–45 分鐘",tip:"穿著遮肩膝、尊重禮佛者；不用為空景久等。"},
  quanthanh:{intro:"Quan Thanh Temple 位在西湖與竹帛湖交界，是河內重要道教古廟，跟鎮國寺可自然串成一條短線。",look:["入口、前院、主殿的尺度","大型銅像與木構細節","兩湖交界的城市位置"],stay:"25–40 分鐘",tip:"如果寺廟類已看夠，可縮成外觀＋短停留。"},
  trucbach:{intro:"竹帛湖比西湖小很多，Ngũ Xã 一帶更適合看日常街區與吃 Phở cuốn。",look:["小湖尺度與住宅街","Ngũ Xã 巷弄與在地餐館"],stay:"45–60 分鐘含散步",tip:"這裡的重點是午餐＋街區，不用環湖一圈。"},
  phocuon:{intro:"Phở cuốn 是竹帛湖／Ngũ Xã 很代表性的河內吃法，米皮包牛肉與香草，口感比湯河粉清爽。",recommend:["Phở cuốn 牛肉河粉捲","Phở chiên phồng 炸河粉可三人共享"],order:"三人先點一份河粉捲＋一份炸河粉共享，再看份量追加",meal:"10/6 午餐",tip:"Chinh Thắng 目前 MICHELIN Guide 列 10:00–21:00；若現場排太久，Ngũ Xã 同類店很多可直接換。"},
- ethnology:{intro:"越南民族學博物館不是『只看展櫃』的博物館，戶外傳統住宅與不同族群的建築很適合你看空間與材料。",look:["54族群文化展示","戶外傳統住宅與構造","住宅尺度、材料與生活方式"],stay:"1.5–2 小時",tip:"官方目前列 08:30–17:30、週一休館；10/6/2026 是週二，可安排下午。"},
+ cuabac:{intro:"Cửa Bắc Church 與 Phan Đình Phùng 就在 Quán Thánh／竹帛湖南側延伸線上，比特地往西去民族學博物館順很多。",look:["Cửa Bắc Church 不對稱的殖民時期教堂量體","Phan Đình Phùng 樹蔭大道與法式街屋","北門與街廓關係"],stay:"60–75 分鐘",tip:"以街區與建築外觀為主；教堂若遇禮拜或未開放，不硬闖。"},
+ ocditu:{intro:"10/6 四人晚餐第一順位。MICHELIN Guide 收錄的螺／海鮮店，位置在 Quán Thánh，適合四人共享。",recommend:["烤 melo melo 螺","香茅辣椒蒸蛤","蝦／下龍灣魷魚"],order:"四人以 3–4 道海鮮共享，再依食量追加",meal:"10/6 19:00–20:30",tip:"144C Quán Thánh；目前公開資訊 10:30–22:00，cash only。"},
+ cua1946:{intro:"10/6 晚餐備案。MICHELIN Guide 收錄的越南家常菜，若不想吃螺／海鮮可直接換這家。",recommend:["青香蕉牛肉沙拉","蟹肉粥火鍋"],order:"四人共享，主菜不要一次點太多",meal:"10/6 晚餐備案",tip:"3 Ngõ Yên Thành, 61 Cửa Bắc；與當天下午路線同區。"},
  melbie:{intro:"位在 Thanh Niên 路、靠近鎮國寺與 Quan Thanh 一帶，適合下午回到湖邊坐下來等晚上的四人會合。",recommend:["Bạc xỉu 越式奶咖啡","蛋咖啡或甜點／麵包"],order:"下午茶不要吃太飽，晚上等洪同學一起正式用餐",meal:"16:15–17:30 下午茶",tip:"以休息、看湖景為主；若現場不合適，就沿 Thanh Niên 路找湖景咖啡替代。"},
  cathedral:{intro:"河內代表性的哥德復興式教堂之一，周邊巷弄與咖啡店比單看正面更有意思。",look:["立面比例、尖拱、雙塔","教堂與狹窄街廓如何接在一起"],stay:"20–40 分鐘",tip:"外觀為主，不需要為了拍正面空景久等。"},
  hoankiem:{intro:"河內中心最容易建立方位感的公共空間。湖本身不大，價值是把老城、法國區與主要街道串起來。",look:["龜塔、湖岸步行空間","北側往老城的轉換"],stay:"40–70 分鐘",tip:"把它當認路基準，不必重複安排多個時段。"},
@@ -149,15 +153,17 @@ const days=[
  {p:"airport",t:"20:35 內排機場",d:"VJ947 抵達。入境、領行李後直接往西湖住宿。",tags:["交通"]},
  {p:"westlake",t:"西湖住宿區",d:"只進房、附近吃熱食、睡覺；不加景點。",tags:["住宿"]}
 ]},
-{id:"d6",lab:"10/6 3人",title:"10/6｜三人先行・把白天用滿",route:["westlake","tranquoc","quanthanh","trucbach","phocuon","ethnology","melbie","westlake"],items:[
- {p:"westlake",t:"08:30｜住宿附近早餐／短走",d:"不把西湖當成要環湖的景點；早餐後直接去南側最值得看的歷史帶。洪同學下午抵達，白天仍以三人行程為主。",tags:["符合豪哥","在地生活"]},
- {p:"tranquoc",t:"09:30｜鎮國寺",d:"西湖真正值得留時間的點之一：寺院、佛塔、湖面與堤道空間一次看。",tags:["我私心推","建築"]},
- {p:"quanthanh",t:"10:20｜Quan Thanh Temple／鎮武觀",d:"順著 Thanh Niên 路往南走，和鎮國寺形成一條很自然的歷史建築線。",tags:["我私心推","建築"]},
- {p:"trucbach",t:"11:05｜竹帛湖／Ngũ Xã 慢走",d:"比西湖更適合步行看街區尺度，順便進入 Phở cuốn 的代表區。",tags:["符合豪哥","在地生活"]},
- {p:"phocuon",t:"11:45｜Phở Cuốn Chinh Thắng 午餐",d:"吃河內特色河粉捲，跟之後安排的湯河粉、Bún Chả、Chả Cá 都不重複。",tags:["我私心推","在地名物"]},
- {p:"ethnology",t:"13:30｜越南民族學博物館",d:"下午安排 1.5–2 小時，戶外傳統住宅、材料與族群生活展示很適合建築／空間觀察。",tags:["我私心推","符合豪哥","建築"]},
- {p:"melbie",t:"15:45｜西湖下午茶",d:"回湖邊坐下休息，喝咖啡吃點甜食；洪同學 16:50 抵達 HAN，所以不要拖太晚。",tags:["下午茶","湖景"]},
- {p:"westlake",t:"17:30–18:00｜回住宿會合",d:"洪同學搭 CI0793，10/6 14:35 TPE 起飛、16:50 抵達 HAN。預留入境、領行李與進城時間，晚上四人可正常一起吃晚餐。",tags:["四人會合","晚餐"]}
+{id:"d6",lab:"10/6 3人",title:"10/6｜三人先行・順路走完，晚餐四人",route:["westlake","tranquoc","quanthanh","trucbach","phocuon","cuabac","melbie","westlake","ocditu"],items:[
+ {p:"westlake",t:"08:15｜C18／655 Lạc Long Quân",d:"住宿已改成真正的 C18 位置。早餐後用 Grab 前往西湖南側，不再把住宿誤當成湖中心。",tags:["住宿","已確認"]},
+ {p:"tranquoc",t:"09:30｜鎮國寺",d:"看寺院、佛塔、湖面與堤道空間。",tags:["我私心推","建築"]},
+ {p:"quanthanh",t:"10:20｜Quan Thanh Temple／鎮武觀",d:"和鎮國寺自然串成一條歷史建築線。",tags:["我私心推","建築"]},
+ {p:"trucbach",t:"11:05｜竹帛湖／Ngũ Xã",d:"小湖與住宅街慢走，直接接午餐。",tags:["符合豪哥","在地生活"]},
+ {p:"phocuon",t:"11:45｜Phở Cuốn Chinh Thắng 午餐",d:"7 Mạc Đĩnh Chi。河粉捲＋炸河粉共享，不和後續主餐重複。",tags:["我私心推","在地名物"]},
+ {p:"cuabac",t:"13:10｜Cửa Bắc Church＋Phan Đình Phùng",d:"取代民族學博物館；同區看建築、樹蔭街道與城市尺度，不再往西繞。",tags:["符合豪哥","建築"]},
+ {p:"melbie",t:"14:30–16:30｜下午茶／休息",d:"在 Thanh Niên／竹帛湖一帶坐下來。洪同學 16:50 抵達 HAN，所以不再塞遠點。",tags:["下午茶","休息"]},
+ {p:"westlake",t:"約 17:00｜回 C18 等洪同學",d:"預留洪同學入境、行李與進城時間；四人會合後再出門吃晚餐。",tags:["四人會合"]},
+ {p:"ocditu",t:"19:00｜Ốc Dì Tú 四人晚餐",d:"144C Quán Thánh。螺／海鮮共享餐；若不想吃海鮮，備案改 1946 Cửa Bắc。",tags:["四人晚餐","MICHELIN","在地名物"]},
+ {p:"cua1946",t:"備案｜1946 Cửa Bắc",d:"3 Ngõ Yên Thành, 61 Cửa Bắc。越南家常共享菜；作為 Ốc Dì Tú 的同區備案。",tags:["備案","MICHELIN"]}
 ]},
 {id:"d7",lab:"10/7 正式1",title:"10/7｜四人正式 Day 1・老城核心",route:["hoankiem","oldquarter","dongxuan","giang","chacathanglong"],items:[
  {p:"hoankiem",t:"還劍湖",d:"四人一起用它認河內中心方向；不用當成長時間景點。",tags:["網紅常推","我私心推"]},
@@ -208,7 +214,7 @@ function render(id){
  current=id; const d=days.find(x=>x.id===id);
  [...tabs.children].forEach(b=>b.classList.toggle("active",b.dataset.id===id));
  content.innerHTML='<h2 class="sectiontitle">'+d.title+'</h2><div class="route">'+d.route.map((k,i)=>'<span>'+(i+1)+'. '+P[k].n+'</span>').join("")+'</div>'+
- d.items.map((it,i)=>{const p=P[it.p];return '<article class="card"><div class="row"><div class="num">'+(i+1)+'</div><div class="grow"><h3>'+it.t+'</h3><div class="why">'+it.d+'</div><div class="tags">'+it.tags.map(t=>'<span class="tag '+tagClass(t)+'">'+t+'</span>').join("")+'</div><div class="actions"><button type="button" class="focus" data-focus="'+it.p+'">地圖聚焦</button><a href="'+gmap(p)+'" target="_blank" rel="noopener">Google 導航</a></div></div></div></article>'}).join("");
+ d.items.map((it,i)=>{const p=P[it.p];return '<article class="card"><div class="row"><div class="num">'+(i+1)+'</div><div class="grow"><h3>'+it.t+'</h3><div class="why">'+it.d+'</div><div class="tags">'+it.tags.map(t=>'<span class="tag '+tagClass(t)+'">'+t+'</span>').join("")+'</div><div class="actions"><button type="button" class="focus" data-focus="'+it.p+'">地圖聚焦</button><a href="'+gmap(p)+'" target="_blank" rel="noopener">Google 導航</a></div>'+detailHtml(it.p)+'</div></div></article>'}).join("");
  draw(d);
 }
 days.forEach(d=>{const b=document.createElement("button");b.type="button";b.textContent=d.lab;b.dataset.id=d.id;b.addEventListener("click",()=>render(d.id));tabs.appendChild(b)});
