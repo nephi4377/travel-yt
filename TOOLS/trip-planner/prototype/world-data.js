@@ -98,6 +98,26 @@ export async function searchPlaces(city,fetcher=fetch){
   return normalizePlaces(await response.json(),city);
 }
 
+// A small, user-triggered discovery query. Never use it to harvest a citywide catalog.
+export const DISCOVERY_CATEGORIES=Object.freeze({
+  culture:{label:'文化地標',filter:'["tourism"~"^(museum|gallery|attraction)$"]'},
+  history:{label:'歷史古蹟',filter:'["historic"~"^(castle|monument|memorial|archaeological_site|ruins)$"]'},
+  nature:{label:'公園景觀',filter:'["leisure"="park"]'},
+  food:{label:'餐飲',filter:'["amenity"~"^(restaurant|cafe|food_court)$"]'}
+});
+export function categoryPlacesQuery(city,category){
+  if(!finite(city?.lat,-90,90)||!finite(city?.lng,-180,180))throw new TypeError('Invalid city coordinates');
+  const selected=DISCOVERY_CATEGORIES[category];
+  if(!selected)throw new TypeError('Invalid discovery category');
+  return `[out:json][timeout:15];nwr(around:3000,${city.lat},${city.lng})["name"]${selected.filter};out center qt 60;`;
+}
+export async function searchCategoryPlaces(city,category,fetcher=fetch){
+  const query=categoryPlacesQuery(city,category);
+  const response=await fetcher(`${PLACES_API}?data=${encodeURIComponent(query)}`,{signal:timeout(22000)});
+  if(!response.ok)throw new Error(`附近地點服務暫時無法使用（${response.status}）；請改用名稱搜尋。`);
+  return normalizePlaces(await response.json(),city);
+}
+
 // Explicit, single-name lookup only. Public Nominatim forbids autocomplete and
 // systematic POI harvesting; the caller must cache and throttle requests.
 export function namedPlaceUrl(city,query,scope='nearby'){

@@ -1,5 +1,11 @@
 # AI Travel Planner V0.2 Prototype
 
+## Current handoff (2026-09-27, user-directed worldwide place categories)
+
+- After selecting any city, users can explicitly look up nearby culture, history, parks, or food using a separate bounded Overpass query (3 km, one category, maximum 60 returned objects). Results merge with manually found places and keep prior selections. The existing broad background nearby query remains for now; the focused buttons provide a practical fallback when it times out, not a guarantee of worldwide POI completeness.
+- Verified: 41 unit tests pass, including bounded category-query construction and one-request behavior. In a local-browser Paris walkthrough, the broad background request failed, a clicked culture request returned 60 real OSM features, and the selected places generated a three-day itinerary with source links and transport comparison. Do not infer opening hours, transit service or fares from these OSM tags.
+- Next priority: remove or replace the slow broad background query after assessing public-service load; refine category result quality (many minor gallery objects can outrank important landmarks) and do narrow-phone visual QA. Research a production-suitable worldwide POI provider or self-hosting with quota enforcement before public use.
+
 ## Current handoff (2026-09-27, independent multi-day timing)
 
 - A generated 1–6 day trip now exposes an editable start time on each day. The condition-form time remains the default, while a day override changes only that day's stop times and date tab; editing unrelated conditions preserves overrides. Changing the global default or regenerating the day count resets them deliberately. Each day shows an approximate finish time and an explicit late-day warning after 20:00. These are distance-model schedule estimates, never verified opening or transit times.

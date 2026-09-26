@@ -1,5 +1,5 @@
 import {dimensions,adjectives,tripDNA,parseAdjustment} from './engine.js';
-import {searchCities,searchFallbackCities,searchPlaces,searchNamedPlaces,parseOsmPlaceUrl,lookupOsmPlace,mergePlaces} from './world-data.js';
+import {searchCities,searchFallbackCities,searchPlaces,searchCategoryPlaces,DISCOVERY_CATEGORIES,searchNamedPlaces,parseOsmPlaceUrl,lookupOsmPlace,mergePlaces} from './world-data.js';
 import {buildWorldTrip,groupPlaceIds,sameTripSelection,km,mapUrl,directionsUrl,suggestedPlaceIds,rankPlaces,recommendedStartTime,startTimeMinutes,normalizeDayStartTimes} from './world-planner.js';
 import {fetchRoadRoute} from './route-data.js';
 
@@ -35,6 +35,15 @@ osmLabel.append(osmInput);osmImport.append(osmSummary,osmHelp,osmLabel,osmButton
 namedLabel.append(namedInput);namedSearch.append(namedLabel,namedButton,widerButton,namedStatus,namedResults,namedHelp,osmImport);
 $('placeStage').insertBefore(namedSearch,$('placeFilter').parentElement);
 const itineraryEditStatus=element('p','hint');itineraryEditStatus.setAttribute('role','status');$('schedule').before(itineraryEditStatus);
+const discovery=element('div','discovery'),discoveryTitle=element('h4','','依類型找附近地點');
+const discoveryHelp=element('p','hint','選一種類型才額外查詢；每次只看市中心約 3 公里，查不到可用具名搜尋。');
+const discoveryButtons=element('div','discovery-buttons'),discoveryStatus=element('p','hint');discoveryStatus.setAttribute('role','status');
+for(const [key,{label}] of Object.entries(DISCOVERY_CATEGORIES)){
+  const button=element('button','chip',label);button.type='button';button.onclick=()=>loadNearbyCategory(key);
+  discoveryButtons.append(button);
+}
+discovery.append(discoveryTitle,discoveryHelp,discoveryButtons,discoveryStatus);
+$('placeStage').insertBefore(discovery,namedSearch);
 
 function show(id){
   for(const name of ['feel','conditions','result'])$(name).classList.toggle('hidden',name!==id);
@@ -153,6 +162,22 @@ async function chooseCity(item){
   }catch(error){if(serial===lookupSerial){
     setCityStatus('附近清單暫時無法載入；仍可依名稱搜尋地點，或換個城市再試。',true);
   }}
+}
+async function loadNearbyCategory(category){
+  if(!city)return;
+  const cityId=city.id,serial=lookupSerial,button=discoveryButtons.children[Object.keys(DISCOVERY_CATEGORIES).indexOf(category)];
+  const cacheKey=placeCachePrefix+`category-${category}-${cityId}`;
+  let result;try{const cached=JSON.parse(sessionStorage.getItem(cacheKey));if(cached?.savedAt>Date.now()-86400000&&Array.isArray(cached.places))result=cached.places;}catch{}
+  button.disabled=true;discoveryStatus.textContent=`正在查詢附近${DISCOVERY_CATEGORIES[category].label}…`;
+  try{
+    if(!result){result=await searchCategoryPlaces(city,category);try{sessionStorage.setItem(cacheKey,JSON.stringify({savedAt:Date.now(),places:result}));}catch{}}
+    if(serial!==lookupSerial||city?.id!==cityId)return;
+    catalog=mergePlaces(catalog,result);
+    if(!selectionTouched){selectedIds.clear();suggestedPlaceIds(catalog,[...words]).forEach(id=>selectedIds.add(id));}
+    renderPlaces();if(trip?.city?.id===city.id)save();
+    discoveryStatus.textContent=result.length?`找到 ${result.length} 個附近${DISCOVERY_CATEGORIES[category].label}；已保留先前選的地點。`:'這類附近地點沒有結果；可改用名稱搜尋。';
+  }catch(error){if(serial===lookupSerial)discoveryStatus.textContent=error.message||'查詢暫時失敗；可改用名稱搜尋。';}
+  finally{button.disabled=false;}
 }
 $('searchCity').onclick=async()=>{
   const query=$('destination').value.trim(),serial=++lookupSerial,button=$('searchCity');++namedLookupSerial;

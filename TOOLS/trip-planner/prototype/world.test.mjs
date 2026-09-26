@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {normalizeCities,normalizeFallbackCities,fallbackCityUrl,searchFallbackCities,normalizePlaces,overpassQuery,searchCities,searchPlaces,namedPlaceUrl,normalizeNamedPlaces,searchNamedPlaces,parseOsmPlaceUrl,osmLookupUrl,lookupOsmPlace,mergePlaces} from './world-data.js';
+import {normalizeCities,normalizeFallbackCities,fallbackCityUrl,searchFallbackCities,normalizePlaces,overpassQuery,searchCities,searchPlaces,categoryPlacesQuery,searchCategoryPlaces,DISCOVERY_CATEGORIES,namedPlaceUrl,normalizeNamedPlaces,searchNamedPlaces,parseOsmPlaceUrl,osmLookupUrl,lookupOsmPlace,mergePlaces} from './world-data.js';
 import {buildWorldTrip,groupPlaceIds,sameTripSelection,transportOptions,directionsUrl,recommendedStartTime,startTimeMinutes,normalizeDayStartTimes,suggestedPlaceIds,rankPlaces,recommendPlaces} from './world-planner.js';
 import {tripDNA} from './engine.js';
 
@@ -59,6 +59,17 @@ test('Overpass query is bounded and place results retain source IDs',async()=>{
   const fetcher=async url=>{assert.match(url,/overpass-api\.de/);return {ok:true,json:async()=>({elements:items})};};
   const places=await searchPlaces(city,fetcher);assert.equal(places.length,8);assert.equal(places[0].source,'https://www.openstreetmap.org/node/1');
   assert.equal(normalizePlaces({elements:[{type:'node',id:9,lat:0,lon:0,tags:{}}]},city).length,0);
+});
+test('explicit category discovery makes one small bounded Overpass request',async()=>{
+  assert.deepEqual(Object.keys(DISCOVERY_CATEGORIES),['culture','history','nature','food']);
+  assert.match(categoryPlacesQuery(city,'history'),/around:3000/);
+  assert.match(categoryPlacesQuery(city,'history'),/historic/);
+  assert.match(categoryPlacesQuery(city,'history'),/out center qt 60/);
+  assert.doesNotMatch(categoryPlacesQuery(city,'food'),/historic/);
+  assert.throws(()=>categoryPlacesQuery(city,'all'));
+  let calls=0;
+  const result=await searchCategoryPlaces(city,'culture',async url=>{calls++;assert.match(decodeURIComponent(url),/tourism/);return {ok:true,json:async()=>({elements:items})};});
+  assert.equal(calls,1);assert.equal(result.length,8);
 });
 test('named landmark lookup is explicit, bounded and uses real OSM IDs',async()=>{
   const url=namedPlaceUrl(city,'Tour Eiffel');
