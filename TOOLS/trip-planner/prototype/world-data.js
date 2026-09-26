@@ -2,6 +2,7 @@
 export const CITY_API='https://geocoding-api.open-meteo.com/v1/search';
 export const PLACES_API='https://overpass-api.de/api/interpreter';
 export const NAMED_PLACE_API='https://nominatim.openstreetmap.org/search';
+export const OSM_LOOKUP_API='https://nominatim.openstreetmap.org/lookup';
 const timeout=(ms)=>AbortSignal.timeout(ms);
 const finite=(n,min,max)=>Number.isFinite(n)&&n>=min&&n<=max;
 
@@ -116,6 +117,29 @@ export async function searchNamedPlaces(city,query,fetcher=fetch,scope='nearby')
   if(!response.ok)throw new Error(`具名地點搜尋暫時無法使用（${response.status}）。請稍後再試。`);
   const places=normalizeNamedPlaces(await response.json(),city,query);
   return scope==='wider'?places.filter(place=>distance(city,place)<=120):places;
+}
+
+export function parseOsmPlaceUrl(value){
+  let url;try{url=new URL(String(value||'').trim());}catch{throw new Error('請貼上 OpenStreetMap 的 node、way 或 relation 地點連結。');}
+  if(url.protocol!=='https:'||!['openstreetmap.org','www.openstreetmap.org','osm.org','www.osm.org'].includes(url.hostname))throw new Error('只接受 OpenStreetMap 官方地點連結。');
+  const match=url.pathname.match(/^\/(node|way|relation)\/([1-9]\d*)\/?$/);
+  if(!match||!Number.isSafeInteger(Number(match[2])))throw new Error('連結需要包含 node、way 或 relation 的有效編號。');
+  return {type:match[1],id:Number(match[2])};
+}
+export function osmLookupUrl(value){
+  const {type,id}=parseOsmPlaceUrl(value),url=new URL(OSM_LOOKUP_API);
+  url.searchParams.set('osm_ids',`${{node:'N',way:'W',relation:'R'}[type]}${id}`);
+  url.searchParams.set('format','jsonv2');url.searchParams.set('namedetails','1');url.searchParams.set('extratags','1');url.searchParams.set('accept-language','zh,en');
+  return url;
+}
+export async function lookupOsmPlace(city,value,fetcher=fetch){
+  const {type,id}=parseOsmPlaceUrl(value);
+  const response=await fetcher(osmLookupUrl(value).toString(),{signal:timeout(12000)});
+  if(!response.ok)throw new Error(`OSM 地點查詢暫時無法使用（${response.status}）。`);
+  const place=normalizeNamedPlaces(await response.json(),city).find(item=>item.id===`${type}-${id}`);
+  if(!place)throw new Error('找不到可加入行程的具名 OSM 地點。');
+  if(distance(city,place)>120)throw new Error('這個地點離所選城市超過 120 公里；請先選擇較近的城市。');
+  return place;
 }
 
 export function mergePlaces(nearby,alreadyAdded){

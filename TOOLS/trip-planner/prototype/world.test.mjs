@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {normalizeCities,normalizeFallbackCities,fallbackCityUrl,searchFallbackCities,normalizePlaces,overpassQuery,searchCities,searchPlaces,namedPlaceUrl,normalizeNamedPlaces,searchNamedPlaces,mergePlaces} from './world-data.js';
+import {normalizeCities,normalizeFallbackCities,fallbackCityUrl,searchFallbackCities,normalizePlaces,overpassQuery,searchCities,searchPlaces,namedPlaceUrl,normalizeNamedPlaces,searchNamedPlaces,parseOsmPlaceUrl,osmLookupUrl,lookupOsmPlace,mergePlaces} from './world-data.js';
 import {buildWorldTrip,groupPlaceIds,sameTripSelection,transportOptions,suggestedPlaceIds,rankPlaces,recommendPlaces} from './world-planner.js';
 import {tripDNA} from './engine.js';
 
@@ -53,6 +53,17 @@ test('user-requested wider named search stays local and excludes distant matches
   const fetcher=async request=>{assert.equal(new URL(request).searchParams.get('bounded'),'0');return {ok:true,json:async()=>payload};};
   const places=await searchNamedPlaces(city,'Tour Eiffel',fetcher,'wider');
   assert.deepEqual(places.map(place=>place.id),['way-11']);
+});
+test('an official OSM object link can resolve one local named place',async()=>{
+  const link='https://www.openstreetmap.org/way/5013364';
+  assert.deepEqual(parseOsmPlaceUrl(link),{type:'way',id:5013364});
+  assert.equal(osmLookupUrl(link).searchParams.get('osm_ids'),'W5013364');
+  for(const invalid of ['https://evil.example/way/5013364','http://www.openstreetmap.org/way/5013364','https://www.openstreetmap.org/#map=16/48/2','https://www.openstreetmap.org/way/0'])assert.throws(()=>parseOsmPlaceUrl(invalid));
+  const payload=[{osm_type:'way',osm_id:5013364,lat:'48.858',lon:'2.294',category:'tourism',type:'attraction',display_name:'Tour Eiffel, Paris'}];
+  const fetcher=async request=>{assert.equal(new URL(request).searchParams.get('osm_ids'),'W5013364');return {ok:true,json:async()=>payload};};
+  assert.equal((await lookupOsmPlace(city,link,fetcher)).id,'way-5013364');
+  await assert.rejects(lookupOsmPlace({...city,lat:35,lng:135},link,fetcher),/120/);
+  await assert.rejects(lookupOsmPlace(city,'https://www.openstreetmap.org/node/999',async request=>{assert.equal(new URL(request).searchParams.get('osm_ids'),'N999');return {ok:true,json:async()=>[]};}),/找不到/);
 });
 test('late nearby response keeps named places added while it was loading',()=>{
   const named={id:'way-1',name:'Chosen landmark'},nearby={id:'node-2',name:'Nearby park'};

@@ -1,5 +1,5 @@
 import {dimensions,adjectives,tripDNA,parseAdjustment} from './engine.js';
-import {searchCities,searchFallbackCities,searchPlaces,searchNamedPlaces,mergePlaces} from './world-data.js';
+import {searchCities,searchFallbackCities,searchPlaces,searchNamedPlaces,parseOsmPlaceUrl,lookupOsmPlace,mergePlaces} from './world-data.js';
 import {buildWorldTrip,groupPlaceIds,sameTripSelection,km,mapUrl,directionsUrl,suggestedPlaceIds,rankPlaces} from './world-planner.js';
 import {fetchRoadRoute} from './route-data.js';
 
@@ -23,7 +23,13 @@ const namedStatus=element('p','hint');namedStatus.setAttribute('role','status');
 const namedResults=element('div','city-results');
 const namedHelp=element('p','muted','具名搜尋由 OpenStreetMap 公共服務提供，僅在按下按鈕時查詢；低流量本機測試用。');
 const policyLink=element('a','','使用政策');policyLink.href='https://operations.osmfoundation.org/policies/nominatim/';policyLink.target='_blank';policyLink.rel='noopener noreferrer';namedHelp.append(' ',policyLink);
-namedLabel.append(namedInput);namedSearch.append(namedLabel,namedButton,widerButton,namedStatus,namedResults,namedHelp);
+const osmImport=element('details','osm-import'),osmSummary=element('summary','','名稱查不到？貼上 OpenStreetMap 地點連結');
+const osmLabel=element('label','','OSM 地點連結'),osmInput=element('input');osmInput.type='url';osmInput.placeholder='https://www.openstreetmap.org/way/5013364';osmInput.maxLength=300;
+const osmButton=element('button','','查詢並加入地點');osmButton.type='button';
+const osmStatus=element('p','hint');osmStatus.setAttribute('role','status');
+const osmHelp=element('p','muted','請從 OpenStreetMap 景點頁複製 node／way／relation 連結；地圖畫面網址不適用。每次只核對一個地點。');
+osmLabel.append(osmInput);osmImport.append(osmSummary,osmHelp,osmLabel,osmButton,osmStatus);
+namedLabel.append(namedInput);namedSearch.append(namedLabel,namedButton,widerButton,namedStatus,namedResults,namedHelp,osmImport);
 $('placeStage').insertBefore(namedSearch,$('placeFilter').parentElement);
 const itineraryEditStatus=element('p','hint');itineraryEditStatus.setAttribute('role','status');$('schedule').before(itineraryEditStatus);
 
@@ -57,7 +63,7 @@ $('restart').onclick=()=>{
   trip=null;city=null;catalog=[];activeDay=0;adjustments=[];routeChoices=[];expandedRoutes=[];selectionTouched=false;selectedIds.clear();words.clear();
   sessionStorage.removeItem(draftKey);$('destination').value='';$('cityResults').replaceChildren();$('placeStage').classList.add('hidden');$('placeFilter').value='';$('cityStatus').textContent='';$('formError').textContent='';
   fallbackCityButton.classList.add('hidden');
-  namedInput.value='';namedStatus.textContent='';namedResults.replaceChildren();widerButton.classList.add('hidden');
+  namedInput.value='';namedStatus.textContent='';namedResults.replaceChildren();widerButton.classList.add('hidden');osmInput.value='';osmStatus.textContent='';
   $('days').value='3';$('travelers').value='2';$('budget').value='0';$('currency').value='TWD';
   for(const chip of $('chips').children)chip.setAttribute('aria-pressed','false');renderDNA();show('feel');
 };
@@ -111,9 +117,25 @@ namedButton.onclick=()=>lookupNamedPlace();
 widerButton.onclick=()=>lookupNamedPlace('wider');
 namedInput.addEventListener('input',()=>{widerButton.classList.add('hidden');namedResults.replaceChildren();namedStatus.textContent='';++namedLookupSerial;});
 namedInput.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();namedButton.click();}});
+osmButton.onclick=async()=>{
+  if(!city){osmStatus.textContent='請先選擇城市。';return;}
+  let parsed;try{parsed=parseOsmPlaceUrl(osmInput.value);}catch(error){osmStatus.textContent=error.message;return;}
+  const cityId=city.id,citySerial=lookupSerial,key=`trip-planner-osm-v1-${cityId}-${parsed.type}-${parsed.id}`;
+  let place;try{const cached=JSON.parse(sessionStorage.getItem(key));if(cached?.savedAt>Date.now()-86400000&&cached.place?.id===`${parsed.type}-${parsed.id}`)place=cached.place;}catch{}
+  if(!place&&Date.now()-namedLookupAt<1100){osmStatus.textContent='公共地點服務每秒至多查詢一次，請稍候再按。';return;}
+  osmButton.disabled=true;osmStatus.textContent='正在核對 OSM 地點…';
+  try{
+    if(!place){namedLookupAt=Date.now();place=await lookupOsmPlace(city,osmInput.value);try{sessionStorage.setItem(key,JSON.stringify({savedAt:Date.now(),place}));}catch{}}
+    if(citySerial!==lookupSerial||city?.id!==cityId)return;
+    if(!catalog.some(item=>item.id===place.id))catalog.push(place);
+    selectedIds.add(place.id);selectionTouched=true;$('placeFilter').value='';renderPlaces();
+    osmStatus.textContent=`已加入「${place.name}」，距所選城市約 ${km(city,place).toFixed(1)} 公里；請核對來源、營業資訊與交通。`;
+  }catch(error){if(citySerial===lookupSerial)osmStatus.textContent=error.message||'OSM 地點查詢失敗，請稍後重試。';}
+  finally{osmButton.disabled=false;}
+};
 async function chooseCity(item){
   const serial=++lookupSerial;++namedLookupSerial;city=item;catalog=[];selectedIds.clear();selectionTouched=false;
-  namedInput.value='';namedStatus.textContent='';namedResults.replaceChildren();widerButton.classList.add('hidden');
+  namedInput.value='';namedStatus.textContent='';namedResults.replaceChildren();widerButton.classList.add('hidden');osmInput.value='';osmStatus.textContent='';
   $('cityResults').replaceChildren();$('chosenCity').textContent=cityLabel(item);$('placeFilter').value='';renderPlaces();$('placeStage').classList.remove('hidden');
   setCityStatus(`已選擇 ${cityLabel(item)}。可立即搜尋具名地點；附近清單正在背景載入…`);
   try{

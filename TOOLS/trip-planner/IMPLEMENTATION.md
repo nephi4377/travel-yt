@@ -1,5 +1,11 @@
 # AI Travel Planner V0.2 Prototype
 
+## Current handoff (2026-09-26, OSM object-link milestone)
+
+- The worldwide place step now accepts an explicit OpenStreetMap `node`/`way`/`relation` object link when name search misses a known destination. One user-triggered Nominatim Lookup verifies the source object, accepts only a named travel-related feature within 120 km of the chosen city, and adds it to the selectable catalog. It is session-cached for 24 hours and uses the existing 1.1-second local throttle. Map-view URLs and arbitrary sites are rejected; the UI keeps provider and visit-detail caveats visible.
+- Verified: 35 unit tests pass, JavaScript syntax and diff checks pass. Browser walkthrough: selected Paris, pasted the official Eiffel Tower OSM way link, saw a source-linked named place added even though the nearby Overpass list was unavailable, chose one day, and generated an itinerary containing that place. No paid key or external deployment was used.
+- Next priority: improve worldwide place-search recall and public-provider reliability without treating one-by-one OSM link entry as a complete catalog. Evaluate a licensed or self-hosted source with aggregate quota control before public deployment. Opening hours, transit, fares, accessibility and booking remain unverified; road-only evidence is separate from estimated travel choices.
+
 ## Current handoff (2026-09-26)
 
 - 2026-09-26 hourly milestone: each generated itinerary leg now has an explicit “查開車道路時間（OSRM）” action. It requests only that leg's OSM road-network distance and pure driving time, caches the result for 24 hours in the browser session, and shows provider attribution plus a clear caveat that this is not live traffic, a taxi quote, transit, or a replacement for the three estimated transport choices. No paid key or automatic per-leg route crawl is used.
