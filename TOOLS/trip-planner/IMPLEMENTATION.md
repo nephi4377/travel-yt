@@ -1,5 +1,7 @@
 # AI Travel Planner V0.2 Prototype
 
+2026-09-26 local preview recovery: The bundled localhost server now accepts both `/` and the previously shared `/TOOLS/trip-planner/prototype/` path, and serves prototype files without browser caching. This keeps existing browser tabs usable after restarting the server.
+
 2026-09-23 provider contract update: `prototype/provider-contract.js` defines and checks the future dated Places/Routes day boundary: unique place IDs, coordinates, adjacent route endpoints, one to three options, currency, and four nonnegative cost dimensions. The existing mock builder does not claim these are real coordinates or routes. A future provider must pass this check before replacing mock data.
 
 2026-09-23 browser walkthrough: Checked a three-day trip in the local browser, switched to day 2, previewed and applied a rain adjustment, and confirmed the replacement stop and cost caveat appear. Corrected the leg warning to cover routes both to and from the replacement stop.
