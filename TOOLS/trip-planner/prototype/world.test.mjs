@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {normalizeCities,normalizePlaces,overpassQuery,searchCities,searchPlaces,namedPlaceUrl,normalizeNamedPlaces,searchNamedPlaces,mergePlaces} from './world-data.js';
+import {normalizeCities,normalizeFallbackCities,fallbackCityUrl,searchFallbackCities,normalizePlaces,overpassQuery,searchCities,searchPlaces,namedPlaceUrl,normalizeNamedPlaces,searchNamedPlaces,mergePlaces} from './world-data.js';
 import {buildWorldTrip,groupPlaceIds,sameTripSelection,transportOptions,suggestedPlaceIds,rankPlaces,recommendPlaces} from './world-planner.js';
 import {tripDNA} from './engine.js';
 
@@ -10,6 +10,15 @@ test('city search is explicit, global and safely encoded',async()=>{
   let requested='';const fetcher=async url=>{requested=url;return {ok:true,json:async()=>({results:[{id:1,name:'Paris',latitude:48.85,longitude:2.35,country:'France'}]})};};
   const result=await searchCities('Paris, France',fetcher);assert.equal(result[0].country,'France');assert.match(requested,/name=Paris%2C\+France/);
   assert.equal(normalizeCities({results:[{name:'bad',latitude:999,longitude:0}]}).length,0);
+});
+test('alternate city lookup is explicit and returns only coordinate-bearing city candidates',async()=>{
+  const url=fallbackCityUrl('Kyoto, Japan');
+  assert.equal(url.searchParams.get('featureType'),'city');
+  assert.equal(url.searchParams.get('q'),'Kyoto, Japan');
+  const payload=[{osm_type:'relation',osm_id:42,name:'Kyoto',lat:'35.02',lon:'135.75',address:{state:'Kyoto Prefecture',country:'Japan'}},{osm_type:'relation',osm_id:42,name:'Kyoto',lat:'35.02',lon:'135.75'},{osm_type:'node',osm_id:43,name:'invalid',lat:'999',lon:'0'}];
+  const fetcher=async request=>{assert.equal(new URL(request).searchParams.get('q'),'Kyoto, Japan');return {ok:true,json:async()=>payload};};
+  assert.deepEqual(await searchFallbackCities('Kyoto, Japan',fetcher),[{id:'osm-relation-42',name:'Kyoto',region:'Kyoto Prefecture',country:'Japan',lat:35.02,lng:135.75,timezone:''}]);
+  assert.equal(normalizeFallbackCities({}).length,0);
 });
 test('Overpass query is bounded and place results retain source IDs',async()=>{
   assert.match(overpassQuery(city,100000),/around:7000/);assert.match(overpassQuery(city),/out center 35/);assert.match(overpassQuery(city),/out center 30/);

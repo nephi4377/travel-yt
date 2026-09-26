@@ -1,5 +1,5 @@
 import {dimensions,adjectives,tripDNA,parseAdjustment} from './engine.js';
-import {searchCities,searchPlaces,searchNamedPlaces,mergePlaces} from './world-data.js';
+import {searchCities,searchFallbackCities,searchPlaces,searchNamedPlaces,mergePlaces} from './world-data.js';
 import {buildWorldTrip,groupPlaceIds,sameTripSelection,km,mapUrl,directionsUrl,suggestedPlaceIds,rankPlaces} from './world-planner.js';
 
 const $=id=>document.getElementById(id);
@@ -8,6 +8,9 @@ const draftKey='trip-planner-world-v1',placeCachePrefix='trip-planner-places-v3-
 const words=new Set(),selectedIds=new Set();
 let city=null,catalog=[],trip=null,activeDay=0,adjustments=[],routeChoices=[],expandedRoutes=[],lookupSerial=0,selectionTouched=false;
 let namedLookupAt=0,namedLookupSerial=0;
+const cityCachePrefix='trip-planner-cities-v1-';
+const fallbackCityButton=element('button','hidden','改用 OpenStreetMap 搜尋城市');fallbackCityButton.type='button';
+$('searchCity').parentElement.after(fallbackCityButton);
 
 const namedSearch=element('div','named-search');
 const namedLabel=element('label','', '找不到想去的地點？輸入名稱搜尋');
@@ -51,6 +54,7 @@ $('restart').onclick=()=>{
   ++lookupSerial;++namedLookupSerial;
   trip=null;city=null;catalog=[];activeDay=0;adjustments=[];routeChoices=[];expandedRoutes=[];selectionTouched=false;selectedIds.clear();words.clear();
   sessionStorage.removeItem(draftKey);$('destination').value='';$('cityResults').replaceChildren();$('placeStage').classList.add('hidden');$('placeFilter').value='';$('cityStatus').textContent='';$('formError').textContent='';
+  fallbackCityButton.classList.add('hidden');
   namedInput.value='';namedStatus.textContent='';namedResults.replaceChildren();widerButton.classList.add('hidden');
   $('days').value='3';$('travelers').value='2';$('budget').value='0';$('currency').value='TWD';
   for(const chip of $('chips').children)chip.setAttribute('aria-pressed','false');renderDNA();show('feel');
@@ -126,15 +130,36 @@ async function chooseCity(item){
 $('searchCity').onclick=async()=>{
   const query=$('destination').value.trim(),serial=++lookupSerial,button=$('searchCity');++namedLookupSerial;
   city=null;catalog=[];selectedIds.clear();$('placeStage').classList.add('hidden');$('cityResults').replaceChildren();
+  fallbackCityButton.classList.add('hidden');
   button.disabled=true;setCityStatus('正在搜尋城市…');
   try{
-    const results=await searchCities(query);if(serial!==lookupSerial)return;
+    const cacheKey=cityCachePrefix+`primary-${query.toLocaleLowerCase()}`;
+    let results;try{const cached=JSON.parse(sessionStorage.getItem(cacheKey));if(cached?.savedAt>Date.now()-86400000&&Array.isArray(cached.results))results=cached.results;}catch{}
+    if(!results){results=await searchCities(query);try{sessionStorage.setItem(cacheKey,JSON.stringify({savedAt:Date.now(),results}));}catch{}}
+    if(serial!==lookupSerial)return;
     if(!results.length){setCityStatus('找不到這個城市。請加上國家名稱再試一次。',true);return;}
     setCityStatus('請選擇正確的城市與國家：');
     for(const item of results){const candidate=element('button','city-choice',cityLabel(item));candidate.type='button';candidate.onclick=()=>chooseCity(item);$('cityResults').append(candidate);}
-  }catch(error){if(serial===lookupSerial)setCityStatus(error.message||'城市搜尋失敗，請稍後重試。',true);}
+  }catch(error){if(serial===lookupSerial){setCityStatus(`${error.message||'城市搜尋失敗。'} 可按下方按鈕改用 OpenStreetMap 查詢。`,true);fallbackCityButton.classList.remove('hidden');}}
   finally{button.disabled=false;}
 };
+fallbackCityButton.onclick=async()=>{
+  const query=$('destination').value.trim(),serial=++lookupSerial;++namedLookupSerial;
+  if(query.length<2){setCityStatus('請輸入至少兩個字的城市名稱。',true);return;}
+  const cacheKey=cityCachePrefix+`fallback-${query.toLocaleLowerCase()}`;
+  let results;try{const cached=JSON.parse(sessionStorage.getItem(cacheKey));if(cached?.savedAt>Date.now()-86400000&&Array.isArray(cached.results))results=cached.results;}catch{}
+  if(!results&&Date.now()-namedLookupAt<1100){setCityStatus('OpenStreetMap 公共服務每秒至多查詢一次，請稍候再按。',true);return;}
+  fallbackCityButton.disabled=true;$('cityResults').replaceChildren();setCityStatus('正在使用 OpenStreetMap 搜尋城市…');
+  try{
+    if(!results){namedLookupAt=Date.now();results=await searchFallbackCities(query);try{sessionStorage.setItem(cacheKey,JSON.stringify({savedAt:Date.now(),results}));}catch{}}
+    if(serial!==lookupSerial)return;
+    if(!results.length){setCityStatus('替代服務也找不到符合的城市；請加上國家名稱或稍後重試。',true);return;}
+    setCityStatus('請核對替代服務找到的城市與國家：');fallbackCityButton.classList.add('hidden');
+    for(const item of results){const candidate=element('button','city-choice',cityLabel(item));candidate.type='button';candidate.onclick=()=>chooseCity(item);$('cityResults').append(candidate);}
+  }catch(error){if(serial===lookupSerial)setCityStatus(error.message||'替代城市搜尋失敗，請稍後重試。',true);}
+  finally{fallbackCityButton.disabled=false;}
+};
+$('destination').addEventListener('input',()=>fallbackCityButton.classList.add('hidden'));
 $('destination').addEventListener('input',()=>{city=null;catalog=[];selectedIds.clear();$('placeStage').classList.add('hidden');$('cityResults').replaceChildren();setCityStatus('名稱已變更，請重新搜尋並選擇城市。');});
 $('destination').addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();$('searchCity').click();}});
 

@@ -4,6 +4,7 @@ Last reviewed: 2026-09-26. Record only project-relevant source facts and design 
 
 ## City lookup
 
+- 2026-09-26 recheck: [Nominatim Search API](https://nominatim.org/release-docs/develop/api/Search/) documents `featureType=city` as an address-layer filter, `addressdetails=1` for location labels, and free-form `q` for a place name. [JSON output fields](https://nominatim.org/release-docs/develop/api/Output/) include OSM identifiers and coordinates. The [public policy](https://operations.osmfoundation.org/policies/nominatim/) still limits aggregate traffic to at most 1 request/second and forbids autocomplete and bulk searches. Decision: use this only as an explicitly clicked, cached local-prototype fallback when Open-Meteo fails; do not silently generate a second request or claim public-production readiness. In live testing the primary Paris search recovered, so no live Nominatim city response was claimed.
 - Source: [Open-Meteo Geocoding API](https://open-meteo.com/en/docs/geocoding-api). It supports global location-name searches and returns candidate coordinates and region/country labels. Use it to disambiguate cities; a typed string alone is not a selected destination.
 - Limitation: [Open-Meteo terms](https://open-meteo.com/en/terms) say the free API is for non-commercial use, rate-limited, and has no availability guarantee. A public/commercial release needs a suitable licensed provider or self-hosted alternative.
 - Decision: keep lookup user-triggered and separate from POI lookup.

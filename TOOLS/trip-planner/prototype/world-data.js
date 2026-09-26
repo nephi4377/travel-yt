@@ -18,6 +18,31 @@ export async function searchCities(query,fetcher=fetch){
   if(!response.ok)throw new Error(`城市搜尋暫時無法使用（${response.status}）。`);
   return normalizeCities(await response.json());
 }
+// A deliberate, separately selected fallback when the primary city service is unavailable.
+export function fallbackCityUrl(query){
+  const name=String(query||'').trim();
+  if(name.length<2||name.length>100)throw new Error('請輸入 2–100 個字的城市名稱。');
+  const url=new URL(NAMED_PLACE_API);
+  url.searchParams.set('q',name);url.searchParams.set('format','jsonv2');url.searchParams.set('featureType','city');
+  url.searchParams.set('addressdetails','1');url.searchParams.set('limit','8');url.searchParams.set('accept-language','zh,en');
+  return url;
+}
+export function normalizeFallbackCities(payload){
+  const seen=new Set();
+  return (Array.isArray(payload)?payload:[]).map(item=>{
+    const lat=Number(item.lat),lng=Number(item.lon),id=Number(item.osm_id);
+    if(!finite(lat,-90,90)||!finite(lng,-180,180)||!Number.isSafeInteger(id)||!['node','way','relation'].includes(item.osm_type))return null;
+    const name=String(item.name||item.display_name||'').split(',')[0].trim();
+    if(name.length<2)return null;
+    const key=`osm-${item.osm_type}-${id}`;if(seen.has(key))return null;seen.add(key);
+    return {id:key,name,region:item.address?.state||item.address?.region||'',country:item.address?.country||'',lat,lng,timezone:''};
+  }).filter(Boolean);
+}
+export async function searchFallbackCities(query,fetcher=fetch){
+  const response=await fetcher(fallbackCityUrl(query).toString(),{signal:timeout(12000)});
+  if(!response.ok)throw new Error(`替代城市搜尋暫時無法使用（${response.status}）。請稍後再試。`);
+  return normalizeFallbackCities(await response.json());
+}
 export function overpassQuery(city,radius=6000){
   if(!finite(city?.lat,-90,90)||!finite(city?.lng,-180,180))throw new TypeError('Invalid city coordinates');
   const meters=Math.max(1000,Math.min(7000,Math.round(radius)));
