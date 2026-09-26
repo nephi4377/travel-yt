@@ -1,5 +1,7 @@
 # V0.2 全球城市搜尋版（目前網頁入口）
 
+2026-09-27 local request coordination: the bundled localhost server can now proxy the explicitly clicked Nominatim city/place/object searches through one process-wide 1.1-second queue with short bounded memory caching and validation. This removes the per-tab-only throttle as the sole defense for local multi-tab use. The existing static preview still works directly, and a port-8000 server started before this change must be restarted to enable the proxy. Neither mode is a production-scale worldwide POI backend. Port-8001 API and browser searches were verified, then the temporary test server was stopped.
+
 2026-09-27 daily start time: the condition form now exposes a bounded, editable start time used to calculate every day's displayed stop times. The TripDNA words `不想早起` and `緊湊` suggest 11:30 and 09:00 respectively until the traveler sets their own time; manual choice wins. A local-browser one-day Paris/Eiffel walkthrough confirmed the chosen 08:15 appears in the itinerary. This is an intended schedule only, not a live opening-hour or routing check.
 
 2026-09-27 route verification: each displayed walking, transit or vehicle candidate now links to the same leg in Google Maps with that travel mode preselected. The URL does not perform an in-app API call or confirm the app's time estimate, fare, service availability or accessibility; the traveler checks the external result. Driving mode is not a taxi quote. A two-stop Paris itinerary confirmed distinct transit and driving links in the local browser.

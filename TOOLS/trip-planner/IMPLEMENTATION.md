@@ -1,5 +1,11 @@
 # AI Travel Planner V0.2 Prototype
 
+## Current handoff (2026-09-27, local Nominatim request coordinator)
+
+- The bundled `npm run dev` server now includes a localhost-only Nominatim search/lookup proxy: one process-wide 1.1-second outbound queue, same-request coalescing, a 24-hour bounded in-memory cache, explicit-query validation and an identifying application User-Agent. City fallback, named-place search and OSM object lookup use it when hosted by the bundled server; an already-running older preview server returns 404, so the client preserves the previous direct low-volume behavior until that server is restarted. Static-host use also remains possible but does **not** gain aggregate rate enforcement.
+- Verified: 40 unit tests pass, including validation, cache/coalescing and request spacing. A separate port-8001 local server successfully returned a Nominatim HTTP 200 through the proxy, and a browser walkthrough searched Paris, then found the real Eiffel Tower via the proxied named-place flow while nearby Overpass was unavailable. JavaScript syntax and diff checks pass. The test server on 8001 was stopped; the existing port-8000 preview was not interrupted.
+- Next priority: move from this single-process local evaluation setup to a production-suitable data provider or self-hosted deployment with shared quota enforcement across instances, persistent cache, monitoring and documented terms. Public Nominatim/Overpass availability and worldwide coverage still cannot be guaranteed; keep real-world routes, fares and opening hours unverified.
+
 ## Current handoff (2026-09-27, editable daily start time)
 
 - Trip conditions now include a real editable daily start time (06:00–14:00), and generated stop times use it instead of a fixed 10:00. `不想早起` suggests 11:30; `緊湊` suggests 09:00; a manually edited time takes precedence over later TripDNA changes. The chosen time is included in the summary and session draft, while adjusting it preserves manually ordered places. This is a scheduling preference, not verified opening-hour or transit data.

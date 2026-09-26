@@ -5,6 +5,19 @@ export const NAMED_PLACE_API='https://nominatim.openstreetmap.org/search';
 export const OSM_LOOKUP_API='https://nominatim.openstreetmap.org/lookup';
 const timeout=(ms)=>AbortSignal.timeout(ms);
 const finite=(n,min,max)=>Number.isFinite(n)&&n>=min&&n<=max;
+export function localNominatimUrl(url,origin=globalThis.location?.origin){
+  if(!origin)return null;
+  const base=new URL(origin);
+  if(!['localhost','127.0.0.1'].includes(base.hostname)||!['8000','8001'].includes(base.port))return null;
+  return new URL(`/api/nominatim${url.pathname}${url.search}`,base).toString();
+}
+async function fetchNominatim(url,fetcher){
+  const upstream=url.toString(),local=fetcher===fetch?localNominatimUrl(url):null;
+  if(!local)return fetcher(upstream,{signal:timeout(12000)});
+  const response=await fetcher(local,{signal:timeout(16000)});
+  // An already-running old static preview server has no proxy route.
+  return response.status===404?fetcher(upstream,{signal:timeout(12000)}):response;
+}
 
 export function normalizeCities(payload){
   return (Array.isArray(payload?.results)?payload.results:[])
@@ -45,7 +58,7 @@ export function normalizeFallbackCities(payload){
   });
 }
 export async function searchFallbackCities(query,fetcher=fetch){
-  const response=await fetcher(fallbackCityUrl(query).toString(),{signal:timeout(12000)});
+  const response=await fetchNominatim(fallbackCityUrl(query),fetcher);
   if(!response.ok)throw new Error(`替代城市搜尋暫時無法使用（${response.status}）。請稍後再試。`);
   return normalizeFallbackCities(await response.json());
 }
@@ -118,7 +131,7 @@ export function normalizeNamedPlaces(payload,city,query=''){
   }).filter(Boolean);
 }
 export async function searchNamedPlaces(city,query,fetcher=fetch,scope='nearby'){
-  const response=await fetcher(namedPlaceUrl(city,query,scope).toString(),{signal:timeout(12000)});
+  const response=await fetchNominatim(namedPlaceUrl(city,query,scope),fetcher);
   if(!response.ok)throw new Error(`具名地點搜尋暫時無法使用（${response.status}）。請稍後再試。`);
   const places=normalizeNamedPlaces(await response.json(),city,query);
   return scope==='wider'?places.filter(place=>distance(city,place)<=120):places;
@@ -139,7 +152,7 @@ export function osmLookupUrl(value){
 }
 export async function lookupOsmPlace(city,value,fetcher=fetch){
   const {type,id}=parseOsmPlaceUrl(value);
-  const response=await fetcher(osmLookupUrl(value).toString(),{signal:timeout(12000)});
+  const response=await fetchNominatim(osmLookupUrl(value),fetcher);
   if(!response.ok)throw new Error(`OSM 地點查詢暫時無法使用（${response.status}）。`);
   const place=normalizeNamedPlaces(await response.json(),city).find(item=>item.id===`${type}-${id}`);
   if(!place)throw new Error('找不到可加入行程的具名 OSM 地點。');
