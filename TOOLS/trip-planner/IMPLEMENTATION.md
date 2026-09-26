@@ -1,5 +1,7 @@
 # AI Travel Planner V0.2 Prototype
 
+2026-09-26 功能更新：網頁已改為具名地點可選、依區域與距離排出多日行程的離線規劃。請以 [OFFLINE-PLANNER.md](OFFLINE-PLANNER.md) 作為目前架構、啟動、完成狀態與限制的準確說明；以下為舊 mock 版的歷史紀錄。
+
 2026-09-26 local preview recovery: The bundled localhost server now accepts both `/` and the previously shared `/TOOLS/trip-planner/prototype/` path, and serves prototype files without browser caching. This keeps existing browser tabs usable after restarting the server.
 
 2026-09-23 provider contract update: `prototype/provider-contract.js` defines and checks the future dated Places/Routes day boundary: unique place IDs, coordinates, adjacent route endpoints, one to three options, currency, and four nonnegative cost dimensions. The existing mock builder does not claim these are real coordinates or routes. A future provider must pass this check before replacing mock data.

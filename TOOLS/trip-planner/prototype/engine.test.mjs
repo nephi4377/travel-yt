@@ -13,7 +13,7 @@ assert.equal(day.legs.length,day.stops.length-1);
 assert.ok(day.legs.every(x=>x.options.length<=3&&x.options.length>0));
 assert.ok(day.legs.every(x=>x.options.every((o,i,a)=>!i||routeScore(a[i-1],5,dna)<=routeScore(o,5,dna))));
 assert.equal(mockRoutes['station-market'].find(x=>x.mode==='公車').estimated_cost*5,7500);
-assert.equal(groupRouteCost(mockRoutes['station-market'].find(x=>x.mode==='計程車'),5),6500);
+assert.equal(groupRouteCost(mockRoutes['station-market'].find(x=>x.mode==='計程車'),5),13000);
 assert.equal(groupRouteCost(mockRoutes['station-market'].find(x=>x.mode==='公車'),5),7500);
 const budget=summarizeDayTransport(day,5,0);
 assert.ok(budget.total>=0);

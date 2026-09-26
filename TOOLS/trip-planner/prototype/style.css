@@ -5,3 +5,4 @@
 .day-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));overflow:visible}.day-tab{white-space:normal;padding:10px 8px}@media(max-width:520px){.day-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .route-toggle{border:0;background:transparent;color:#186e51;font-size:.84rem;font-weight:700;padding:9px 3px 2px}.route-toggle:hover{text-decoration:underline}
 .route-reason{color:#176347;font-weight:700}
+.place-choices{display:grid;gap:4px}.place-area{font-size:1rem;margin:18px 0 4px}.place-choice{display:flex;align-items:center;gap:10px;margin:0;padding:9px;border-radius:9px;background:#f5f8f5;font-weight:500}.place-choice input{width:auto;margin:0;accent-color:#16724e}.map-link{display:inline-block;color:#126b50;font-weight:700;padding:6px 0}fieldset{border:1px solid #d6e5da;border-radius:12px;margin:20px 0;padding:12px}legend{font-weight:700;padding:0 6px}
