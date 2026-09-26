@@ -1,5 +1,7 @@
 # V0.2 全球城市搜尋版（目前網頁入口）
 
+2026-09-27 daily start time: the condition form now exposes a bounded, editable start time used to calculate every day's displayed stop times. The TripDNA words `不想早起` and `緊湊` suggest 11:30 and 09:00 respectively until the traveler sets their own time; manual choice wins. A local-browser one-day Paris/Eiffel walkthrough confirmed the chosen 08:15 appears in the itinerary. This is an intended schedule only, not a live opening-hour or routing check.
+
 2026-09-27 route verification: each displayed walking, transit or vehicle candidate now links to the same leg in Google Maps with that travel mode preselected. The URL does not perform an in-app API call or confirm the app's time estimate, fare, service availability or accessibility; the traveler checks the external result. Driving mode is not a taxi quote. A two-stop Paris itinerary confirmed distinct transit and driving links in the local browser.
 
 2026-09-27 city fallback usability: the secondary OSM city search is an explicit option both when the primary source fails or finds nothing and when its returned list does not contain the intended city. Identical nearby OSM city records are merged for display, while distant namesakes remain available; semicolon-separated multilingual region/country aliases are shown as one label. The local browser verified a no-result primary state, then a Paris primary result with an explicit OSM alternative. It is still one user-triggered lookup, never automatic bulk geocoding.

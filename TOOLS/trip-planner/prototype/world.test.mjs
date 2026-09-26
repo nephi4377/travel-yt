@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {normalizeCities,normalizeFallbackCities,fallbackCityUrl,searchFallbackCities,normalizePlaces,overpassQuery,searchCities,searchPlaces,namedPlaceUrl,normalizeNamedPlaces,searchNamedPlaces,parseOsmPlaceUrl,osmLookupUrl,lookupOsmPlace,mergePlaces} from './world-data.js';
-import {buildWorldTrip,groupPlaceIds,sameTripSelection,transportOptions,directionsUrl,suggestedPlaceIds,rankPlaces,recommendPlaces} from './world-planner.js';
+import {buildWorldTrip,groupPlaceIds,sameTripSelection,transportOptions,directionsUrl,recommendedStartTime,startTimeMinutes,suggestedPlaceIds,rankPlaces,recommendPlaces} from './world-planner.js';
 import {tripDNA} from './engine.js';
 
 const city={id:'1',name:'Example',lat:48.85,lng:2.35};
@@ -17,6 +17,15 @@ test('every estimated transport choice opens matching external route mode',()=>{
     assert.equal(url.searchParams.get('destination'),'48.86,2.36');
     assert.equal(url.searchParams.get('travelmode'),option.travelMode);
   }
+});
+test('daily start time follows late/compact preference unless a valid time is explicitly entered',()=>{
+  assert.equal(recommendedStartTime([]),'10:00');
+  assert.equal(recommendedStartTime(['緊湊']),'09:00');
+  assert.equal(recommendedStartTime(['緊湊','不想早起']),'11:30');
+  assert.equal(startTimeMinutes('11:30'),690);
+  assert.equal(startTimeMinutes('06:00'),360);
+  assert.throws(()=>startTimeMinutes('05:59'),/06:00/);
+  assert.throws(()=>startTimeMinutes('14:01'),/06:00/);
 });
 test('city search is explicit, global and safely encoded',async()=>{
   let requested='';const fetcher=async url=>{requested=url;return {ok:true,json:async()=>({results:[{id:1,name:'Paris',latitude:48.85,longitude:2.35,country:'France'}]})};};

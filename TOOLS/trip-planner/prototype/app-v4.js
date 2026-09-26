@@ -1,6 +1,6 @@
 import {dimensions,adjectives,tripDNA,parseAdjustment} from './engine.js';
 import {searchCities,searchFallbackCities,searchPlaces,searchNamedPlaces,parseOsmPlaceUrl,lookupOsmPlace,mergePlaces} from './world-data.js';
-import {buildWorldTrip,groupPlaceIds,sameTripSelection,km,mapUrl,directionsUrl,suggestedPlaceIds,rankPlaces} from './world-planner.js';
+import {buildWorldTrip,groupPlaceIds,sameTripSelection,km,mapUrl,directionsUrl,suggestedPlaceIds,rankPlaces,recommendedStartTime,startTimeMinutes} from './world-planner.js';
 import {fetchRoadRoute} from './route-data.js';
 
 const $=id=>document.getElementById(id);
@@ -8,9 +8,12 @@ const element=(tag,className='',text='')=>{const item=document.createElement(tag
 const draftKey='trip-planner-world-v1',placeCachePrefix='trip-planner-places-v3-';
 const words=new Set(),selectedIds=new Set();
 let city=null,catalog=[],trip=null,activeDay=0,adjustments=[],routeChoices=[],expandedRoutes=[],lookupSerial=0,selectionTouched=false;
+let startTimeTouched=false;
 let namedLookupAt=0,namedLookupSerial=0;
 let roadLookupAt=0;
 const cityCachePrefix='trip-planner-cities-v1-';
+const startLabel=element('label','','每日出發時間'),startInput=element('input');startInput.id='startTime';startInput.type='time';startInput.min='06:00';startInput.max='14:00';startInput.value='10:00';startInput.required=true;
+startInput.addEventListener('input',()=>{startTimeTouched=true;});startLabel.append(startInput,element('small','','「不想早起」建議 11:30，「緊湊」建議 09:00；可自行修改，人工設定優先。'));$('date').parentElement.after(startLabel);
 const fallbackCityButton=element('button','hidden','找不到正確城市？改用 OpenStreetMap 搜尋');fallbackCityButton.type='button';
 $('searchCity').parentElement.after(fallbackCityButton);
 
@@ -40,7 +43,7 @@ function show(id){
 }
 function save(){
   if(!trip)return;
-  try{sessionStorage.setItem(draftKey,JSON.stringify({trip,city,catalog,words:[...words],activeDay,adjustments,routeChoices}));}catch{}
+  try{sessionStorage.setItem(draftKey,JSON.stringify({trip,city,catalog,words:[...words],activeDay,adjustments,routeChoices,startTimeTouched}));}catch{}
 }
 function renderDNA(){
   const box=$('dnaBars');box.replaceChildren();
@@ -51,7 +54,7 @@ function renderDNA(){
 }
 for(const word of Object.keys(adjectives)){
   const button=element('button','chip',word);button.type='button';button.setAttribute('aria-pressed','false');
-  button.onclick=()=>{words.has(word)?words.delete(word):words.add(word);button.setAttribute('aria-pressed',String(words.has(word)));renderDNA();if(catalog.length){if(!selectionTouched){selectedIds.clear();suggestedPlaceIds(catalog,[...words]).forEach(id=>selectedIds.add(id));}renderPlaces();}};
+  button.onclick=()=>{words.has(word)?words.delete(word):words.add(word);button.setAttribute('aria-pressed',String(words.has(word)));if(!startTimeTouched)startInput.value=recommendedStartTime([...words]);renderDNA();if(catalog.length){if(!selectionTouched){selectedIds.clear();suggestedPlaceIds(catalog,[...words]).forEach(id=>selectedIds.add(id));}renderPlaces();}};
   $('chips').append(button);
 }
 renderDNA();
@@ -60,11 +63,11 @@ $('date').value=`${tomorrow.getFullYear()}-${String(tomorrow.getMonth()+1).padSt
 $('next').onclick=()=>show('conditions');$('back').onclick=()=>show('feel');$('editTrip').onclick=()=>show('conditions');
 $('restart').onclick=()=>{
   ++lookupSerial;++namedLookupSerial;
-  trip=null;city=null;catalog=[];activeDay=0;adjustments=[];routeChoices=[];expandedRoutes=[];selectionTouched=false;selectedIds.clear();words.clear();
+  trip=null;city=null;catalog=[];activeDay=0;adjustments=[];routeChoices=[];expandedRoutes=[];selectionTouched=false;startTimeTouched=false;selectedIds.clear();words.clear();
   sessionStorage.removeItem(draftKey);$('destination').value='';$('cityResults').replaceChildren();$('placeStage').classList.add('hidden');$('placeFilter').value='';$('cityStatus').textContent='';$('formError').textContent='';
   fallbackCityButton.classList.add('hidden');
   namedInput.value='';namedStatus.textContent='';namedResults.replaceChildren();widerButton.classList.add('hidden');osmInput.value='';osmStatus.textContent='';
-  $('days').value='3';$('travelers').value='2';$('budget').value='0';$('currency').value='TWD';
+  $('days').value='3';$('travelers').value='2';$('budget').value='0';$('currency').value='TWD';startInput.value='10:00';
   for(const chip of $('chips').children)chip.setAttribute('aria-pressed','false');renderDNA();show('feel');
 };
 
@@ -196,14 +199,15 @@ function dateLabel(index){const date=new Date(`${trip.date}T12:00:00`);date.setD
 const clock=minutes=>`${String(Math.floor(minutes/60)).padStart(2,'0')}:${String(minutes%60).padStart(2,'0')}`;
 function renderSummary(){
   $('resultTitle').textContent=`${city.name} · ${trip.date} 起 ${trip.days} 天`;
-  $('summary').textContent=`${cityLabel(city)} · ${trip.travelers} 人 · ${trip.placeIds.length} 個所選地點 · ${trip.budget?`紀錄預算 ${trip.budget.toLocaleString()} ${trip.currency}（尚未計價）`:'預算未設定'} · 偏好：${[...words].join('、')||'均衡'}`;
+  $('summary').textContent=`${cityLabel(city)} · ${trip.travelers} 人 · ${trip.placeIds.length} 個所選地點 · 每日 ${trip.startTime||'10:00'} 出發 · ${trip.budget?`紀錄預算 ${trip.budget.toLocaleString()} ${trip.currency}（尚未計價）`:'預算未設定'} · 偏好：${[...words].join('、')||'均衡'}`;
 }
 $('tripForm').onsubmit=event=>{
   event.preventDefault();$('formError').textContent='';if(!event.currentTarget.reportValidity())return;
   if(!city||!catalog.length){$('formError').textContent='請先搜尋並選擇城市，等候地點載入。';return;}
   const ids=selectedPlaces(),days=Number($('days').value);
   if(ids.length<days||ids.length>days*4){$('formError').textContent=`${days} 天請選 ${days}–${days*4} 個地點；目前選了 ${ids.length} 個。`;return;}
-  const updated={city,destination:city.name,date:$('date').value,days,travelers:Number($('travelers').value),budget:Number($('budget').value),currency:$('currency').value.toUpperCase(),placeIds:ids,preferenceWords:[...words]};
+  let startTime;try{startTimeMinutes(startInput.value);startTime=startInput.value;}catch{$('formError').textContent='每日出發時間請選 06:00–14:00。';return;}
+  const updated={city,destination:city.name,date:$('date').value,days,startTime,travelers:Number($('travelers').value),budget:Number($('budget').value),currency:$('currency').value.toUpperCase(),placeIds:ids,preferenceWords:[...words]};
   const keepPlan=sameTripSelection(trip,updated);
   const samePreferences=keepPlan&&JSON.stringify(trip.preferenceWords)===JSON.stringify(updated.preferenceWords);
   updated.dayPlaceIds=keepPlan&&trip.dayPlaceIds?trip.dayPlaceIds:groupPlaceIds({...updated,catalog}).map(group=>group.map(place=>place.id));
@@ -240,7 +244,7 @@ function renderTrip(){
     clear.onclick=()=>{adjustments[activeDay]={};routeChoices[activeDay]=[];itineraryEditStatus.textContent='已清除這一天的臨時調整。';renderTrip();save();};box.append(clear);
   }
   if(day.stops.length===1)box.append(element('p','hint','今天只安排一站；可回到地點選擇增加內容。'));
-  let cursor=600;
+  let cursor=startTimeMinutes(trip.startTime||'10:00');
   day.stops.forEach((stop,index)=>{
     const card=element('article','stop');card.append(element('time','',`建議 ${clock(cursor)}`),element('h3','',stop.name),element('p','',`${stop.category} · 建議停留約 ${stop.minutes} 分 · ${stop.note}`));
     const link=element('a','map-link','地圖與來源 ↗');link.href=stop.source||mapUrl(stop);link.target='_blank';link.rel='noopener noreferrer';card.append(link);
@@ -309,14 +313,15 @@ $('adjustForm').onsubmit=event=>{
 try{
   const saved=JSON.parse(sessionStorage.getItem(draftKey));
   if(saved?.trip?.city&&Array.isArray(saved.catalog)&&saved.catalog.length&&Array.isArray(saved.trip.placeIds)&&saved.trip.days>=1&&saved.trip.days<=6){
-    city=saved.city;catalog=saved.catalog;trip=saved.trip;if(!trip.dayPlaceIds)trip.dayPlaceIds=groupPlaceIds({...trip,catalog}).map(group=>group.map(place=>place.id));
+    city=saved.city;catalog=saved.catalog;trip=saved.trip;startTimeMinutes(trip.startTime||'10:00');startTimeTouched=Boolean(saved.startTimeTouched);if(!trip.dayPlaceIds)trip.dayPlaceIds=groupPlaceIds({...trip,catalog}).map(group=>group.map(place=>place.id));
     groupPlaceIds({...trip,catalog});
     activeDay=Math.min(Math.max(0,saved.activeDay||0),trip.days-1);adjustments=Array.isArray(saved.adjustments)?saved.adjustments:Array.from({length:trip.days},()=>({}));routeChoices=Array.isArray(saved.routeChoices)?saved.routeChoices:Array.from({length:trip.days},()=>[]);
     for(const word of saved.words||[])if(Object.hasOwn(adjectives,word))words.add(word);
+    if(!trip.startTime)trip.startTime=recommendedStartTime([...words]);
     for(const chip of $('chips').children)chip.setAttribute('aria-pressed',String(words.has(chip.textContent)));
     $('destination').value=city.name;$('chosenCity').textContent=cityLabel(city);$('placeStage').classList.remove('hidden');
     for(const id of trip.placeIds)selectedIds.add(id);selectionTouched=true;renderPlaces();
-    for(const id of ['date','days','travelers','budget','currency'])$(id).value=trip[id];
+    for(const id of ['date','days','travelers','budget','currency'])$(id).value=trip[id];startInput.value=trip.startTime||recommendedStartTime([...words]);
     renderDNA();renderSummary();renderTrip();show('result');
   }
 }catch{}

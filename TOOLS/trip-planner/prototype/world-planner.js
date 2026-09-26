@@ -1,6 +1,14 @@
 const rad=x=>x*Math.PI/180;
 export function km(a,b){const dlat=rad(b.lat-a.lat),dlng=rad(b.lng-a.lng),h=Math.sin(dlat/2)**2+Math.cos(rad(a.lat))*Math.cos(rad(b.lat))*Math.sin(dlng/2)**2;return 6371*2*Math.atan2(Math.sqrt(h),Math.sqrt(1-h));}
 const round5=n=>Math.max(5,Math.ceil(n/5)*5);
+export function recommendedStartTime(words=[]){return words.includes('不想早起')?'11:30':words.includes('緊湊')?'09:00':'10:00';}
+export function startTimeMinutes(value){
+  const match=/^([01]\d|2[0-3]):([0-5]\d)$/.exec(String(value||''));
+  if(!match)throw new RangeError('Invalid start time');
+  const minutes=Number(match[1])*60+Number(match[2]);
+  if(minutes<360||minutes>840)throw new RangeError('Start time must be 06:00–14:00');
+  return minutes;
+}
 export function transportOptions(from,to,dna,adjustment={}){
   const distance=km(from,to),walk=round5(distance/4*60),transit=round5(12+distance/18*60),car=round5(8+distance/25*60);
   const option=(mode,travelMode,time,walking,friction)=>({mode,travelMode,duration_min:time,walking_min:walking,energy_score:Math.min(100,Math.round(walking*2)),friction_score:friction,estimated_cost:null,currency:null,estimate:true});

@@ -1,5 +1,11 @@
 # AI Travel Planner V0.2 Prototype
 
+## Current handoff (2026-09-27, editable daily start time)
+
+- Trip conditions now include a real editable daily start time (06:00–14:00), and generated stop times use it instead of a fixed 10:00. `不想早起` suggests 11:30; `緊湊` suggests 09:00; a manually edited time takes precedence over later TripDNA changes. The chosen time is included in the summary and session draft, while adjusting it preserves manually ordered places. This is a scheduling preference, not verified opening-hour or transit data.
+- Verified: 38 unit tests pass, including start-time bounds and preference precedence. Browser walkthrough: `不想早起` produced 11:30 in the form; setting 08:15 manually and then choosing `緊湊` kept 08:15; a real Paris/Eiffel one-day itinerary displayed 08:15 in both summary and stop schedule. JavaScript syntax and diff checks pass.
+- Next priority: verify multi-day small-screen timing and provide better source-backed opening/transit/fare data. The start time should not be interpreted as confirmation that a destination is open or reachable then; keep those caveats visible. Continue testing across cities and preserve user edits.
+
 ## Current handoff (2026-09-27, mode-specific route verification)
 
 - Each transport candidate on a generated leg now has its own explicit Google Maps directions link using the matching `walking`, `transit`, or `driving` mode. This is a handoff for the traveler to verify the proposed mode, not a paid Routes API call or a claim that the distance-model time, schedule, availability or fare is confirmed. The external link for driving does not imply taxi service. The existing optional OSRM road-only check remains separate.
