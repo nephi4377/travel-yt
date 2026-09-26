@@ -1,11 +1,23 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {normalizeCities,normalizeFallbackCities,fallbackCityUrl,searchFallbackCities,normalizePlaces,overpassQuery,searchCities,searchPlaces,namedPlaceUrl,normalizeNamedPlaces,searchNamedPlaces,parseOsmPlaceUrl,osmLookupUrl,lookupOsmPlace,mergePlaces} from './world-data.js';
-import {buildWorldTrip,groupPlaceIds,sameTripSelection,transportOptions,suggestedPlaceIds,rankPlaces,recommendPlaces} from './world-planner.js';
+import {buildWorldTrip,groupPlaceIds,sameTripSelection,transportOptions,directionsUrl,suggestedPlaceIds,rankPlaces,recommendPlaces} from './world-planner.js';
 import {tripDNA} from './engine.js';
 
 const city={id:'1',name:'Example',lat:48.85,lng:2.35};
 const items=Array.from({length:8},(_,i)=>({type:'node',id:i+1,lat:48.85+i*.002,lon:2.35+i*.002,tags:{name:`Place ${i+1}`,tourism:i%3===0?'museum':'attraction'}}));
+test('every estimated transport choice opens matching external route mode',()=>{
+  const from={lat:48.85,lng:2.35},to={lat:48.86,lng:2.36};
+  const options=transportOptions(from,to,tripDNA([]));
+  assert.deepEqual(new Set(options.map(option=>option.travelMode)),new Set(['walking','transit','driving']));
+  for(const option of options){
+    const url=new URL(directionsUrl(from,to,option.travelMode));
+    assert.equal(url.searchParams.get('api'),'1');
+    assert.equal(url.searchParams.get('origin'),'48.85,2.35');
+    assert.equal(url.searchParams.get('destination'),'48.86,2.36');
+    assert.equal(url.searchParams.get('travelmode'),option.travelMode);
+  }
+});
 test('city search is explicit, global and safely encoded',async()=>{
   let requested='';const fetcher=async url=>{requested=url;return {ok:true,json:async()=>({results:[{id:1,name:'Paris',latitude:48.85,longitude:2.35,country:'France'}]})};};
   const result=await searchCities('Paris, France',fetcher);assert.equal(result[0].country,'France');assert.match(requested,/name=Paris%2C\+France/);

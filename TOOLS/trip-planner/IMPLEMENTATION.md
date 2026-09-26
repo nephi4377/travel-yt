@@ -1,5 +1,11 @@
 # AI Travel Planner V0.2 Prototype
 
+## Current handoff (2026-09-27, mode-specific route verification)
+
+- Each transport candidate on a generated leg now has its own explicit Google Maps directions link using the matching `walking`, `transit`, or `driving` mode. This is a handoff for the traveler to verify the proposed mode, not a paid Routes API call or a claim that the distance-model time, schedule, availability or fare is confirmed. The external link for driving does not imply taxi service. The existing optional OSRM road-only check remains separate.
+- Verified: 37 unit tests pass, including mode-to-URL mapping. In the local browser, a Paris trip with real source-linked Louvre and Eiffel Tower stops showed distinct driving and transit verification links on the same leg, and the mobile-first comparison control still worked. JavaScript syntax and diff checks pass.
+- Next priority: evaluate actual transit/fare/opening data from a licensed or self-hosted provider with production-safe aggregate limits. Until then, keep Money and real-world time explicitly unverified, and continue testing multiple regions and small-screen flows.
+
 ## Current handoff (2026-09-27, city selection reliability)
 
 - The alternate OpenStreetMap city search is now offered explicitly when the primary geocoder returns no candidate **or** returns candidates that do not match the desired city, not only after a network error. This closes a worldwide-search dead end without silently doubling API requests. Equivalent nearby OSM representations of a city are collapsed, and semicolon-separated multilingual labels display one readable variant; genuinely distant same-name cities remain separate.

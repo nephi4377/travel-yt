@@ -3,10 +3,10 @@ export function km(a,b){const dlat=rad(b.lat-a.lat),dlng=rad(b.lng-a.lng),h=Math
 const round5=n=>Math.max(5,Math.ceil(n/5)*5);
 export function transportOptions(from,to,dna,adjustment={}){
   const distance=km(from,to),walk=round5(distance/4*60),transit=round5(12+distance/18*60),car=round5(8+distance/25*60);
-  const option=(mode,time,walking,friction)=>({mode,duration_min:time,walking_min:walking,energy_score:Math.min(100,Math.round(walking*2)),friction_score:friction,estimated_cost:null,currency:null,estimate:true});
+  const option=(mode,travelMode,time,walking,friction)=>({mode,travelMode,duration_min:time,walking_min:walking,energy_score:Math.min(100,Math.round(walking*2)),friction_score:friction,estimated_cost:null,currency:null,estimate:true});
   const options=[];
-  if(distance<=3&&!adjustment.tired)options.push(option('步行',walk,walk,5));
-  options.push(option('大眾運輸（待查）',transit,8,35),option('車輛（待查）',car,3,20));
+  if(distance<=3&&!adjustment.tired)options.push(option('步行','walking',walk,walk,5));
+  options.push(option('大眾運輸（待查）','transit',transit,8,35),option('車輛（待查）','driving',car,3,20));
   const weights=dna.weights;
   return options.sort((a,b)=>a.duration_min*(1+weights.pace/100)+a.energy_score*(1+(100-weights.walking_tolerance)/60)+a.friction_score*(1+(100-weights.transport_tolerance)/80)-b.duration_min*(1+weights.pace/100)-b.energy_score*(1+(100-weights.walking_tolerance)/60)-b.friction_score*(1+(100-weights.transport_tolerance)/80));
 }
@@ -84,4 +84,9 @@ export function buildWorldTrip(input,dna,adjustments=[]){
   });
 }
 export function mapUrl(place){return `https://www.openstreetmap.org/?mlat=${encodeURIComponent(place.lat)}&mlon=${encodeURIComponent(place.lng)}#map=16/${encodeURIComponent(place.lat)}/${encodeURIComponent(place.lng)}`;}
-export function directionsUrl(a,b){return `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(`${a.lat},${a.lng}`)}&destination=${encodeURIComponent(`${b.lat},${b.lng}`)}`;}
+export function directionsUrl(a,b,travelMode){
+  const url=new URL('https://www.google.com/maps/dir/');url.searchParams.set('api','1');
+  url.searchParams.set('origin',`${a.lat},${a.lng}`);url.searchParams.set('destination',`${b.lat},${b.lng}`);
+  if(['walking','transit','driving'].includes(travelMode))url.searchParams.set('travelmode',travelMode);
+  return url.toString();
+}

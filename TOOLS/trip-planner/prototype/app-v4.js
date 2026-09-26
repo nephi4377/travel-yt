@@ -269,9 +269,12 @@ function renderTrip(){
       const label=element('label',`route-option${selected===optionIndex?' selected':''}`),radio=element('input');radio.type='radio';radio.name=`route-${activeDay}-${index}`;radio.checked=selected===optionIndex;
       radio.onchange=()=>{routeChoices[activeDay][index]=optionIndex;renderTrip();save();};
       const body=element('span','route-body');body.append(element('strong','',`${route.mode} · 約 ${route.duration_min} 分`),element('small','',`Money 待查 · Time 約 ${route.duration_min} 分`),element('small','',`Energy ${route.energy_score}/100 · Friction ${route.friction_score}/100 · 步行約 ${route.walking_min} 分`));
-      label.append(radio,body);list.append(label);
+      label.append(radio,body);
+      const choice=element('div','route-choice');choice.append(label);
+      const verify=element('a','map-link',`在 Google Maps 核對${route.travelMode==='walking'?'步行':route.travelMode==='transit'?'大眾運輸':'開車'}路線 ↗`);
+      verify.href=directionsUrl(stop,next,route.travelMode);verify.target='_blank';verify.rel='noopener noreferrer';choice.append(verify);list.append(choice);
     });
-    section.append(list);
+    section.append(list,element('p','hint','核對連結會另開地圖的相應交通模式；地圖結果可能因地區或日期而無路線，車輛模式不代表可叫車或車資。'));
     const roadButton=element('button','route-toggle','查開車道路時間（OSRM）');roadButton.type='button';
     const roadStatus=element('p','hint');roadStatus.setAttribute('role','status');
     roadButton.onclick=async()=>{
@@ -287,12 +290,12 @@ function renderTrip(){
     };
     section.append(roadButton,roadStatus);
     const roadSource=element('a','map-link','道路資料：OSRM / OpenStreetMap');roadSource.href='https://routing.openstreetmap.de/about.html';roadSource.target='_blank';roadSource.rel='noopener noreferrer';section.append(roadSource);
-    const routeLink=element('a','map-link','查詢實際路線 ↗');routeLink.href=directionsUrl(stop,next);routeLink.target='_blank';routeLink.rel='noopener noreferrer';section.append(routeLink);box.append(section);
+    box.append(section);
     if(leg.options.length>1){
       const toggle=element('button','route-toggle',expandedRoutes[activeDay]?.[index]?'收合其他交通方案':`比較其他 ${leg.options.length-1} 種交通方案`);
       toggle.type='button';toggle.setAttribute('aria-expanded',String(Boolean(expandedRoutes[activeDay]?.[index])));
       toggle.onclick=()=>{expandedRoutes[activeDay]??=[];expandedRoutes[activeDay][index]=!expandedRoutes[activeDay][index];renderTrip();};
-      section.insertBefore(toggle,routeLink);
+      section.append(toggle);
     }
     cursor+=stop.minutes+30+leg.options[selected].duration_min;
   });
