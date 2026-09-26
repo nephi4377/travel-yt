@@ -11,13 +11,36 @@ export function transportOptions(from,to,dna,adjustment={}){
   return options.sort((a,b)=>a.duration_min*(1+weights.pace/100)+a.energy_score*(1+(100-weights.walking_tolerance)/60)+a.friction_score*(1+(100-weights.transport_tolerance)/80)-b.duration_min*(1+weights.pace/100)-b.energy_score*(1+(100-weights.walking_tolerance)/60)-b.friction_score*(1+(100-weights.transport_tolerance)/80));
 }
 function nearestOrder(places,center){const remaining=[...places],ordered=[];let cursor=center;while(remaining.length){let best=0;for(let i=1;i<remaining.length;i++)if(km(cursor,remaining[i])<km(cursor,remaining[best]))best=i;cursor=remaining.splice(best,1)[0];ordered.push(cursor);}return ordered;}
-export function suggestedPlaceIds(catalog,words=[],count=6){
-  const preferred=words.includes('自然')?['公園','展望點','歷史地點','室內文化','景點']:words.includes('深度')?['歷史地點','室內文化','公園','展望點','景點']:['室內文化','公園','歷史地點','展望點','景點'];
-  const ids=[];
-  for(const category of preferred){const candidate=catalog.find(p=>p.category===category&&!ids.includes(p.id));if(candidate)ids.push(candidate.id);}
-  for(const place of catalog)if(ids.length<count&&!ids.includes(place.id))ids.push(place.id);
-  return ids.slice(0,count);
+// Only score preferences supported by the place categories we actually query.
+// Other TripDNA dimensions must not be presented as verified place attributes.
+export function rankPlaces(catalog,words=[]){
+  return catalog.map((place,index)=>{
+    const reasons=[],category=place.category;
+    let score=40+Math.min(20,Math.max(0,Number(place.quality)||0)/8);
+    if(words.includes('自然')&&(category==='公園'||category==='展望點')){score+=30;reasons.push('符合自然偏好：公園或觀景點');}
+    if(words.includes('深度')&&(category==='歷史地點'||category==='室內文化')){score+=25;reasons.push('符合深度偏好：歷史或文化地點');}
+    if((Number(place.quality)||0)>=60)reasons.push('地圖資料附有額外參考來源');
+    if(!reasons.length)reasons.push('依地點類型與可查來源列入候選');
+    return {place,score:Math.round(score),reasons,order:index};
+  }).sort((a,b)=>b.score-a.score||a.order-b.order);
 }
+export function recommendPlaces(catalog,words=[],count=6){
+  const remaining=rankPlaces(catalog,words),chosen=[],categoryCounts=new Map();
+  const diversityPenalty=words.includes('自然')||words.includes('深度')?12:35;
+  while(chosen.length<Math.max(0,count)&&remaining.length){
+    let best=0;
+    for(let i=1;i<remaining.length;i++){
+      const candidate=remaining[i],current=remaining[best];
+      const candidateScore=candidate.score-diversityPenalty*(categoryCounts.get(candidate.place.category)||0);
+      const currentScore=current.score-diversityPenalty*(categoryCounts.get(current.place.category)||0);
+      if(candidateScore>currentScore)best=i;
+    }
+    const [selection]=remaining.splice(best,1);chosen.push(selection);
+    categoryCounts.set(selection.place.category,(categoryCounts.get(selection.place.category)||0)+1);
+  }
+  return chosen;
+}
+export function suggestedPlaceIds(catalog,words=[],count=6){return recommendPlaces(catalog,words,count).map(item=>item.place.id);}
 export function buildWorldTrip(input,dna,adjustments=[]){
   const {catalog,placeIds,days,city}=input;
   if(!city||!Array.isArray(catalog)||!Number.isInteger(days)||days<1||days>6)throw new TypeError('Invalid trip');

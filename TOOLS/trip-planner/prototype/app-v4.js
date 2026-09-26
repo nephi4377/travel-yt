@@ -1,12 +1,12 @@
 import {dimensions,adjectives,tripDNA,parseAdjustment} from './engine.js';
 import {searchCities,searchPlaces} from './world-data.js';
-import {buildWorldTrip,km,mapUrl,directionsUrl,suggestedPlaceIds} from './world-planner.js';
+import {buildWorldTrip,km,mapUrl,directionsUrl,suggestedPlaceIds,rankPlaces} from './world-planner.js';
 
 const $=id=>document.getElementById(id);
 const element=(tag,className='',text='')=>{const item=document.createElement(tag);item.className=className;item.textContent=text;return item;};
 const draftKey='trip-planner-world-v1',placeCachePrefix='trip-planner-places-v3-';
 const words=new Set(),selectedIds=new Set();
-let city=null,catalog=[],trip=null,activeDay=0,adjustments=[],routeChoices=[],expandedRoutes=[],lookupSerial=0;
+let city=null,catalog=[],trip=null,activeDay=0,adjustments=[],routeChoices=[],expandedRoutes=[],lookupSerial=0,selectionTouched=false;
 
 function show(id){
   for(const name of ['feel','conditions','result'])$(name).classList.toggle('hidden',name!==id);
@@ -26,7 +26,7 @@ function renderDNA(){
 }
 for(const word of Object.keys(adjectives)){
   const button=element('button','chip',word);button.type='button';button.setAttribute('aria-pressed','false');
-  button.onclick=()=>{words.has(word)?words.delete(word):words.add(word);button.setAttribute('aria-pressed',String(words.has(word)));renderDNA();};
+  button.onclick=()=>{words.has(word)?words.delete(word):words.add(word);button.setAttribute('aria-pressed',String(words.has(word)));renderDNA();if(catalog.length){if(!selectionTouched){selectedIds.clear();suggestedPlaceIds(catalog,[...words]).forEach(id=>selectedIds.add(id));}renderPlaces();}};
   $('chips').append(button);
 }
 renderDNA();
@@ -35,7 +35,7 @@ $('date').value=`${tomorrow.getFullYear()}-${String(tomorrow.getMonth()+1).padSt
 $('next').onclick=()=>show('conditions');$('back').onclick=()=>show('feel');$('editTrip').onclick=()=>show('conditions');
 $('restart').onclick=()=>{
   ++lookupSerial;
-  trip=null;city=null;catalog=[];activeDay=0;adjustments=[];routeChoices=[];expandedRoutes=[];selectedIds.clear();words.clear();
+  trip=null;city=null;catalog=[];activeDay=0;adjustments=[];routeChoices=[];expandedRoutes=[];selectionTouched=false;selectedIds.clear();words.clear();
   sessionStorage.removeItem(draftKey);$('destination').value='';$('cityResults').replaceChildren();$('placeStage').classList.add('hidden');$('placeFilter').value='';$('cityStatus').textContent='';$('formError').textContent='';
   $('days').value='3';$('travelers').value='2';$('budget').value='0';$('currency').value='TWD';
   for(const chip of $('chips').children)chip.setAttribute('aria-pressed','false');renderDNA();show('feel');
@@ -46,10 +46,12 @@ function setCityStatus(message,isError=false){$('cityStatus').textContent=messag
 function countPlaces(){$('placeCount').textContent=`已選 ${selectedIds.size} 個地點；清單共 ${catalog.length} 個。` ;}
 function renderPlaces(){
   const box=$('placeChoices'),filter=$('placeFilter').value.trim().toLocaleLowerCase();box.replaceChildren();
-  for(const place of catalog.filter(p=>!filter||p.name.toLocaleLowerCase().includes(filter)||p.category.includes(filter))){
+  for(const {place,reasons} of rankPlaces(catalog,[...words]).filter(({place})=>!filter||place.name.toLocaleLowerCase().includes(filter)||place.category.includes(filter))){
     const label=element('label','place-choice'),checkbox=element('input');checkbox.type='checkbox';checkbox.value=place.id;checkbox.checked=selectedIds.has(place.id);
-    checkbox.onchange=()=>{checkbox.checked?selectedIds.add(place.id):selectedIds.delete(place.id);countPlaces();};
-    label.append(checkbox,element('span','',`${place.name} · ${place.category} · ${place.kind==='indoor'?'室內':place.kind==='outdoor'?'戶外':'環境待查'}`));box.append(label);
+    checkbox.onchange=()=>{selectionTouched=true;checkbox.checked?selectedIds.add(place.id):selectedIds.delete(place.id);countPlaces();};
+    const details=element('span','place-body');
+    details.append(element('strong','',`${place.name} · ${place.category} · ${place.kind==='indoor'?'室內':place.kind==='outdoor'?'戶外':'環境待查'}`),element('small','',reasons.join('；')));
+    label.append(checkbox,details);box.append(label);
   }
   if(!box.children.length)box.append(element('p','muted','沒有符合篩選的地點。'));
   countPlaces();
@@ -63,9 +65,9 @@ async function chooseCity(item){
     let result;try{const cached=JSON.parse(sessionStorage.getItem(cacheKey));if(cached?.savedAt>Date.now()-86400000&&Array.isArray(cached.places))result=cached.places;}catch{}
     if(!result){result=await searchPlaces(item);try{sessionStorage.setItem(cacheKey,JSON.stringify({savedAt:Date.now(),places:result}));}catch{}}
     if(serial!==lookupSerial)return;
-    catalog=result;selectedIds.clear();suggestedPlaceIds(catalog,[...words]).forEach(id=>selectedIds.add(id));
+    catalog=result;selectedIds.clear();selectionTouched=false;suggestedPlaceIds(catalog,[...words]).forEach(id=>selectedIds.add(id));
     $('chosenCity').textContent=cityLabel(item);$('placeFilter').value='';renderPlaces();$('placeStage').classList.remove('hidden');
-    setCityStatus(catalog.length?`查到 ${catalog.length} 個具名地點，優先顯示資料較完整者；請確認想去的地方。`:'這個中心區域沒有查到符合條件的具名景點，請選另一城市或稍後重試。');
+    setCityStatus(catalog.length?`查到 ${catalog.length} 個具名地點，已依可驗證的自然／深度偏好排序；其餘偏好仍需人工確認。`:'這個中心區域沒有查到符合條件的具名景點，請選另一城市或稍後重試。');
   }catch(error){if(serial===lookupSerial){city=null;setCityStatus(error.message||'地點搜尋失敗，請稍後重試。',true);}}
 }
 $('searchCity').onclick=async()=>{
@@ -150,7 +152,7 @@ try{
     for(const word of saved.words||[])if(Object.hasOwn(adjectives,word))words.add(word);
     for(const chip of $('chips').children)chip.setAttribute('aria-pressed',String(words.has(chip.textContent)));
     $('destination').value=city.name;$('chosenCity').textContent=cityLabel(city);$('placeStage').classList.remove('hidden');
-    for(const id of trip.placeIds)selectedIds.add(id);renderPlaces();
+    for(const id of trip.placeIds)selectedIds.add(id);selectionTouched=true;renderPlaces();
     for(const id of ['date','days','travelers','budget','currency'])$(id).value=trip[id];
     renderDNA();renderSummary();renderTrip();show('result');
   }

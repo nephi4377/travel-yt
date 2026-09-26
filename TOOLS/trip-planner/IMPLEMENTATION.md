@@ -1,5 +1,14 @@
 # AI Travel Planner V0.2 Prototype
 
+## Current handoff (2026-09-26)
+
+- Goal: a usable worldwide, mobile-first trip planner, not a single-city demo.
+- This iteration: real OSM candidates now receive an explainable, preference-aware ordering. The `自然` and `深度` adjectives change place ranking and default selections; recommendations show their evidence in the place list. Unsupported subjective adjectives are not misrepresented as verified place facts.
+- Verified: all 24 tests pass, including opposite preference rankings and different default shortlists. A local-browser walkthrough searched Paris, France and confirmed real named places plus visible recommendation reasons; changing from `自然` to `深度` reordered the same city's list without another POI request.
+- Browser finding: Paris still surfaced small neighborhood squares ahead of some major destinations. Source completeness is not the same as visitor relevance; do not treat the current ranking as a finished travel recommendation engine.
+- Highest-priority gaps: broaden named-place discovery beyond a fixed city-center radius and result cap; support additional TripDNA interests with appropriate source data; allow manual place inclusion and itinerary editing; replace approximate transport with verified routing before presenting it as actionable.
+- Next iteration: expand user-controlled worldwide place discovery without overloading public Overpass. Keep provider limits and attribution in view; see [RESEARCH-LOG.md](RESEARCH-LOG.md).
+
 2026-09-26 search consistency fix: Editing the destination or restarting now invalidates in-flight city/place lookups, preventing a late response from repopulating a different city's results. The interface still requires an explicit search and city selection before building a trip.
 
 2026-09-26 mobile route UI update: Each leg now shows its selected transport option first. A per-leg comparison control reveals the other available options only on demand. This is presentation-only and does not change route estimates or the worldwide data flow.

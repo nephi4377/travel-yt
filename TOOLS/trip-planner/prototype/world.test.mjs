@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {normalizeCities,normalizePlaces,overpassQuery,searchCities,searchPlaces} from './world-data.js';
-import {buildWorldTrip,transportOptions,suggestedPlaceIds} from './world-planner.js';
+import {buildWorldTrip,transportOptions,suggestedPlaceIds,rankPlaces,recommendPlaces} from './world-planner.js';
 import {tripDNA} from './engine.js';
 
 const city={id:'1',name:'Example',lat:48.85,lng:2.35};
@@ -38,6 +38,18 @@ test('world trip uses only returned places and never invents fares',()=>{
 test('suggested places include several categories when available',()=>{
   const ids=suggestedPlaceIds([{id:'m1',category:'室內文化'},{id:'m2',category:'室內文化'},{id:'p',category:'公園'},{id:'h',category:'歷史地點'}],[],3);
   assert.deepEqual(ids,['m1','p','h']);
+});
+test('supported TripDNA words change place ranking with an explicit reason',()=>{
+  const places=[{id:'museum',name:'Museum',category:'室內文化',quality:0},{id:'park',name:'Park',category:'公園',quality:0},{id:'history',name:'History',category:'歷史地點',quality:0}];
+  const nature=rankPlaces(places,['自然']),depth=rankPlaces(places,['深度']);
+  assert.equal(nature[0].place.id,'park');
+  assert.match(nature[0].reasons.join(' '),/自然/);
+  assert.notEqual(depth[0].place.id,'park');
+  assert.match(depth[0].reasons.join(' '),/深度/);
+  assert.deepEqual(rankPlaces(places,['美食']).map(x=>x.score),[40,40,40]);
+  assert.equal(recommendPlaces(places,['自然'],1)[0].place.id,'park');
+  const fuller=[...places,{id:'park2',name:'Park 2',category:'公園',quality:0},{id:'park3',name:'Park 3',category:'公園',quality:0},{id:'museum2',name:'Museum 2',category:'室內文化',quality:0}];
+  assert.notDeepEqual(suggestedPlaceIds(fuller,['自然'],3),suggestedPlaceIds(fuller,['深度'],3));
 });
 test('rain swaps with a nearby unselected indoor place, tired removes a stop',()=>{
   const catalog=normalizePlaces({elements:items},city).map((p,i)=>({...p,kind:i<4?'outdoor':i===4?'indoor':p.kind})),dna=tripDNA([]),selected=catalog.slice(0,4);
