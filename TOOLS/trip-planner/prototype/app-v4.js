@@ -1,6 +1,6 @@
 import {dimensions,adjectives,tripDNA,parseAdjustment} from './engine.js';
 import {searchCities,searchFallbackCities,searchPlaces,searchNamedPlaces,parseOsmPlaceUrl,lookupOsmPlace,mergePlaces} from './world-data.js';
-import {buildWorldTrip,groupPlaceIds,sameTripSelection,km,mapUrl,directionsUrl,suggestedPlaceIds,rankPlaces,recommendedStartTime,startTimeMinutes} from './world-planner.js';
+import {buildWorldTrip,groupPlaceIds,sameTripSelection,km,mapUrl,directionsUrl,suggestedPlaceIds,rankPlaces,recommendedStartTime,startTimeMinutes,normalizeDayStartTimes} from './world-planner.js';
 import {fetchRoadRoute} from './route-data.js';
 
 const $=id=>document.getElementById(id);
@@ -196,10 +196,10 @@ $('destination').addEventListener('input',()=>{++lookupSerial;++namedLookupSeria
 function selectedPlaces(){return [...selectedIds].filter(id=>catalog.some(p=>p.id===id));}
 function tripDays(){return buildWorldTrip({...trip,catalog},tripDNA(words),adjustments);}
 function dateLabel(index){const date=new Date(`${trip.date}T12:00:00`);date.setDate(date.getDate()+index);return `${date.getMonth()+1}/${date.getDate()}`;}
-const clock=minutes=>`${String(Math.floor(minutes/60)).padStart(2,'0')}:${String(minutes%60).padStart(2,'0')}`;
+const clock=minutes=>`${minutes>=1440?'隔日 ':''}${String(Math.floor(minutes/60)%24).padStart(2,'0')}:${String(minutes%60).padStart(2,'0')}`;
 function renderSummary(){
   $('resultTitle').textContent=`${city.name} · ${trip.date} 起 ${trip.days} 天`;
-  $('summary').textContent=`${cityLabel(city)} · ${trip.travelers} 人 · ${trip.placeIds.length} 個所選地點 · 每日 ${trip.startTime||'10:00'} 出發 · ${trip.budget?`紀錄預算 ${trip.budget.toLocaleString()} ${trip.currency}（尚未計價）`:'預算未設定'} · 偏好：${[...words].join('、')||'均衡'}`;
+  $('summary').textContent=`${cityLabel(city)} · ${trip.travelers} 人 · ${trip.placeIds.length} 個所選地點 · 預設 ${trip.startTime||'10:00'} 出發（各日可調） · ${trip.budget?`紀錄預算 ${trip.budget.toLocaleString()} ${trip.currency}（尚未計價）`:'預算未設定'} · 偏好：${[...words].join('、')||'均衡'}`;
 }
 $('tripForm').onsubmit=event=>{
   event.preventDefault();$('formError').textContent='';if(!event.currentTarget.reportValidity())return;
@@ -211,6 +211,7 @@ $('tripForm').onsubmit=event=>{
   const keepPlan=sameTripSelection(trip,updated);
   const samePreferences=keepPlan&&JSON.stringify(trip.preferenceWords)===JSON.stringify(updated.preferenceWords);
   updated.dayPlaceIds=keepPlan&&trip.dayPlaceIds?trip.dayPlaceIds:groupPlaceIds({...updated,catalog}).map(group=>group.map(place=>place.id));
+  updated.dayStartTimes=normalizeDayStartTimes(keepPlan&&trip.startTime===updated.startTime?trip.dayStartTimes:null,days,updated.startTime);
   trip=updated;itineraryEditStatus.textContent=keepPlan?'已保留原有地點順序與每日安排。':'';
   if(!keepPlan){activeDay=0;adjustments=Array.from({length:days},()=>({}));routeChoices=Array.from({length:days},()=>[]);expandedRoutes=Array.from({length:days},()=>[]);}
   else if(!samePreferences){routeChoices=Array.from({length:days},()=>[]);expandedRoutes=Array.from({length:days},()=>[]);itineraryEditStatus.textContent='已保留每日安排，並依新的旅行偏好重新選擇交通。';}
@@ -218,7 +219,7 @@ $('tripForm').onsubmit=event=>{
 };
 function renderTabs(){
   const box=$('dayTabs');box.replaceChildren();
-  for(let i=0;i<trip.days;i++){const button=element('button','day-tab',`第 ${i+1} 天 · ${dateLabel(i)}`);button.type='button';button.setAttribute('aria-pressed',String(i===activeDay));button.onclick=()=>{activeDay=i;$('preview').replaceChildren();renderTrip();save();};box.append(button);}
+  for(let i=0;i<trip.days;i++){const button=element('button','day-tab',`第 ${i+1} 天 · ${dateLabel(i)} · ${trip.dayStartTimes?.[i]||trip.startTime}`);button.type='button';button.setAttribute('aria-pressed',String(i===activeDay));button.onclick=()=>{activeDay=i;$('preview').replaceChildren();renderTrip();save();};box.append(button);}
 }
 function editDayPlace(index,targetDay,targetIndex){
   const groups=trip.dayPlaceIds,source=groups[activeDay],id=source[index];
@@ -239,12 +240,21 @@ function editDayPlace(index,targetDay,targetIndex){
 function renderTrip(){
   renderTabs();const day=tripDays()[activeDay],box=$('schedule');box.replaceChildren();
   box.append(element('h3','',`第 ${activeDay+1} 天 · ${day.stops.length} 個地點`));
+  const dayStartLabel=element('label','day-start',`第 ${activeDay+1} 天出發時間`),dayStartInput=element('input');
+  dayStartInput.type='time';dayStartInput.min='06:00';dayStartInput.max='14:00';dayStartInput.required=true;dayStartInput.value=trip.dayStartTimes[activeDay];
+  dayStartInput.onchange=()=>{
+    if(!dayStartInput.reportValidity())return;
+    try{startTimeMinutes(dayStartInput.value);}catch{itineraryEditStatus.textContent='出發時間請選 06:00–14:00。';return;}
+    trip.dayStartTimes[activeDay]=dayStartInput.value;itineraryEditStatus.textContent=`已調整第 ${activeDay+1} 天的出發時間；其他日期不變。`;
+    renderTrip();save();
+  };
+  dayStartLabel.append(dayStartInput,element('small','','只調整這一天；景點營業時間與班次仍須另查。'));box.append(dayStartLabel);
   if(adjustments[activeDay]?.rain||adjustments[activeDay]?.tired){
     const clear=element('button','route-toggle','清除這一天的臨時調整，以編輯地點順序');clear.type='button';
     clear.onclick=()=>{adjustments[activeDay]={};routeChoices[activeDay]=[];itineraryEditStatus.textContent='已清除這一天的臨時調整。';renderTrip();save();};box.append(clear);
   }
   if(day.stops.length===1)box.append(element('p','hint','今天只安排一站；可回到地點選擇增加內容。'));
-  let cursor=startTimeMinutes(trip.startTime||'10:00');
+  let cursor=startTimeMinutes(trip.dayStartTimes[activeDay]);
   day.stops.forEach((stop,index)=>{
     const card=element('article','stop');card.append(element('time','',`建議 ${clock(cursor)}`),element('h3','',stop.name),element('p','',`${stop.category} · 建議停留約 ${stop.minutes} 分 · ${stop.note}`));
     const link=element('a','map-link','地圖與來源 ↗');link.href=stop.source||mapUrl(stop);link.target='_blank';link.rel='noopener noreferrer';card.append(link);
@@ -303,6 +313,8 @@ function renderTrip(){
     }
     cursor+=stop.minutes+30+leg.options[selected].duration_min;
   });
+  const projectedEnd=cursor+(day.stops.at(-1)?.minutes||0);
+  box.append(element('p',projectedEnd>1200?'warning':'hint',`預估最後一站約 ${clock(projectedEnd)} 結束；未核對營業時間與實際交通。${projectedEnd>1200?' 這天可能太晚，建議提早出發或減少地點。':''}`));
 }
 $('adjustForm').onsubmit=event=>{
   event.preventDefault();const intent=parseAdjustment($('adjust').value),preview=$('preview');preview.replaceChildren();
@@ -318,6 +330,7 @@ try{
     activeDay=Math.min(Math.max(0,saved.activeDay||0),trip.days-1);adjustments=Array.isArray(saved.adjustments)?saved.adjustments:Array.from({length:trip.days},()=>({}));routeChoices=Array.isArray(saved.routeChoices)?saved.routeChoices:Array.from({length:trip.days},()=>[]);
     for(const word of saved.words||[])if(Object.hasOwn(adjectives,word))words.add(word);
     if(!trip.startTime)trip.startTime=recommendedStartTime([...words]);
+    trip.dayStartTimes=normalizeDayStartTimes(trip.dayStartTimes,trip.days,trip.startTime);
     for(const chip of $('chips').children)chip.setAttribute('aria-pressed',String(words.has(chip.textContent)));
     $('destination').value=city.name;$('chosenCity').textContent=cityLabel(city);$('placeStage').classList.remove('hidden');
     for(const id of trip.placeIds)selectedIds.add(id);selectionTouched=true;renderPlaces();

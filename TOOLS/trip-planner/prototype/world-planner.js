@@ -9,6 +9,14 @@ export function startTimeMinutes(value){
   if(minutes<360||minutes>840)throw new RangeError('Start time must be 06:00–14:00');
   return minutes;
 }
+export function normalizeDayStartTimes(times,days,fallback){
+  startTimeMinutes(fallback);
+  if(!Number.isInteger(days)||days<1||days>6)throw new RangeError('Invalid day count');
+  return Array.from({length:days},(_,index)=>{
+    const value=Array.isArray(times)?times[index]:undefined;
+    try{startTimeMinutes(value);return value;}catch{return fallback;}
+  });
+}
 export function transportOptions(from,to,dna,adjustment={}){
   const distance=km(from,to),walk=round5(distance/4*60),transit=round5(12+distance/18*60),car=round5(8+distance/25*60);
   const option=(mode,travelMode,time,walking,friction)=>({mode,travelMode,duration_min:time,walking_min:walking,energy_score:Math.min(100,Math.round(walking*2)),friction_score:friction,estimated_cost:null,currency:null,estimate:true});

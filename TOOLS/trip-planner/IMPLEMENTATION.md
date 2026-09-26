@@ -1,5 +1,11 @@
 # AI Travel Planner V0.2 Prototype
 
+## Current handoff (2026-09-27, independent multi-day timing)
+
+- A generated 1–6 day trip now exposes an editable start time on each day. The condition-form time remains the default, while a day override changes only that day's stop times and date tab; editing unrelated conditions preserves overrides. Changing the global default or regenerating the day count resets them deliberately. Each day shows an approximate finish time and an explicit late-day warning after 20:00. These are distance-model schedule estimates, never verified opening or transit times.
+- Verified: 40 unit tests pass, including normalization of invalid/legacy per-day times. Browser walkthrough used two real source-linked Paris places: day 2 changed from 10:00 to 13:30, its stop and finish moved accordingly, day 1 stayed at 10:00, and changing party size to 3 preserved both day times. JavaScript syntax and diff checks pass.
+- Next priority: visual QA at narrow phone width and a multi-stop late-day case; then investigate reliable opening-hours/transit/fare data before calling schedules actionable. The existing public-provider rate and coverage limits remain. Do not assume the projected end time includes verified waits, queues or opening hours.
+
 ## Current handoff (2026-09-27, local Nominatim request coordinator)
 
 - The bundled `npm run dev` server now includes a localhost-only Nominatim search/lookup proxy: one process-wide 1.1-second outbound queue, same-request coalescing, a 24-hour bounded in-memory cache, explicit-query validation and an identifying application User-Agent. City fallback, named-place search and OSM object lookup use it when hosted by the bundled server; an already-running older preview server returns 404, so the client preserves the previous direct low-volume behavior until that server is restarted. Static-host use also remains possible but does **not** gain aggregate rate enforcement.

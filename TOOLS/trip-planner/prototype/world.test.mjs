@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {normalizeCities,normalizeFallbackCities,fallbackCityUrl,searchFallbackCities,normalizePlaces,overpassQuery,searchCities,searchPlaces,namedPlaceUrl,normalizeNamedPlaces,searchNamedPlaces,parseOsmPlaceUrl,osmLookupUrl,lookupOsmPlace,mergePlaces} from './world-data.js';
-import {buildWorldTrip,groupPlaceIds,sameTripSelection,transportOptions,directionsUrl,recommendedStartTime,startTimeMinutes,suggestedPlaceIds,rankPlaces,recommendPlaces} from './world-planner.js';
+import {buildWorldTrip,groupPlaceIds,sameTripSelection,transportOptions,directionsUrl,recommendedStartTime,startTimeMinutes,normalizeDayStartTimes,suggestedPlaceIds,rankPlaces,recommendPlaces} from './world-planner.js';
 import {tripDNA} from './engine.js';
 
 const city={id:'1',name:'Example',lat:48.85,lng:2.35};
@@ -26,6 +26,8 @@ test('daily start time follows late/compact preference unless a valid time is ex
   assert.equal(startTimeMinutes('06:00'),360);
   assert.throws(()=>startTimeMinutes('05:59'),/06:00/);
   assert.throws(()=>startTimeMinutes('14:01'),/06:00/);
+  assert.deepEqual(normalizeDayStartTimes(['08:15','25:00','11:30'],3,'10:00'),['08:15','10:00','11:30']);
+  assert.deepEqual(normalizeDayStartTimes(null,2,'09:00'),['09:00','09:00']);
 });
 test('city search is explicit, global and safely encoded',async()=>{
   let requested='';const fetcher=async url=>{requested=url;return {ok:true,json:async()=>({results:[{id:1,name:'Paris',latitude:48.85,longitude:2.35,country:'France'}]})};};
