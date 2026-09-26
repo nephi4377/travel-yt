@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {normalizeCities,normalizeFallbackCities,fallbackCityUrl,searchFallbackCities,normalizePlaces,overpassQuery,searchCities,searchPlaces,categoryPlacesQuery,searchCategoryPlaces,DISCOVERY_CATEGORIES,namedPlaceUrl,normalizeNamedPlaces,searchNamedPlaces,parseOsmPlaceUrl,osmLookupUrl,lookupOsmPlace,mergePlaces} from './world-data.js';
-import {buildWorldTrip,groupPlaceIds,sameTripSelection,transportOptions,directionsUrl,recommendedStartTime,startTimeMinutes,normalizeDayStartTimes,suggestedPlaceIds,rankPlaces,recommendPlaces} from './world-planner.js';
+import {buildWorldTrip,groupPlaceIds,sameTripSelection,transportOptions,directionsUrl,recommendedStartTime,startTimeMinutes,normalizeDayStartTimes,suggestedPlaceIds,suggestedDocumentedPlaceIds,rankPlaces,recommendPlaces} from './world-planner.js';
 import {tripDNA} from './engine.js';
 
 const city={id:'1',name:'Example',lat:48.85,lng:2.35};
@@ -33,6 +33,11 @@ test('city search is explicit, global and safely encoded',async()=>{
   let requested='';const fetcher=async url=>{requested=url;return {ok:true,json:async()=>({results:[{id:1,name:'Paris',latitude:48.85,longitude:2.35,country:'France'}]})};};
   const result=await searchCities('Paris, France',fetcher);assert.equal(result[0].country,'France');assert.match(requested,/name=Paris%2C\+France/);
   assert.equal(normalizeCities({results:[{name:'bad',latitude:999,longitude:0}]}).length,0);
+});
+test('city candidates exclude landmarks and transport features while keeping populated places',()=>{
+  const place=(id,feature_code)=>({id,name:`Kyoto ${id}`,latitude:35,longitude:135,feature_code});
+  const results=normalizeCities({results:[place(1,'PPLA'),place(2,'PPL'),place(3,'AIRH'),place(4,'PAL'),place(5,'PPLX'),place(6,'PPLQ')]});
+  assert.deepEqual(results.map(item=>item.id),['1','2']);
 });
 test('alternate city lookup is explicit and returns only coordinate-bearing city candidates',async()=>{
   const url=fallbackCityUrl('Kyoto, Japan');
@@ -121,6 +126,14 @@ test('documented major places rank above incidental nearby attractions',()=>{
   assert.equal(ranked[0].name,'National Museum');
   assert.equal(ranked[0].kind,'indoor');
   assert.equal(ranked[1].kind,'unknown');
+});
+test('automatic place suggestions require an external OSM cross-reference',()=>{
+  const candidates=normalizePlaces({elements:[
+    {type:'node',id:101,lat:48.85,lon:2.35,tags:{name:'Minor monument',historic:'memorial'}},
+    {type:'way',id:102,center:{lat:48.86,lon:2.36},tags:{name:'Documented museum',tourism:'museum',wikidata:'Q123'}}
+  ]},city);
+  assert.deepEqual(suggestedDocumentedPlaceIds(candidates),['way-102']);
+  assert.deepEqual(suggestedDocumentedPlaceIds(candidates.filter(place=>place.id==='node-101')),[]);
 });
 test('world trip uses only returned places and never invents fares',()=>{
   const catalog=normalizePlaces({elements:items},city),dna=tripDNA(['舒服']);

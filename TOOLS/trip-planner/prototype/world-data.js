@@ -22,6 +22,7 @@ async function fetchNominatim(url,fetcher){
 export function normalizeCities(payload){
   return (Array.isArray(payload?.results)?payload.results:[])
     .filter(x=>finite(x.latitude,-90,90)&&finite(x.longitude,-180,180)&&typeof x.name==='string')
+    .filter(x=>!x.feature_code||(/^PPL(?:A[2-5]?|C|F|G|L|R|S)?$/.test(x.feature_code)))
     .map(x=>({id:String(x.id),name:x.name,region:x.admin1||'',country:x.country||x.country_code||'',lat:x.latitude,lng:x.longitude,timezone:x.timezone||''}));
 }
 export async function searchCities(query,fetcher=fetch){

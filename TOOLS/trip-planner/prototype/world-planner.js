@@ -60,6 +60,11 @@ export function recommendPlaces(catalog,words=[],count=6){
   return chosen;
 }
 export function suggestedPlaceIds(catalog,words=[],count=6){return recommendPlaces(catalog,words,count).map(item=>item.place.id);}
+// Public OSM category tags alone do not justify preselecting minor monuments or galleries.
+// A cross-linked record is still only a candidate, not a verified endorsement.
+export function suggestedDocumentedPlaceIds(catalog,words=[],count=6){
+  return suggestedPlaceIds(catalog.filter(place=>(Number(place.quality)||0)>=60),words,count);
+}
 export function sameTripSelection(previous,next){
   if(!previous||!next||previous.city?.id!==next.city?.id||previous.days!==next.days)return false;
   const a=previous.placeIds,b=next.placeIds;

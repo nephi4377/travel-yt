@@ -1,5 +1,11 @@
 # AI Travel Planner V0.2 Prototype
 
+## Current handoff (2026-09-27, safer global search and suggestions)
+
+- Open-Meteo city candidates with a feature code are now restricted to current populated-place types; unrelated facilities and sights no longer appear as selectable cities. Nearby OSM category results are no longer blindly preselected: only candidates with an external Wikipedia/Wikidata cross-reference meet the automatic-suggestion threshold, while every returned place remains available for user choice. A cross-reference is an identity signal, not proof of quality, hours, accessibility or suitability.
+- Verified: 43 unit tests pass, including facility/landmark rejection and low-evidence suggestion exclusion. In the local browser, a Kyoto query returned cities without the previously visible heliport and palace. The historic-category lookup was used again to inspect selection behavior. No paid API or new background request was added.
+- Next priority: inspect low-evidence/empty-default UX and make it easy to choose enough places for multi-day trips; further improve result ranking without pretending OSM tags are reviews. Then narrow-phone visual QA and production-suitable provider evaluation. Current OSM/Open-Meteo limits and unverified routes, fares and opening hours still apply.
+
 ## Current handoff (2026-09-27, discovery only on explicit request)
 
 - Choosing a city no longer fires the slow six-part nearby Overpass request. The user instead clicks one of four bounded category searches or enters a named place; changing a city still clears its old candidates. During a category request, the other category buttons are disabled to avoid concurrent public-service calls from one tab. Existing city/category session caching and source-linked itinerary flow remain.

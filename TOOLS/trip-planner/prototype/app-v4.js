@@ -1,6 +1,6 @@
 import {dimensions,adjectives,tripDNA,parseAdjustment} from './engine.js';
 import {searchCities,searchFallbackCities,searchCategoryPlaces,DISCOVERY_CATEGORIES,searchNamedPlaces,parseOsmPlaceUrl,lookupOsmPlace,mergePlaces} from './world-data.js';
-import {buildWorldTrip,groupPlaceIds,sameTripSelection,km,mapUrl,directionsUrl,suggestedPlaceIds,rankPlaces,recommendedStartTime,startTimeMinutes,normalizeDayStartTimes} from './world-planner.js';
+import {buildWorldTrip,groupPlaceIds,sameTripSelection,km,mapUrl,directionsUrl,suggestedDocumentedPlaceIds,rankPlaces,recommendedStartTime,startTimeMinutes,normalizeDayStartTimes} from './world-planner.js';
 import {fetchRoadRoute} from './route-data.js';
 
 const $=id=>document.getElementById(id);
@@ -65,7 +65,7 @@ function renderDNA(){
 }
 for(const word of Object.keys(adjectives)){
   const button=element('button','chip',word);button.type='button';button.setAttribute('aria-pressed','false');
-  button.onclick=()=>{words.has(word)?words.delete(word):words.add(word);button.setAttribute('aria-pressed',String(words.has(word)));if(!startTimeTouched)startInput.value=recommendedStartTime([...words]);renderDNA();if(catalog.length){if(!selectionTouched){selectedIds.clear();suggestedPlaceIds(catalog,[...words]).forEach(id=>selectedIds.add(id));}renderPlaces();}};
+  button.onclick=()=>{words.has(word)?words.delete(word):words.add(word);button.setAttribute('aria-pressed',String(words.has(word)));if(!startTimeTouched)startInput.value=recommendedStartTime([...words]);renderDNA();if(catalog.length){if(!selectionTouched){selectedIds.clear();suggestedDocumentedPlaceIds(catalog,[...words]).forEach(id=>selectedIds.add(id));}renderPlaces();}};
   $('chips').append(button);
 }
 renderDNA();
@@ -165,9 +165,9 @@ async function loadNearbyCategory(category){
     if(!result){result=await searchCategoryPlaces(city,category);try{sessionStorage.setItem(cacheKey,JSON.stringify({savedAt:Date.now(),places:result}));}catch{}}
     if(serial!==lookupSerial||city?.id!==cityId)return;
     catalog=mergePlaces(catalog,result);
-    if(!selectionTouched){selectedIds.clear();suggestedPlaceIds(catalog,[...words]).forEach(id=>selectedIds.add(id));}
+    if(!selectionTouched){selectedIds.clear();suggestedDocumentedPlaceIds(catalog,[...words]).forEach(id=>selectedIds.add(id));}
     renderPlaces();if(trip?.city?.id===city.id)save();
-    discoveryStatus.textContent=result.length?`找到 ${result.length} 個附近${DISCOVERY_CATEGORIES[category].label}；已保留先前選的地點。`:'這類附近地點沒有結果；可改用名稱搜尋。';
+    discoveryStatus.textContent=result.length?`找到 ${result.length} 個附近${DISCOVERY_CATEGORIES[category].label}；僅預選附有外部參考的候選地點，請檢查並自行勾選想去的地方。`:'這類附近地點沒有結果；可改用名稱搜尋。';
   }catch(error){if(serial===lookupSerial)discoveryStatus.textContent=error.message||'查詢暫時失敗；可改用名稱搜尋。';}
   finally{discoveryBusy=false;for(const item of discoveryButtons.children)item.disabled=false;}
 }
