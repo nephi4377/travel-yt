@@ -29,15 +29,20 @@ export function fallbackCityUrl(query){
   return url;
 }
 export function normalizeFallbackCities(payload){
-  const seen=new Set();
+  const seen=new Set(),candidates=[];
+  const displayPart=value=>String(value||'').split(';').map(part=>part.trim()).filter(Boolean).at(-1)||'';
   return (Array.isArray(payload)?payload:[]).map(item=>{
     const lat=Number(item.lat),lng=Number(item.lon),id=Number(item.osm_id);
     if(!finite(lat,-90,90)||!finite(lng,-180,180)||!Number.isSafeInteger(id)||!['node','way','relation'].includes(item.osm_type))return null;
-    const name=String(item.name||item.display_name||'').split(',')[0].trim();
+    const name=displayPart(String(item.name||item.display_name||'').split(',')[0]);
     if(name.length<2)return null;
     const key=`osm-${item.osm_type}-${id}`;if(seen.has(key))return null;seen.add(key);
-    return {id:key,name,region:item.address?.state||item.address?.region||'',country:item.address?.country||'',lat,lng,timezone:''};
-  }).filter(Boolean);
+    return {id:key,name,region:displayPart(item.address?.state||item.address?.region),country:displayPart(item.address?.country),lat,lng,timezone:''};
+  }).filter(Boolean).filter(city=>{
+    const sameCity=candidates.some(previous=>previous.name.toLocaleLowerCase()===city.name.toLocaleLowerCase()&&previous.country===city.country&&previous.region===city.region&&distance(previous,city)<5);
+    if(!sameCity)candidates.push(city);
+    return !sameCity;
+  });
 }
 export async function searchFallbackCities(query,fetcher=fetch){
   const response=await fetcher(fallbackCityUrl(query).toString(),{signal:timeout(12000)});

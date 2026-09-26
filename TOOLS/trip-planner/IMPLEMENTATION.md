@@ -1,5 +1,11 @@
 # AI Travel Planner V0.2 Prototype
 
+## Current handoff (2026-09-27, city selection reliability)
+
+- The alternate OpenStreetMap city search is now offered explicitly when the primary geocoder returns no candidate **or** returns candidates that do not match the desired city, not only after a network error. This closes a worldwide-search dead end without silently doubling API requests. Equivalent nearby OSM representations of a city are collapsed, and semicolon-separated multilingual labels display one readable variant; genuinely distant same-name cities remain separate.
+- Verified: unit tests cover near-duplicate/distant-city behavior and label cleanup. Browser walkthrough: a no-result primary query showed the alternate button; a successful Paris primary query also offered it; the explicit OpenStreetMap fallback returned one selectable Paris candidate instead of three indistinguishable entries, and the candidate opened the place-selection step. Existing place lookup remains explicit and usable while nearby loading continues.
+- Next priority: test more world regions and reduce dependence on shared, rate-limited public services through a production-suitable provider or self-hosted stack. This still is a local prototype: place coverage, opening hours, transit and fares are incomplete or unverified. Do not auto-query the public fallback or deploy it as an unrestricted worldwide service.
+
 ## Current handoff (2026-09-26, OSM object-link milestone)
 
 - The worldwide place step now accepts an explicit OpenStreetMap `node`/`way`/`relation` object link when name search misses a known destination. One user-triggered Nominatim Lookup verifies the source object, accepts only a named travel-related feature within 120 km of the chosen city, and adds it to the selectable catalog. It is session-cached for 24 hours and uses the existing 1.1-second local throttle. Map-view URLs and arbitrary sites are rejected; the UI keeps provider and visit-detail caveats visible.

@@ -11,7 +11,7 @@ let city=null,catalog=[],trip=null,activeDay=0,adjustments=[],routeChoices=[],ex
 let namedLookupAt=0,namedLookupSerial=0;
 let roadLookupAt=0;
 const cityCachePrefix='trip-planner-cities-v1-';
-const fallbackCityButton=element('button','hidden','改用 OpenStreetMap 搜尋城市');fallbackCityButton.type='button';
+const fallbackCityButton=element('button','hidden','找不到正確城市？改用 OpenStreetMap 搜尋');fallbackCityButton.type='button';
 $('searchCity').parentElement.after(fallbackCityButton);
 
 const namedSearch=element('div','named-search');
@@ -161,9 +161,10 @@ $('searchCity').onclick=async()=>{
     let results;try{const cached=JSON.parse(sessionStorage.getItem(cacheKey));if(cached?.savedAt>Date.now()-86400000&&Array.isArray(cached.results))results=cached.results;}catch{}
     if(!results){results=await searchCities(query);try{sessionStorage.setItem(cacheKey,JSON.stringify({savedAt:Date.now(),results}));}catch{}}
     if(serial!==lookupSerial)return;
-    if(!results.length){setCityStatus('找不到這個城市。請加上國家名稱再試一次。',true);return;}
+    if(!results.length){setCityStatus('主要服務找不到這個城市；可加上國家名稱重試，或按下方按鈕查詢 OpenStreetMap。',true);fallbackCityButton.classList.remove('hidden');return;}
     setCityStatus('請選擇正確的城市與國家：');
     for(const item of results){const candidate=element('button','city-choice',cityLabel(item));candidate.type='button';candidate.onclick=()=>chooseCity(item);$('cityResults').append(candidate);}
+    fallbackCityButton.classList.remove('hidden');
   }catch(error){if(serial===lookupSerial){setCityStatus(`${error.message||'城市搜尋失敗。'} 可按下方按鈕改用 OpenStreetMap 查詢。`,true);fallbackCityButton.classList.remove('hidden');}}
   finally{button.disabled=false;}
 };

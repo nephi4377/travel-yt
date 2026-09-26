@@ -20,6 +20,15 @@ test('alternate city lookup is explicit and returns only coordinate-bearing city
   assert.deepEqual(await searchFallbackCities('Kyoto, Japan',fetcher),[{id:'osm-relation-42',name:'Kyoto',region:'Kyoto Prefecture',country:'Japan',lat:35.02,lng:135.75,timezone:''}]);
   assert.equal(normalizeFallbackCities({}).length,0);
 });
+test('alternate city lookup removes indistinguishable nearby OSM duplicates but keeps distant cities',()=>{
+  const result=normalizeFallbackCities([
+    {osm_type:'node',osm_id:1,name:'Paris',lat:'48.8566',lon:'2.3522',address:{state:'Ile-de-France',country:'France'}},
+    {osm_type:'relation',osm_id:2,name:'Paris',lat:'48.858',lon:'2.35',address:{state:'Ile-de-France',country:'France'}},
+    {osm_type:'node',osm_id:3,name:'Paris',lat:'33.66',lon:'-95.55',address:{state:'Texas',country:'United States'}}
+  ]);
+  assert.deepEqual(result.map(item=>item.id),['osm-node-1','osm-node-3']);
+  assert.deepEqual(normalizeFallbackCities([{osm_type:'relation',osm_id:4,name:'巴黎',lat:'48.85',lon:'2.35',address:{state:'法兰西岛大区;法蘭西島大區',country:'法国;法國'}}]).map(item=>[item.region,item.country]),[['法蘭西島大區','法國']]);
+});
 test('Overpass query is bounded and place results retain source IDs',async()=>{
   assert.match(overpassQuery(city,100000),/around:7000/);assert.match(overpassQuery(city),/out center 35/);assert.match(overpassQuery(city),/out center 30/);
   assert.match(overpassQuery(city),/amenity.*restaurant\|cafe\|food_court\|marketplace/);
