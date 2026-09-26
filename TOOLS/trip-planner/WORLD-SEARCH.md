@@ -4,6 +4,8 @@
 
 2026-09-26 itinerary editing: after generating a trip, each stop can be moved earlier/later on its day or transferred to another day. The interface enforces 1–4 selected stops per day, recalculates the affected distance-model legs, and keeps the arrangement in session storage. Manual edits clear provisional weather/fatigue adjustments and selected transport options; these are not verified bookings.
 
+2026-09-26 loading behavior: after city selection the named-place search is immediately usable. The nearby Overpass request continues in the background and, if it succeeds, merges results without removing user-added named places or their selections. If it fails, named search and itinerary generation remain available.
+
 使用者不必先選釜山。開啟 `prototype/` 後，選旅行形容詞、搜尋世界各地城市／地區、挑選正確國家，再查詢城市中心附近的具名景點，勾選後產生 1–6 天行程。已在瀏覽器實際查到河內的地點並排出三日行程，也查到巴黎的城市候選。`catalog.js`、`app-v3.js` 及 `OFFLINE-PLANNER.md` 是先前釜山離線版本的歷史資料，現行入口為 `index.html` → `app-v4.js`。
 
 ## 啟動與驗證

@@ -81,3 +81,11 @@ export async function searchNamedPlaces(city,query,fetcher=fetch){
   if(!response.ok)throw new Error(`具名地點搜尋暫時無法使用（${response.status}）。請稍後再試。`);
   return normalizeNamedPlaces(await response.json(),city,query);
 }
+
+export function mergePlaces(nearby,alreadyAdded){
+  const seen=new Set();
+  return [...nearby,...alreadyAdded].filter(place=>{
+    if(seen.has(place.id))return false;
+    seen.add(place.id);return true;
+  });
+}

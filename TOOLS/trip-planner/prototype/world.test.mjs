@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {normalizeCities,normalizePlaces,overpassQuery,searchCities,searchPlaces,namedPlaceUrl,normalizeNamedPlaces,searchNamedPlaces} from './world-data.js';
+import {normalizeCities,normalizePlaces,overpassQuery,searchCities,searchPlaces,namedPlaceUrl,normalizeNamedPlaces,searchNamedPlaces,mergePlaces} from './world-data.js';
 import {buildWorldTrip,groupPlaceIds,transportOptions,suggestedPlaceIds,rankPlaces,recommendPlaces} from './world-planner.js';
 import {tripDNA} from './engine.js';
 
@@ -32,6 +32,11 @@ test('named landmark lookup is explicit, bounded and uses real OSM IDs',async()=
   assert.deepEqual(normalizeNamedPlaces(payload,city),places);
   const misleading=[{osm_type:'node',osm_id:502,lat:'48.858',lon:'2.294',category:'amenity',type:'restaurant',display_name:'Le Jules Verne, Tour Eiffel, Paris'}];
   assert.deepEqual(normalizeNamedPlaces(misleading,city,'Tour Eiffel'),[]);
+});
+test('late nearby response keeps named places added while it was loading',()=>{
+  const named={id:'way-1',name:'Chosen landmark'},nearby={id:'node-2',name:'Nearby park'};
+  assert.deepEqual(mergePlaces([nearby],[named]),[nearby,named]);
+  assert.deepEqual(mergePlaces([named,nearby],[named]),[named,nearby]);
 });
 test('documented major places rank above incidental nearby attractions',()=>{
   const ranked=normalizePlaces({elements:[

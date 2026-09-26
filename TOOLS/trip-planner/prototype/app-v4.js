@@ -1,5 +1,5 @@
 import {dimensions,adjectives,tripDNA,parseAdjustment} from './engine.js';
-import {searchCities,searchPlaces,searchNamedPlaces} from './world-data.js';
+import {searchCities,searchPlaces,searchNamedPlaces,mergePlaces} from './world-data.js';
 import {buildWorldTrip,groupPlaceIds,km,mapUrl,directionsUrl,suggestedPlaceIds,rankPlaces} from './world-planner.js';
 
 const $=id=>document.getElementById(id);
@@ -100,20 +100,20 @@ namedButton.onclick=async()=>{
 };
 namedInput.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();namedButton.click();}});
 async function chooseCity(item){
-  const serial=++lookupSerial;++namedLookupSerial;city=item;catalog=[];selectedIds.clear();$('placeStage').classList.add('hidden');
+  const serial=++lookupSerial;++namedLookupSerial;city=item;catalog=[];selectedIds.clear();selectionTouched=false;
   namedInput.value='';namedStatus.textContent='';namedResults.replaceChildren();
-  $('cityResults').replaceChildren();setCityStatus(`正在查詢 ${cityLabel(item)} 附近的地點…`);
+  $('cityResults').replaceChildren();$('chosenCity').textContent=cityLabel(item);$('placeFilter').value='';renderPlaces();$('placeStage').classList.remove('hidden');
+  setCityStatus(`已選擇 ${cityLabel(item)}。可立即搜尋具名地點；附近清單正在背景載入…`);
   try{
     const cacheKey=placeCachePrefix+item.id;
     let result;try{const cached=JSON.parse(sessionStorage.getItem(cacheKey));if(cached?.savedAt>Date.now()-86400000&&Array.isArray(cached.places))result=cached.places;}catch{}
     if(!result){result=await searchPlaces(item);try{sessionStorage.setItem(cacheKey,JSON.stringify({savedAt:Date.now(),places:result}));}catch{}}
     if(serial!==lookupSerial)return;
-    catalog=result;selectedIds.clear();selectionTouched=false;suggestedPlaceIds(catalog,[...words]).forEach(id=>selectedIds.add(id));
-    $('chosenCity').textContent=cityLabel(item);$('placeFilter').value='';renderPlaces();$('placeStage').classList.remove('hidden');
-    setCityStatus(catalog.length?`查到 ${catalog.length} 個具名地點，已依可驗證的自然／深度偏好排序；其餘偏好仍需人工確認。`:'這個中心區域沒有查到符合條件的具名景點，請選另一城市或稍後重試。');
+    catalog=mergePlaces(result,catalog);
+    if(!selectionTouched){selectedIds.clear();suggestedPlaceIds(catalog,[...words]).forEach(id=>selectedIds.add(id));}
+    renderPlaces();if(trip?.city?.id===city.id)save();
+    setCityStatus(result.length?`附近查到 ${result.length} 個具名地點；自行加入的地點已保留。偏好排序僅依可用證據。`:'附近清單沒有結果；仍可搜尋想去的具名地點。');
   }catch(error){if(serial===lookupSerial){
-    catalog=[];selectedIds.clear();selectionTouched=false;
-    $('chosenCity').textContent=cityLabel(item);$('placeFilter').value='';renderPlaces();$('placeStage').classList.remove('hidden');
     setCityStatus('附近清單暫時無法載入；仍可依名稱搜尋地點，或換個城市再試。',true);
   }}
 }
