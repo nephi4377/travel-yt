@@ -6,7 +6,7 @@ const $=id=>document.getElementById(id);
 const element=(tag,className='',text='')=>{const item=document.createElement(tag);item.className=className;item.textContent=text;return item;};
 const draftKey='trip-planner-world-v1',placeCachePrefix='trip-planner-places-v3-';
 const words=new Set(),selectedIds=new Set();
-let city=null,catalog=[],trip=null,activeDay=0,adjustments=[],routeChoices=[],lookupSerial=0;
+let city=null,catalog=[],trip=null,activeDay=0,adjustments=[],routeChoices=[],expandedRoutes=[],lookupSerial=0;
 
 function show(id){
   for(const name of ['feel','conditions','result'])$(name).classList.toggle('hidden',name!==id);
@@ -34,7 +34,7 @@ const tomorrow=new Date(Date.now()+86400000);
 $('date').value=`${tomorrow.getFullYear()}-${String(tomorrow.getMonth()+1).padStart(2,'0')}-${String(tomorrow.getDate()).padStart(2,'0')}`;
 $('next').onclick=()=>show('conditions');$('back').onclick=()=>show('feel');$('editTrip').onclick=()=>show('conditions');
 $('restart').onclick=()=>{
-  trip=null;city=null;catalog=[];activeDay=0;adjustments=[];routeChoices=[];selectedIds.clear();words.clear();
+  trip=null;city=null;catalog=[];activeDay=0;adjustments=[];routeChoices=[];expandedRoutes=[];selectedIds.clear();words.clear();
   sessionStorage.removeItem(draftKey);$('destination').value='';$('cityResults').replaceChildren();$('placeStage').classList.add('hidden');$('placeFilter').value='';$('cityStatus').textContent='';$('formError').textContent='';
   $('days').value='3';$('travelers').value='2';$('budget').value='0';$('currency').value='TWD';
   for(const chip of $('chips').children)chip.setAttribute('aria-pressed','false');renderDNA();show('feel');
@@ -96,7 +96,7 @@ $('tripForm').onsubmit=event=>{
   const ids=selectedPlaces(),days=Number($('days').value);
   if(ids.length<days||ids.length>days*4){$('formError').textContent=`${days} 天請選 ${days}–${days*4} 個地點；目前選了 ${ids.length} 個。`;return;}
   trip={city,destination:city.name,date:$('date').value,days,travelers:Number($('travelers').value),budget:Number($('budget').value),currency:$('currency').value.toUpperCase(),placeIds:ids};
-  activeDay=0;adjustments=Array.from({length:days},()=>({}));routeChoices=Array.from({length:days},()=>[]);
+  activeDay=0;adjustments=Array.from({length:days},()=>({}));routeChoices=Array.from({length:days},()=>[]);expandedRoutes=Array.from({length:days},()=>[]);
   renderSummary();renderTrip();save();show('result');
 };
 function renderTabs(){
@@ -118,12 +118,19 @@ function renderTrip(){
     section.append(element('p','hint','候選交通是距離模型，是否有班次／道路及實際票價須查證。'));
     const list=element('div','route-list');let selected=routeChoices[activeDay][index]??0;if(selected>=leg.options.length)selected=0;
     leg.options.forEach((route,optionIndex)=>{
+      if(!expandedRoutes[activeDay]?.[index]&&optionIndex!==selected)return;
       const label=element('label',`route-option${selected===optionIndex?' selected':''}`),radio=element('input');radio.type='radio';radio.name=`route-${activeDay}-${index}`;radio.checked=selected===optionIndex;
       radio.onchange=()=>{routeChoices[activeDay][index]=optionIndex;renderTrip();save();};
       const body=element('span','route-body');body.append(element('strong','',`${route.mode} · 約 ${route.duration_min} 分`),element('small','',`Money 待查 · Time 約 ${route.duration_min} 分`),element('small','',`Energy ${route.energy_score}/100 · Friction ${route.friction_score}/100 · 步行約 ${route.walking_min} 分`));
       label.append(radio,body);list.append(label);
     });
     section.append(list);const routeLink=element('a','map-link','查詢實際路線 ↗');routeLink.href=directionsUrl(stop,next);routeLink.target='_blank';routeLink.rel='noopener noreferrer';section.append(routeLink);box.append(section);
+    if(leg.options.length>1){
+      const toggle=element('button','route-toggle',expandedRoutes[activeDay]?.[index]?'收合其他交通方案':`比較其他 ${leg.options.length-1} 種交通方案`);
+      toggle.type='button';toggle.setAttribute('aria-expanded',String(Boolean(expandedRoutes[activeDay]?.[index])));
+      toggle.onclick=()=>{expandedRoutes[activeDay]??=[];expandedRoutes[activeDay][index]=!expandedRoutes[activeDay][index];renderTrip();};
+      section.insertBefore(toggle,routeLink);
+    }
     cursor+=stop.minutes+30+leg.options[selected].duration_min;
   });
 }
