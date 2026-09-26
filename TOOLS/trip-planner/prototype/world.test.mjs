@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {normalizeCities,normalizePlaces,overpassQuery,searchCities,searchPlaces,namedPlaceUrl,normalizeNamedPlaces,searchNamedPlaces,mergePlaces} from './world-data.js';
-import {buildWorldTrip,groupPlaceIds,transportOptions,suggestedPlaceIds,rankPlaces,recommendPlaces} from './world-planner.js';
+import {buildWorldTrip,groupPlaceIds,sameTripSelection,transportOptions,suggestedPlaceIds,rankPlaces,recommendPlaces} from './world-planner.js';
 import {tripDNA} from './engine.js';
 
 const city={id:'1',name:'Example',lat:48.85,lng:2.35};
@@ -63,6 +63,13 @@ test('manual day assignments preserve exact order and reject missing or repeated
   assert.deepEqual(buildWorldTrip(input,tripDNA([])).map(day=>day.stops.map(place=>place.id)),input.dayPlaceIds);
   assert.throws(()=>groupPlaceIds({...input,dayPlaceIds:[[ids[0],ids[0]],[ids[2],ids[3]]]}),RangeError);
   assert.throws(()=>groupPlaceIds({...input,dayPlaceIds:[[ids[0],ids[1],ids[2],ids[3]],[]]}),RangeError);
+});
+test('editing only trip conditions preserves the manual itinerary',()=>{
+  const previous={city,days:2,placeIds:['a','b','c'],dayPlaceIds:[['b'],['a','c']]};
+  assert.equal(sameTripSelection(previous,{...previous,date:'2026-10-10',travelers:3,placeIds:['c','b','a']}),true);
+  assert.equal(sameTripSelection(previous,{...previous,days:3}),false);
+  assert.equal(sameTripSelection(previous,{...previous,placeIds:['a','b','d']}),false);
+  assert.equal(sameTripSelection(previous,{...previous,city:{...city,id:'other'}}),false);
 });
 test('suggested places include several categories when available',()=>{
   const ids=suggestedPlaceIds([{id:'m1',category:'室內文化'},{id:'m2',category:'室內文化'},{id:'p',category:'公園'},{id:'h',category:'歷史地點'}],[],3);

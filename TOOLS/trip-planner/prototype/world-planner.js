@@ -41,6 +41,11 @@ export function recommendPlaces(catalog,words=[],count=6){
   return chosen;
 }
 export function suggestedPlaceIds(catalog,words=[],count=6){return recommendPlaces(catalog,words,count).map(item=>item.place.id);}
+export function sameTripSelection(previous,next){
+  if(!previous||!next||previous.city?.id!==next.city?.id||previous.days!==next.days)return false;
+  const a=previous.placeIds,b=next.placeIds;
+  return Array.isArray(a)&&Array.isArray(b)&&a.length===b.length&&new Set(a).size===a.length&&new Set(b).size===b.length&&a.every(id=>b.includes(id));
+}
 export function groupPlaceIds(input){
   const {catalog,placeIds,days,city}=input;
   if(!city||!Array.isArray(catalog)||!Number.isInteger(days)||days<1||days>6)throw new TypeError('Invalid trip');

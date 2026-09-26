@@ -1,6 +1,6 @@
 import {dimensions,adjectives,tripDNA,parseAdjustment} from './engine.js';
 import {searchCities,searchPlaces,searchNamedPlaces,mergePlaces} from './world-data.js';
-import {buildWorldTrip,groupPlaceIds,km,mapUrl,directionsUrl,suggestedPlaceIds,rankPlaces} from './world-planner.js';
+import {buildWorldTrip,groupPlaceIds,sameTripSelection,km,mapUrl,directionsUrl,suggestedPlaceIds,rankPlaces} from './world-planner.js';
 
 const $=id=>document.getElementById(id);
 const element=(tag,className='',text='')=>{const item=document.createElement(tag);item.className=className;item.textContent=text;return item;};
@@ -147,9 +147,13 @@ $('tripForm').onsubmit=event=>{
   if(!city||!catalog.length){$('formError').textContent='請先搜尋並選擇城市，等候地點載入。';return;}
   const ids=selectedPlaces(),days=Number($('days').value);
   if(ids.length<days||ids.length>days*4){$('formError').textContent=`${days} 天請選 ${days}–${days*4} 個地點；目前選了 ${ids.length} 個。`;return;}
-  trip={city,destination:city.name,date:$('date').value,days,travelers:Number($('travelers').value),budget:Number($('budget').value),currency:$('currency').value.toUpperCase(),placeIds:ids};
-  trip.dayPlaceIds=groupPlaceIds({...trip,catalog}).map(group=>group.map(place=>place.id));itineraryEditStatus.textContent='';
-  activeDay=0;adjustments=Array.from({length:days},()=>({}));routeChoices=Array.from({length:days},()=>[]);expandedRoutes=Array.from({length:days},()=>[]);
+  const updated={city,destination:city.name,date:$('date').value,days,travelers:Number($('travelers').value),budget:Number($('budget').value),currency:$('currency').value.toUpperCase(),placeIds:ids,preferenceWords:[...words]};
+  const keepPlan=sameTripSelection(trip,updated);
+  const samePreferences=keepPlan&&JSON.stringify(trip.preferenceWords)===JSON.stringify(updated.preferenceWords);
+  updated.dayPlaceIds=keepPlan&&trip.dayPlaceIds?trip.dayPlaceIds:groupPlaceIds({...updated,catalog}).map(group=>group.map(place=>place.id));
+  trip=updated;itineraryEditStatus.textContent=keepPlan?'已保留原有地點順序與每日安排。':'';
+  if(!keepPlan){activeDay=0;adjustments=Array.from({length:days},()=>({}));routeChoices=Array.from({length:days},()=>[]);expandedRoutes=Array.from({length:days},()=>[]);}
+  else if(!samePreferences){routeChoices=Array.from({length:days},()=>[]);expandedRoutes=Array.from({length:days},()=>[]);itineraryEditStatus.textContent='已保留每日安排，並依新的旅行偏好重新選擇交通。';}
   renderSummary();renderTrip();save();show('result');
 };
 function renderTabs(){
@@ -230,7 +234,9 @@ $('adjustForm').onsubmit=event=>{
 try{
   const saved=JSON.parse(sessionStorage.getItem(draftKey));
   if(saved?.trip?.city&&Array.isArray(saved.catalog)&&saved.catalog.length&&Array.isArray(saved.trip.placeIds)&&saved.trip.days>=1&&saved.trip.days<=6){
-    city=saved.city;catalog=saved.catalog;trip=saved.trip;if(!trip.dayPlaceIds)trip.dayPlaceIds=groupPlaceIds({...trip,catalog}).map(group=>group.map(place=>place.id));activeDay=Math.min(Math.max(0,saved.activeDay||0),trip.days-1);adjustments=Array.isArray(saved.adjustments)?saved.adjustments:Array.from({length:trip.days},()=>({}));routeChoices=Array.isArray(saved.routeChoices)?saved.routeChoices:Array.from({length:trip.days},()=>[]);
+    city=saved.city;catalog=saved.catalog;trip=saved.trip;if(!trip.dayPlaceIds)trip.dayPlaceIds=groupPlaceIds({...trip,catalog}).map(group=>group.map(place=>place.id));
+    groupPlaceIds({...trip,catalog});
+    activeDay=Math.min(Math.max(0,saved.activeDay||0),trip.days-1);adjustments=Array.isArray(saved.adjustments)?saved.adjustments:Array.from({length:trip.days},()=>({}));routeChoices=Array.isArray(saved.routeChoices)?saved.routeChoices:Array.from({length:trip.days},()=>[]);
     for(const word of saved.words||[])if(Object.hasOwn(adjectives,word))words.add(word);
     for(const chip of $('chips').children)chip.setAttribute('aria-pressed',String(words.has(chip.textContent)));
     $('destination').value=city.name;$('chosenCity').textContent=cityLabel(city);$('placeStage').classList.remove('hidden');
