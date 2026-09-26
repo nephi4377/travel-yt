@@ -1,6 +1,7 @@
 import {dimensions,adjectives,tripDNA,parseAdjustment} from './engine.js';
 import {searchCities,searchFallbackCities,searchPlaces,searchNamedPlaces,mergePlaces} from './world-data.js';
 import {buildWorldTrip,groupPlaceIds,sameTripSelection,km,mapUrl,directionsUrl,suggestedPlaceIds,rankPlaces} from './world-planner.js';
+import {fetchRoadRoute} from './route-data.js';
 
 const $=id=>document.getElementById(id);
 const element=(tag,className='',text='')=>{const item=document.createElement(tag);item.className=className;item.textContent=text;return item;};
@@ -8,6 +9,7 @@ const draftKey='trip-planner-world-v1',placeCachePrefix='trip-planner-places-v3-
 const words=new Set(),selectedIds=new Set();
 let city=null,catalog=[],trip=null,activeDay=0,adjustments=[],routeChoices=[],expandedRoutes=[],lookupSerial=0,selectionTouched=false;
 let namedLookupAt=0,namedLookupSerial=0;
+let roadLookupAt=0;
 const cityCachePrefix='trip-planner-cities-v1-';
 const fallbackCityButton=element('button','hidden','改用 OpenStreetMap 搜尋城市');fallbackCityButton.type='button';
 $('searchCity').parentElement.after(fallbackCityButton);
@@ -246,7 +248,23 @@ function renderTrip(){
       const body=element('span','route-body');body.append(element('strong','',`${route.mode} · 約 ${route.duration_min} 分`),element('small','',`Money 待查 · Time 約 ${route.duration_min} 分`),element('small','',`Energy ${route.energy_score}/100 · Friction ${route.friction_score}/100 · 步行約 ${route.walking_min} 分`));
       label.append(radio,body);list.append(label);
     });
-    section.append(list);const routeLink=element('a','map-link','查詢實際路線 ↗');routeLink.href=directionsUrl(stop,next);routeLink.target='_blank';routeLink.rel='noopener noreferrer';section.append(routeLink);box.append(section);
+    section.append(list);
+    const roadButton=element('button','route-toggle','查開車道路時間（OSRM）');roadButton.type='button';
+    const roadStatus=element('p','hint');roadStatus.setAttribute('role','status');
+    roadButton.onclick=async()=>{
+      const key=`trip-planner-road-v1-${stop.lat.toFixed(5)},${stop.lng.toFixed(5)}-${next.lat.toFixed(5)},${next.lng.toFixed(5)}`;
+      let result;try{const cached=JSON.parse(sessionStorage.getItem(key));if(cached?.savedAt>Date.now()-86400000&&cached.route?.mode==='car')result=cached.route;}catch{}
+      if(!result&&Date.now()-roadLookupAt<1100){roadStatus.textContent='公共道路服務每秒至多查詢一次，請稍候再按。';return;}
+      roadButton.disabled=true;roadStatus.textContent='正在查詢開車道路時間…';
+      try{
+        if(!result){roadLookupAt=Date.now();result=await fetchRoadRoute(stop,next);try{sessionStorage.setItem(key,JSON.stringify({savedAt:Date.now(),route:result}));}catch{}}
+        roadStatus.textContent=`OSRM 道路路線約 ${result.distanceKm.toFixed(1)} km、純行車 ${result.minutes} 分；不含等車、停車或塞車，也不取代上方距離模型與實際票價查證。`;
+      }catch(error){roadStatus.textContent=error.message||'道路查詢失敗；原本交通時間仍是距離模型估算。';}
+      finally{roadButton.disabled=false;}
+    };
+    section.append(roadButton,roadStatus);
+    const roadSource=element('a','map-link','道路資料：OSRM / OpenStreetMap');roadSource.href='https://routing.openstreetmap.de/about.html';roadSource.target='_blank';roadSource.rel='noopener noreferrer';section.append(roadSource);
+    const routeLink=element('a','map-link','查詢實際路線 ↗');routeLink.href=directionsUrl(stop,next);routeLink.target='_blank';routeLink.rel='noopener noreferrer';section.append(routeLink);box.append(section);
     if(leg.options.length>1){
       const toggle=element('button','route-toggle',expandedRoutes[activeDay]?.[index]?'收合其他交通方案':`比較其他 ${leg.options.length-1} 種交通方案`);
       toggle.type='button';toggle.setAttribute('aria-expanded',String(Boolean(expandedRoutes[activeDay]?.[index])));
