@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {normalizeCities,normalizePlaces,overpassQuery,searchCities,searchPlaces,namedPlaceUrl,normalizeNamedPlaces,searchNamedPlaces} from './world-data.js';
-import {buildWorldTrip,transportOptions,suggestedPlaceIds,rankPlaces,recommendPlaces} from './world-planner.js';
+import {buildWorldTrip,groupPlaceIds,transportOptions,suggestedPlaceIds,rankPlaces,recommendPlaces} from './world-planner.js';
 import {tripDNA} from './engine.js';
 
 const city={id:'1',name:'Example',lat:48.85,lng:2.35};
@@ -50,6 +50,14 @@ test('world trip uses only returned places and never invents fares',()=>{
   assert.ok(days.every(d=>d.legs.length===d.stops.length-1&&d.legs.every(leg=>leg.options.every(o=>o.estimated_cost===null&&o.options===undefined))));
   assert.ok(transportOptions(catalog[0],catalog[1],dna).length<=3);
   assert.throws(()=>buildWorldTrip({...input,placeIds:[]},dna),RangeError);
+});
+test('manual day assignments preserve exact order and reject missing or repeated places',()=>{
+  const catalog=normalizePlaces({elements:items},city),ids=catalog.slice(0,4).map(place=>place.id);
+  const input={city,catalog,placeIds:ids,days:2,dayPlaceIds:[[ids[2],ids[0]],[ids[3],ids[1]]]};
+  assert.deepEqual(groupPlaceIds(input).map(group=>group.map(place=>place.id)),input.dayPlaceIds);
+  assert.deepEqual(buildWorldTrip(input,tripDNA([])).map(day=>day.stops.map(place=>place.id)),input.dayPlaceIds);
+  assert.throws(()=>groupPlaceIds({...input,dayPlaceIds:[[ids[0],ids[0]],[ids[2],ids[3]]]}),RangeError);
+  assert.throws(()=>groupPlaceIds({...input,dayPlaceIds:[[ids[0],ids[1],ids[2],ids[3]],[]]}),RangeError);
 });
 test('suggested places include several categories when available',()=>{
   const ids=suggestedPlaceIds([{id:'m1',category:'室內文化'},{id:'m2',category:'室內文化'},{id:'p',category:'公園'},{id:'h',category:'歷史地點'}],[],3);

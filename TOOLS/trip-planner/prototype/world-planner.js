@@ -41,13 +41,26 @@ export function recommendPlaces(catalog,words=[],count=6){
   return chosen;
 }
 export function suggestedPlaceIds(catalog,words=[],count=6){return recommendPlaces(catalog,words,count).map(item=>item.place.id);}
-export function buildWorldTrip(input,dna,adjustments=[]){
+export function groupPlaceIds(input){
   const {catalog,placeIds,days,city}=input;
   if(!city||!Array.isArray(catalog)||!Number.isInteger(days)||days<1||days>6)throw new TypeError('Invalid trip');
   const selected=[...new Set(placeIds)].map(id=>catalog.find(p=>p.id===id)).filter(Boolean);
   if(selected.length<days||selected.length>days*4)throw new RangeError('每一天需有 1–4 個所選地點');
+  if(input.dayPlaceIds){
+    const groups=input.dayPlaceIds;
+    if(!Array.isArray(groups)||groups.length!==days||groups.some(group=>!Array.isArray(group)||group.length<1||group.length>4))throw new RangeError('每天需有 1–4 個地點');
+    const ids=groups.flat(),allowed=new Set(selected.map(place=>place.id));
+    if(ids.length!==selected.length||new Set(ids).size!==ids.length||ids.some(id=>!allowed.has(id)))throw new RangeError('每日地點需與所選地點一致且不可重複');
+    return groups.map(group=>group.map(id=>catalog.find(place=>place.id===id)));
+  }
   const ordered=nearestOrder(selected,city),groups=Array.from({length:days},()=>[]);
   ordered.forEach((p,i)=>groups[Math.min(days-1,Math.floor(i*days/ordered.length))].push(p));
+  return groups;
+}
+export function buildWorldTrip(input,dna,adjustments=[]){
+  const {catalog,placeIds}=input;
+  const groups=groupPlaceIds(input);
+  const selected=placeIds.map(id=>catalog.find(place=>place.id===id)).filter(Boolean);
   const reserved=new Set(selected.map(p=>p.id));
   return groups.map((group,index)=>{
     const adjustment=adjustments[index]||{};

@@ -1,6 +1,6 @@
 import {dimensions,adjectives,tripDNA,parseAdjustment} from './engine.js';
 import {searchCities,searchPlaces,searchNamedPlaces} from './world-data.js';
-import {buildWorldTrip,km,mapUrl,directionsUrl,suggestedPlaceIds,rankPlaces} from './world-planner.js';
+import {buildWorldTrip,groupPlaceIds,km,mapUrl,directionsUrl,suggestedPlaceIds,rankPlaces} from './world-planner.js';
 
 const $=id=>document.getElementById(id);
 const element=(tag,className='',text='')=>{const item=document.createElement(tag);item.className=className;item.textContent=text;return item;};
@@ -19,6 +19,7 @@ const namedHelp=element('p','muted','具名搜尋由 OpenStreetMap 公共服務�
 const policyLink=element('a','','使用政策');policyLink.href='https://operations.osmfoundation.org/policies/nominatim/';policyLink.target='_blank';policyLink.rel='noopener noreferrer';namedHelp.append(' ',policyLink);
 namedLabel.append(namedInput);namedSearch.append(namedLabel,namedButton,namedStatus,namedResults,namedHelp);
 $('placeStage').insertBefore(namedSearch,$('placeFilter').parentElement);
+const itineraryEditStatus=element('p','hint');itineraryEditStatus.setAttribute('role','status');$('schedule').before(itineraryEditStatus);
 
 function show(id){
   for(const name of ['feel','conditions','result'])$(name).classList.toggle('hidden',name!==id);
@@ -147,6 +148,7 @@ $('tripForm').onsubmit=event=>{
   const ids=selectedPlaces(),days=Number($('days').value);
   if(ids.length<days||ids.length>days*4){$('formError').textContent=`${days} 天請選 ${days}–${days*4} 個地點；目前選了 ${ids.length} 個。`;return;}
   trip={city,destination:city.name,date:$('date').value,days,travelers:Number($('travelers').value),budget:Number($('budget').value),currency:$('currency').value.toUpperCase(),placeIds:ids};
+  trip.dayPlaceIds=groupPlaceIds({...trip,catalog}).map(group=>group.map(place=>place.id));itineraryEditStatus.textContent='';
   activeDay=0;adjustments=Array.from({length:days},()=>({}));routeChoices=Array.from({length:days},()=>[]);expandedRoutes=Array.from({length:days},()=>[]);
   renderSummary();renderTrip();save();show('result');
 };
@@ -154,15 +156,49 @@ function renderTabs(){
   const box=$('dayTabs');box.replaceChildren();
   for(let i=0;i<trip.days;i++){const button=element('button','day-tab',`第 ${i+1} 天 · ${dateLabel(i)}`);button.type='button';button.setAttribute('aria-pressed',String(i===activeDay));button.onclick=()=>{activeDay=i;$('preview').replaceChildren();renderTrip();save();};box.append(button);}
 }
+function editDayPlace(index,targetDay,targetIndex){
+  const groups=trip.dayPlaceIds,source=groups[activeDay],id=source[index];
+  if(!id)return;
+  if(targetDay!==activeDay){
+    if(source.length===1){itineraryEditStatus.textContent='每一天至少要保留一個地點。';return;}
+    if(groups[targetDay].length===4){itineraryEditStatus.textContent='每一天最多安排四個地點。';return;}
+    source.splice(index,1);groups[targetDay].push(id);
+    itineraryEditStatus.textContent=`已移至第 ${targetDay+1} 天。`;
+  }else{
+    if(targetIndex<0||targetIndex>=source.length)return;
+    source.splice(index,1);source.splice(targetIndex,0,id);
+    itineraryEditStatus.textContent='已調整當天地點順序。';
+  }
+  adjustments=Array.from({length:trip.days},()=>({}));routeChoices=Array.from({length:trip.days},()=>[]);expandedRoutes=Array.from({length:trip.days},()=>[]);
+  $('preview').replaceChildren();renderTrip();save();
+}
 function renderTrip(){
   renderTabs();const day=tripDays()[activeDay],box=$('schedule');box.replaceChildren();
   box.append(element('h3','',`第 ${activeDay+1} 天 · ${day.stops.length} 個地點`));
+  if(adjustments[activeDay]?.rain||adjustments[activeDay]?.tired){
+    const clear=element('button','route-toggle','清除這一天的臨時調整，以編輯地點順序');clear.type='button';
+    clear.onclick=()=>{adjustments[activeDay]={};routeChoices[activeDay]=[];itineraryEditStatus.textContent='已清除這一天的臨時調整。';renderTrip();save();};box.append(clear);
+  }
   if(day.stops.length===1)box.append(element('p','hint','今天只安排一站；可回到地點選擇增加內容。'));
   let cursor=600;
   day.stops.forEach((stop,index)=>{
     const card=element('article','stop');card.append(element('time','',`建議 ${clock(cursor)}`),element('h3','',stop.name),element('p','',`${stop.category} · 建議停留約 ${stop.minutes} 分 · ${stop.note}`));
     const link=element('a','map-link','地圖與來源 ↗');link.href=stop.source||mapUrl(stop);link.target='_blank';link.rel='noopener noreferrer';card.append(link);
     if(stop.rainReplacement)card.append(element('p','hint','雨天替換：附近未排入的室內地點'));
+    if(!adjustments[activeDay]?.rain&&!adjustments[activeDay]?.tired){
+      const controls=element('div','stop-controls');
+      for(const [label,offset] of [['上移',-1],['下移',1]]){
+        const move=element('button','',label);move.type='button';move.disabled=index+offset<0||index+offset>=day.stops.length;
+        move.setAttribute('aria-label',`${stop.name}${label}`);move.onclick=()=>editDayPlace(index,activeDay,index+offset);controls.append(move);
+      }
+      if(trip.days>1){
+        const label=element('label','move-day-label','移至其他天');const select=element('select');select.setAttribute('aria-label',`${stop.name}移至其他天`);
+        const placeholder=element('option','','選擇日期');placeholder.value='';select.append(placeholder);
+        for(let dayIndex=0;dayIndex<trip.days;dayIndex++)if(dayIndex!==activeDay){const option=element('option','',`第 ${dayIndex+1} 天`);option.value=String(dayIndex);select.append(option);}
+        select.onchange=()=>{editDayPlace(index,Number(select.value));select.value='';};label.append(select);controls.append(label);
+      }
+      card.append(controls);
+    }
     box.append(card);
     const leg=day.legs[index];if(!leg)return;
     const next=day.stops[index+1],section=element('section','leg');section.append(element('h4','',`前往 ${next.name} · 直線約 ${km(stop,next).toFixed(1)} km`));
@@ -194,7 +230,7 @@ $('adjustForm').onsubmit=event=>{
 try{
   const saved=JSON.parse(sessionStorage.getItem(draftKey));
   if(saved?.trip?.city&&Array.isArray(saved.catalog)&&saved.catalog.length&&Array.isArray(saved.trip.placeIds)&&saved.trip.days>=1&&saved.trip.days<=6){
-    city=saved.city;catalog=saved.catalog;trip=saved.trip;activeDay=Math.min(Math.max(0,saved.activeDay||0),trip.days-1);adjustments=Array.isArray(saved.adjustments)?saved.adjustments:Array.from({length:trip.days},()=>({}));routeChoices=Array.isArray(saved.routeChoices)?saved.routeChoices:Array.from({length:trip.days},()=>[]);
+    city=saved.city;catalog=saved.catalog;trip=saved.trip;if(!trip.dayPlaceIds)trip.dayPlaceIds=groupPlaceIds({...trip,catalog}).map(group=>group.map(place=>place.id));activeDay=Math.min(Math.max(0,saved.activeDay||0),trip.days-1);adjustments=Array.isArray(saved.adjustments)?saved.adjustments:Array.from({length:trip.days},()=>({}));routeChoices=Array.isArray(saved.routeChoices)?saved.routeChoices:Array.from({length:trip.days},()=>[]);
     for(const word of saved.words||[])if(Object.hasOwn(adjectives,word))words.add(word);
     for(const chip of $('chips').children)chip.setAttribute('aria-pressed',String(words.has(chip.textContent)));
     $('destination').value=city.name;$('chosenCity').textContent=cityLabel(city);$('placeStage').classList.remove('hidden');
