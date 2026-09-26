@@ -6,6 +6,8 @@
 
 2026-09-26 city reliability: successful city searches are cached for the current browser session for 24 hours. If Open-Meteo city lookup returns an error such as HTTP 429, users can explicitly try a separate OpenStreetMap city search and choose from its city/country candidates. This does not turn the public Nominatim service into a production geocoder; no automatic fallback request or autocomplete is performed.
 
+2026-09-26 TripDNA coverage: OSM-mapped dining and shopping types are now sampled in the existing nearby query, and a small category reserve prevents them from being crowded out of the 60-place list. Food, shopping, and family interests can rank matching dining, shopping, zoo or theme-park places higher; nature and depth remain supported. A preference match means only that the OSM feature type aligns with the chosen interest—not that the venue is good, open, affordable or suitable for a particular child. If nearby discovery fails, users can add a real named place and see the same evidence-based reason.
+
 2026-09-26 itinerary editing: after generating a trip, each stop can be moved earlier/later on its day or transferred to another day. The interface enforces 1–4 selected stops per day, recalculates the affected distance-model legs, and keeps the arrangement in session storage. Manual edits clear provisional weather/fatigue adjustments and selected transport options; these are not verified bookings.
 
 2026-09-26 loading behavior: after city selection the named-place search is immediately usable. The nearby Overpass request continues in the background and, if it succeeds, merges results without removing user-added named places or their selections. If it fails, named search and itinerary generation remain available.

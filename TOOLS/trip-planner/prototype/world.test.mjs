@@ -22,6 +22,8 @@ test('alternate city lookup is explicit and returns only coordinate-bearing city
 });
 test('Overpass query is bounded and place results retain source IDs',async()=>{
   assert.match(overpassQuery(city,100000),/around:7000/);assert.match(overpassQuery(city),/out center 35/);assert.match(overpassQuery(city),/out center 30/);
+  assert.match(overpassQuery(city),/amenity.*restaurant\|cafe\|food_court\|marketplace/);
+  assert.match(overpassQuery(city),/shop.*mall\|department_store/);
   const fetcher=async url=>{assert.match(url,/overpass-api\.de/);return {ok:true,json:async()=>({elements:items})};};
   const places=await searchPlaces(city,fetcher);assert.equal(places.length,8);assert.equal(places[0].source,'https://www.openstreetmap.org/node/1');
   assert.equal(normalizePlaces({elements:[{type:'node',id:9,lat:0,lon:0,tags:{}}]},city).length,0);
@@ -105,6 +107,30 @@ test('supported TripDNA words change place ranking with an explicit reason',()=>
   assert.equal(recommendPlaces(places,['自然'],1)[0].place.id,'park');
   const fuller=[...places,{id:'park2',name:'Park 2',category:'公園',quality:0},{id:'park3',name:'Park 3',category:'公園',quality:0},{id:'museum2',name:'Museum 2',category:'室內文化',quality:0}];
   assert.notDeepEqual(suggestedPlaceIds(fuller,['自然'],3),suggestedPlaceIds(fuller,['深度'],3));
+});
+test('food, shopping and family interests use sourced place types, not invented reviews',()=>{
+  const mapped=normalizePlaces({elements:[
+    {type:'node',id:101,lat:city.lat,lon:city.lng,tags:{name:'Local cafe',amenity:'cafe'}},
+    {type:'way',id:102,center:{lat:city.lat+.002,lon:city.lng},tags:{name:'Market hall',amenity:'marketplace'}},
+    {type:'node',id:103,lat:city.lat+.004,lon:city.lng,tags:{name:'City zoo',tourism:'zoo'}},
+    {type:'node',id:104,lat:city.lat+.006,lon:city.lng,tags:{name:'Museum',tourism:'museum'}}
+  ]},city);
+  assert.deepEqual(mapped.slice(0,3).map(place=>place.category),['室內文化','餐飲','購物']);
+  assert.equal(rankPlaces(mapped,['美食'])[0].place.category,'餐飲');
+  assert.match(rankPlaces(mapped,['美食'])[0].reasons.join(' '),/營業時間仍須核對/);
+  assert.equal(rankPlaces(mapped,['購物'])[0].place.category,'購物');
+  assert.equal(rankPlaces(mapped,['親子'])[0].place.category,'動物園');
+  const named=normalizeNamedPlaces([{osm_type:'node',osm_id:201,lat:String(city.lat),lon:String(city.lng),category:'tourism',type:'theme_park',display_name:'Example theme park'}],city,'Example theme park');
+  assert.equal(named[0].category,'主題樂園');
+});
+test('nearby shortlist retains food and shopping when highly documented sights dominate',()=>{
+  const museums=Array.from({length:70},(_,i)=>({type:'node',id:i+1,lat:city.lat+i*.0001,lon:city.lng,tags:{name:`Museum ${i}`,tourism:'museum',wikidata:`Q${i}`}}));
+  const extras=[{type:'node',id:1001,lat:city.lat,lon:city.lng,tags:{name:'Neighbourhood cafe',amenity:'cafe'}},{type:'node',id:1002,lat:city.lat,lon:city.lng,tags:{name:'City mall',shop:'mall'}}];
+  const result=normalizePlaces({elements:[...museums,...extras]},city);
+  assert.equal(result.length,60);
+  assert.ok(result.some(place=>place.category==='餐飲'));
+  assert.ok(result.some(place=>place.category==='購物'));
+  assert.equal(rankPlaces(result,['美食'])[0].place.category,'餐飲');
 });
 test('rain swaps with a nearby unselected indoor place, tired removes a stop',()=>{
   const catalog=normalizePlaces({elements:items},city).map((p,i)=>({...p,kind:i<4?'outdoor':i===4?'indoor':p.kind})),dna=tripDNA([]),selected=catalog.slice(0,4);

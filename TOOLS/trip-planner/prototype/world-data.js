@@ -47,19 +47,29 @@ export function overpassQuery(city,radius=6000){
   if(!finite(city?.lat,-90,90)||!finite(city?.lng,-180,180))throw new TypeError('Invalid city coordinates');
   const meters=Math.max(1000,Math.min(7000,Math.round(radius)));
   const around=`(around:${meters},${city.lat},${city.lng})`;
-  return `[out:json][timeout:25];nwr${around}["name"]["tourism"~"^(museum|gallery|viewpoint|zoo|theme_park)$"];out center 35;nwr${around}["name"]["historic"~"^(castle|monument|memorial|archaeological_site|ruins)$"];out center 25;nwr${around}["name"]["leisure"="park"];out center 20;nwr${around}["name"]["tourism"="attraction"];out center 30;`;
+  const compact=`(around:3000,${city.lat},${city.lng})`;
+  return `[out:json][timeout:25];nwr${around}["name"]["tourism"~"^(museum|gallery|viewpoint|zoo|theme_park)$"];out center 35;nwr${around}["name"]["historic"~"^(castle|monument|memorial|archaeological_site|ruins)$"];out center 25;nwr${around}["name"]["leisure"="park"];out center 20;nwr${around}["name"]["tourism"="attraction"];out center 30;nwr${compact}["name"]["amenity"~"^(restaurant|cafe|food_court|marketplace)$"];out center 18;nwr${compact}["name"]["shop"~"^(mall|department_store)$"];out center 12;`;
 }
-const category=tags=>tags.tourism==='museum'||tags.tourism==='gallery'?'室內文化':tags.leisure==='park'?'公園':tags.tourism==='viewpoint'?'展望點':tags.historic?'歷史地點':'景點';
+const placeCategory=tags=>tags.tourism==='museum'||tags.tourism==='gallery'?'室內文化':tags.leisure==='park'?'公園':tags.tourism==='viewpoint'?'展望點':tags.tourism==='zoo'?'動物園':tags.tourism==='theme_park'?'主題樂園':['restaurant','cafe','fast_food','food_court'].includes(tags.amenity)?'餐飲':tags.shop||tags.amenity==='marketplace'?'購物':tags.historic?'歷史地點':tags.natural?'自然景點':'景點';
 const quality=tags=>(tags.wikipedia?80:0)+(tags.wikidata?60:0)+(tags.website||tags['contact:website']?25:0)+(tags.tourism==='museum'?30:0)+(tags.tourism==='gallery'?10:0)+(tags.historic==='castle'?25:0)+(tags.leisure==='park'?12:0);
 export function normalizePlaces(payload,city){
   const seen=new Set();
-  return (Array.isArray(payload?.elements)?payload.elements:[]).map(x=>{
+  const ranked=(Array.isArray(payload?.elements)?payload.elements:[]).map(x=>{
     const tags=x.tags||{},lat=x.lat??x.center?.lat,lng=x.lon??x.center?.lon,name=tags['name:zh']||tags.name;
     if(!finite(lat,-90,90)||!finite(lng,-180,180)||typeof name!=='string'||name.trim().length<2)return null;
     const id=`${x.type}-${x.id}`;if(seen.has(id))return null;seen.add(id);
-    const kind=tags.tourism==='museum'||tags.tourism==='gallery'?'indoor':tags.leisure==='park'||tags.tourism==='viewpoint'?'outdoor':'unknown';
-    return {id,name:name.trim(),lat,lng,kind,category:category(tags),minutes:kind==='indoor'?75:60,note:tags.opening_hours?'營業時間請自行核對':'營業資訊未驗證',source:`https://www.openstreetmap.org/${x.type}/${x.id}`,cityId:city.id,quality:quality(tags)};
-  }).filter(Boolean).sort((a,b)=>b.quality-a.quality||distance(city,a)-distance(city,b)).filter((place,index,all)=>all.findIndex(other=>other.name.toLocaleLowerCase()===place.name.toLocaleLowerCase()&&distance(other,place)<.35)===index).slice(0,60);
+    const category=placeCategory(tags),kind=['室內文化','餐飲','購物'].includes(category)?'indoor':['公園','展望點','動物園','主題樂園','自然景點'].includes(category)?'outdoor':'unknown';
+    return {id,name:name.trim(),lat,lng,kind,category,minutes:kind==='indoor'?75:60,note:tags.opening_hours?'營業時間請自行核對':'營業資訊未驗證',source:`https://www.openstreetmap.org/${x.type}/${x.id}`,cityId:city.id,quality:quality(tags)};
+  }).filter(Boolean).sort((a,b)=>b.quality-a.quality||distance(city,a)-distance(city,b)).filter((place,index,all)=>all.findIndex(other=>other.name.toLocaleLowerCase()===place.name.toLocaleLowerCase()&&distance(other,place)<.35)===index);
+  const selected=ranked.slice(0,45),ids=new Set(selected.map(place=>place.id));
+  for(const category of ['餐飲','購物','動物園','主題樂園']){
+    for(const place of ranked.filter(item=>item.category===category).slice(0,3)){
+      if(selected.length>=60)break;
+      if(!ids.has(place.id)){selected.push(place);ids.add(place.id);}
+    }
+  }
+  for(const place of ranked){if(selected.length>=60)break;if(!ids.has(place.id)){selected.push(place);ids.add(place.id);}}
+  return selected;
 }
 function distance(a,b){const lat=(a.lat-b.lat)*111,lon=(a.lng-b.lng)*111*Math.cos(a.lat*Math.PI/180);return Math.hypot(lat,lon);}
 export async function searchPlaces(city,fetcher=fetch){
@@ -96,8 +106,8 @@ export function normalizeNamedPlaces(payload,city,query=''){
     const aliases=[name,...Object.values(item.namedetails||{}).filter(value=>typeof value==='string')];
     if(sought&&!aliases.some(alias=>alias.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase().includes(sought)))return null;
     const key=`${type}-${id}`;if(seen.has(key))return null;seen.add(key);
-    const category=group==='historic'?'歷史地點':group==='leisure'&&subtype==='park'?'公園':group==='natural'?'自然景點':group==='tourism'&&['museum','gallery'].includes(subtype)?'室內文化':group==='tourism'&&subtype==='viewpoint'?'展望點':group==='amenity'&&['restaurant','cafe','fast_food'].includes(subtype)?'餐飲':group==='shop'||subtype==='marketplace'?'購物':'景點';
-    const kind=['室內文化','餐飲','購物'].includes(category)?'indoor':['公園','展望點','自然景點'].includes(category)?'outdoor':'unknown';
+    const category=placeCategory({[group]:subtype});
+    const kind=['室內文化','餐飲','購物'].includes(category)?'indoor':['公園','展望點','自然景點','動物園','主題樂園'].includes(category)?'outdoor':'unknown';
     return {id:key,name,lat,lng,kind,category,minutes:60,note:'營業資訊未驗證',source:`https://www.openstreetmap.org/${type}/${id}`,cityId:city.id,quality:quality(item.extratags||{}),importance:Number(item.importance)||0};
   }).filter(Boolean);
 }

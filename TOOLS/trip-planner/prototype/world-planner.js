@@ -17,8 +17,11 @@ export function rankPlaces(catalog,words=[]){
   return catalog.map((place,index)=>{
     const reasons=[],category=place.category;
     let score=40+Math.min(20,Math.max(0,Number(place.quality)||0)/8);
-    if(words.includes('自然')&&(category==='公園'||category==='展望點')){score+=30;reasons.push('符合自然偏好：公園或觀景點');}
+    if(words.includes('自然')&&['公園','展望點','自然景點'].includes(category)){score+=30;reasons.push('地圖類型符合自然偏好：公園、觀景或自然景點');}
     if(words.includes('深度')&&(category==='歷史地點'||category==='室內文化')){score+=25;reasons.push('符合深度偏好：歷史或文化地點');}
+    if(words.includes('美食')&&category==='餐飲'){score+=30;reasons.push('地圖標記為餐飲；口味與營業時間仍須核對');}
+    if(words.includes('購物')&&category==='購物'){score+=30;reasons.push('地圖標記為商場或市場；商品與營業時間仍須核對');}
+    if(words.includes('親子')&&['動物園','主題樂園'].includes(category)){score+=25;reasons.push('地圖標記為動物園或主題樂園；年齡適宜性仍須核對');}
     if((Number(place.quality)||0)>=60)reasons.push('地圖資料附有額外參考來源');
     if(!reasons.length)reasons.push('依地點類型與可查來源列入候選');
     return {place,score:Math.round(score),reasons,order:index};
@@ -26,7 +29,7 @@ export function rankPlaces(catalog,words=[]){
 }
 export function recommendPlaces(catalog,words=[],count=6){
   const remaining=rankPlaces(catalog,words),chosen=[],categoryCounts=new Map();
-  const diversityPenalty=words.includes('自然')||words.includes('深度')?12:35;
+  const diversityPenalty=['自然','深度','美食','購物','親子'].some(word=>words.includes(word))?12:35;
   while(chosen.length<Math.max(0,count)&&remaining.length){
     let best=0;
     for(let i=1;i<remaining.length;i++){
