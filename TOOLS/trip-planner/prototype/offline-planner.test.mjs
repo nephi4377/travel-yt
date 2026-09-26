@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {defaultPlaceIds,places} from './catalog.js';
-import {allocateDays,buildOfflineDay,distanceKm,routeOptions} from './offline-planner.js';
-import {tripDNA} from './engine.js';
+import {allocateDays,buildOfflineDay,distanceKm,routeOptions,recommendRouteChoices} from './offline-planner.js';
+import {tripDNA,routeScore} from './engine.js';
 import {groupRouteCost} from './budget.js';
 
 const dna=tripDNA(['舒服']);
@@ -29,4 +29,12 @@ test('one selected place per day is valid and empty allocation is rejected',()=>
   const one={...input,days:1,placeIds:['haeundae']};
   assert.equal(buildOfflineDay(0,one,dna).legs.length,0);
   assert.throws(()=>allocateDays([],1,dna),RangeError);
+});
+test('budget choice finds the best whole-day combination, not a greedy leg choice',()=>{
+  const day=buildOfflineDay(2,input,dna),budget=3000;
+  const result=recommendRouteChoices(day,input.travelers,dna,budget);
+  const combinations=day.legs.reduce((rows,leg)=>rows.flatMap(row=>leg.options.map((_,i)=>[...row,i])),[[]]);
+  const feasible=combinations.map(indices=>({indices,cost:indices.reduce((sum,i,leg)=>sum+groupRouteCost(day.legs[leg].options[i],input.travelers),0),score:indices.reduce((sum,i,leg)=>sum+routeScore(day.legs[leg].options[i],input.travelers,dna),0)})).filter(item=>item.cost<=budget).sort((a,b)=>a.score-b.score);
+  assert.equal(result.withinBudget,feasible.length>0);
+  if(feasible.length){assert.equal(result.cost,feasible[0].cost);assert.deepEqual(result.choices,feasible[0].indices);}
 });

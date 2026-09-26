@@ -1,6 +1,6 @@
-import {dimensions,adjectives,tripDNA,parseAdjustment,routeScore} from './engine.js';
+import {dimensions,adjectives,tripDNA,parseAdjustment} from './engine.js';
 import {places,defaultPlaceIds,mapUrl} from './catalog.js';
-import {buildOfflineDay,distanceKm} from './offline-planner.js';
+import {buildOfflineDay,distanceKm,recommendRouteChoices} from './offline-planner.js';
 import {groupRouteCost} from './budget.js';
 
 const $=id=>document.getElementById(id);
@@ -20,7 +20,7 @@ $('next').onclick=()=>show('conditions');$('back').onclick=()=>show('feel');$('e
 function dateFor(i){const d=new Date(`${trip.date}T12:00:00`);d.setDate(d.getDate()+i);return `${d.getMonth()+1}/${d.getDate()}`;}
 function clock(minutes){return `${String(Math.floor(minutes/60)).padStart(2,'0')}:${String(minutes%60).padStart(2,'0')}`;}
 function day(i){return buildOfflineDay(i,trip,tripDNA(selectedWords),changes[i]);}
-function chooseRoutes(d){let total=0;return d.legs.map(leg=>{const ranked=leg.options.map((r,i)=>({i,cost:groupRouteCost(r,trip.travelers),score:routeScore(r,trip.travelers,tripDNA(selectedWords))})).sort((a,b)=>a.score-b.score);const within=ranked.find(r=>total+r.cost<=trip.budget);const best=within||[...ranked].sort((a,b)=>a.cost-b.cost)[0];total+=best.cost;return best.i;});}
+function chooseRoutes(d){return recommendRouteChoices(d,trip.travelers,tripDNA(selectedWords),trip.budget).choices;}
 function updateSummary(){$('resultTitle').textContent=`釜山 · ${trip.date} 起 ${trip.days} 天`;$('summary').textContent=`${trip.travelers} 人 · ${trip.placeIds.length} 個所選地點 · 每日全團交通預算 ${trip.budget.toLocaleString()} KRW · 偏好：${[...selectedWords].join('、')||'均衡'}`;}
 $('tripForm').onsubmit=e=>{e.preventDefault();$('formError').textContent='';if(!e.currentTarget.reportValidity())return;const destination=$('destination').value.trim();if(!/^(釜山|busan)$/i.test(destination)){$('formError').textContent='目前只有釜山具名離線地點，無法為其他目的地編造行程。';return;}const ids=selectedIds(),days=Number($('days').value);if(ids.length<days){$('formError').textContent=`已選 ${ids.length} 個地點，${days} 天至少需選 ${days} 個。`;return;}if(ids.length>days*4){$('formError').textContent=`為保留旅行節奏，每天最多安排 4 個地點；${days} 天請選不超過 ${days*4} 個。`;return;}
   trip={destination:'釜山',date:$('date').value,days,travelers:Number($('travelers').value),budget:Number($('budget').value),placeIds:ids};activeDay=0;changes=Array.from({length:days},()=>({}));choices=Array.from({length:days},(_,i)=>chooseRoutes(day(i)));updateSummary();render();save();show('result');};

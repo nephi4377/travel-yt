@@ -1,5 +1,6 @@
 import {places,placeById} from './catalog.js';
 import {routeScore} from './engine.js';
+import {groupRouteCost} from './budget.js';
 
 const radians=value=>value*Math.PI/180;
 export function distanceKm(a,b){const dLat=radians(b.lat-a.lat),dLng=radians(b.lng-a.lng);const h=Math.sin(dLat/2)**2+Math.cos(radians(a.lat))*Math.cos(radians(b.lat))*Math.sin(dLng/2)**2;return 6371*2*Math.atan2(Math.sqrt(h),Math.sqrt(1-h));}
@@ -13,6 +14,23 @@ export function routeOptions(a,b,travelers,dna,adjustment={}){
   list.push(option('公車',bus,1500,8,0,30));
   list.push(option('計程車',taxi,Math.ceil((4800+km*1400)/500)*500,3,0,14));
   return list.sort((x,y)=>routeScore(x,travelers,dna)-routeScore(y,travelers,dna)).slice(0,3);
+}
+export function recommendRouteChoices(day,travelers,dna,budget){
+  let bestWithin=null,bestFallback=null;
+  function visit(index,choices,cost,score){
+    if(index===day.legs.length){
+      const result={choices:[...choices],cost,score};
+      if(cost<=budget&&(!bestWithin||score<bestWithin.score))bestWithin=result;
+      if(!bestFallback||cost<bestFallback.cost||(cost===bestFallback.cost&&score<bestFallback.score))bestFallback=result;
+      return;
+    }
+    day.legs[index].options.forEach((route,choice)=>{
+      choices[index]=choice;
+      visit(index+1,choices,cost+groupRouteCost(route,travelers),score+routeScore(route,travelers,dna));
+    });
+  }
+  visit(0,[],0,0);
+  return {...(bestWithin||bestFallback),withinBudget:!!bestWithin};
 }
 function nearestOrder(list){
   if(!list.length)return [];
