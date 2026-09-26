@@ -1,5 +1,7 @@
 # AI Travel Planner V0.2 Prototype
 
+2026-09-26 search consistency fix: Editing the destination or restarting now invalidates in-flight city/place lookups, preventing a late response from repopulating a different city's results. The interface still requires an explicit search and city selection before building a trip.
+
 2026-09-26 mobile route UI update: Each leg now shows its selected transport option first. A per-leg comparison control reveals the other available options only on demand. This is presentation-only and does not change route estimates or the worldwide data flow.
 
 2026-09-26 全球搜尋版：使用者可主動查詢世界各地城市及附近的 OpenStreetMap 具名地點，並以查到的資料排多日行程。現行架構、使用限制與啟動方式請看 [WORLD-SEARCH.md](WORLD-SEARCH.md)。以下釜山離線版及更早 mock 版記錄為歷史紀錄。

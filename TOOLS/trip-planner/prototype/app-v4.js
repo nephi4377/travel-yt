@@ -34,6 +34,7 @@ const tomorrow=new Date(Date.now()+86400000);
 $('date').value=`${tomorrow.getFullYear()}-${String(tomorrow.getMonth()+1).padStart(2,'0')}-${String(tomorrow.getDate()).padStart(2,'0')}`;
 $('next').onclick=()=>show('conditions');$('back').onclick=()=>show('feel');$('editTrip').onclick=()=>show('conditions');
 $('restart').onclick=()=>{
+  ++lookupSerial;
   trip=null;city=null;catalog=[];activeDay=0;adjustments=[];routeChoices=[];expandedRoutes=[];selectedIds.clear();words.clear();
   sessionStorage.removeItem(draftKey);$('destination').value='';$('cityResults').replaceChildren();$('placeStage').classList.add('hidden');$('placeFilter').value='';$('cityStatus').textContent='';$('formError').textContent='';
   $('days').value='3';$('travelers').value='2';$('budget').value='0';$('currency').value='TWD';
@@ -82,6 +83,8 @@ $('searchCity').onclick=async()=>{
 $('destination').addEventListener('input',()=>{city=null;catalog=[];selectedIds.clear();$('placeStage').classList.add('hidden');$('cityResults').replaceChildren();setCityStatus('名稱已變更，請重新搜尋並選擇城市。');});
 $('destination').addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();$('searchCity').click();}});
 
+// Discard delayed results for a city name the user has already changed.
+$('destination').addEventListener('input',()=>{++lookupSerial;});
 function selectedPlaces(){return [...selectedIds].filter(id=>catalog.some(p=>p.id===id));}
 function tripDays(){return buildWorldTrip({...trip,catalog},tripDNA(words),adjustments);}
 function dateLabel(index){const date=new Date(`${trip.date}T12:00:00`);date.setDate(date.getDate()+index);return `${date.getMonth()+1}/${date.getDate()}`;}
