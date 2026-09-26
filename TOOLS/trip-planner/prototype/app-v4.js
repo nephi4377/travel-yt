@@ -13,11 +13,12 @@ const namedSearch=element('div','named-search');
 const namedLabel=element('label','', '找不到想去的地點？輸入名稱搜尋');
 const namedInput=element('input');namedInput.id='namedPlace';namedInput.placeholder='例如 Tour Eiffel';namedInput.maxLength=80;
 const namedButton=element('button','','搜尋具名地點');namedButton.type='button';
+const widerButton=element('button','secondary hidden','擴大範圍再查一次');widerButton.type='button';
 const namedStatus=element('p','hint');namedStatus.setAttribute('role','status');
 const namedResults=element('div','city-results');
 const namedHelp=element('p','muted','具名搜尋由 OpenStreetMap 公共服務提供，僅在按下按鈕時查詢；低流量本機測試用。');
 const policyLink=element('a','','使用政策');policyLink.href='https://operations.osmfoundation.org/policies/nominatim/';policyLink.target='_blank';policyLink.rel='noopener noreferrer';namedHelp.append(' ',policyLink);
-namedLabel.append(namedInput);namedSearch.append(namedLabel,namedButton,namedStatus,namedResults,namedHelp);
+namedLabel.append(namedInput);namedSearch.append(namedLabel,namedButton,widerButton,namedStatus,namedResults,namedHelp);
 $('placeStage').insertBefore(namedSearch,$('placeFilter').parentElement);
 const itineraryEditStatus=element('p','hint');itineraryEditStatus.setAttribute('role','status');$('schedule').before(itineraryEditStatus);
 
@@ -50,7 +51,7 @@ $('restart').onclick=()=>{
   ++lookupSerial;++namedLookupSerial;
   trip=null;city=null;catalog=[];activeDay=0;adjustments=[];routeChoices=[];expandedRoutes=[];selectionTouched=false;selectedIds.clear();words.clear();
   sessionStorage.removeItem(draftKey);$('destination').value='';$('cityResults').replaceChildren();$('placeStage').classList.add('hidden');$('placeFilter').value='';$('cityStatus').textContent='';$('formError').textContent='';
-  namedInput.value='';namedStatus.textContent='';namedResults.replaceChildren();
+  namedInput.value='';namedStatus.textContent='';namedResults.replaceChildren();widerButton.classList.add('hidden');
   $('days').value='3';$('travelers').value='2';$('budget').value='0';$('currency').value='TWD';
   for(const chip of $('chips').children)chip.setAttribute('aria-pressed','false');renderDNA();show('feel');
 };
@@ -71,19 +72,21 @@ function renderPlaces(){
   countPlaces();
 }
 $('placeFilter').oninput=renderPlaces;
-namedButton.onclick=async()=>{
+async function lookupNamedPlace(scope='nearby'){
   if(!city){namedStatus.textContent='請先選擇城市。';return;}
   const query=namedInput.value.trim(),cityId=city.id,citySerial=lookupSerial,serial=++namedLookupSerial;
   namedResults.replaceChildren();namedStatus.textContent='正在查詢具名地點…';
   if(query.length<3){namedStatus.textContent='請輸入至少 3 個字的地點名稱。';return;}
-  const cacheKey=`trip-planner-named-v2-${cityId}-${query.toLocaleLowerCase()}`;
+  const cacheKey=`trip-planner-named-v3-${scope}-${cityId}-${query.toLocaleLowerCase()}`;
   let places;try{const cached=JSON.parse(sessionStorage.getItem(cacheKey));if(cached?.savedAt>Date.now()-86400000&&Array.isArray(cached.places))places=cached.places;}catch{}
   if(!places&&Date.now()-namedLookupAt<1100){namedStatus.textContent='公共地點服務每秒至多查詢一次，請稍候再按。';return;}
-  namedButton.disabled=true;
+  namedButton.disabled=true;widerButton.disabled=true;widerButton.classList.add('hidden');
   try{
-    if(!places){namedLookupAt=Date.now();places=await searchNamedPlaces(city,query);try{sessionStorage.setItem(cacheKey,JSON.stringify({savedAt:Date.now(),places}));}catch{}}
+    if(!places){namedLookupAt=Date.now();places=await searchNamedPlaces(city,query,fetch,scope);try{sessionStorage.setItem(cacheKey,JSON.stringify({savedAt:Date.now(),places}));}catch{}}
     if(serial!==namedLookupSerial||citySerial!==lookupSerial||city?.id!==cityId)return;
-    if(!places.length){namedStatus.textContent='附近沒有查到符合名稱的具名地點；可改用當地語言或完整名稱再試。';return;}
+    if(!places.length&&scope==='nearby')widerButton.classList.remove('hidden');
+    if(!places.length&&scope==='wider'){namedStatus.textContent='擴大查詢仍沒有找到 120 公里內的同名地點；可試當地語言或完整名稱。';return;}
+    if(!places.length){namedStatus.textContent='附近沒有查到符合名稱的具名地點；可按下方按鈕擴大範圍，或改用當地語言再試。';return;}
     namedStatus.textContent=`找到 ${places.length} 個可能地點，點選後加入行程候選；名稱與位置請自行核對。`;
     for(const place of places){
       const candidate=element('button','city-choice',`${place.name} · ${place.category} · 距城市中心約 ${km(city,place).toFixed(1)} km`);
@@ -96,12 +99,15 @@ namedButton.onclick=async()=>{
       namedResults.append(candidate);
     }
   }catch(error){if(serial===namedLookupSerial)namedStatus.textContent=error.message||'地點搜尋失敗，請稍後重試。';}
-  finally{namedButton.disabled=false;}
-};
+  finally{namedButton.disabled=false;widerButton.disabled=false;}
+}
+namedButton.onclick=()=>lookupNamedPlace();
+widerButton.onclick=()=>lookupNamedPlace('wider');
+namedInput.addEventListener('input',()=>{widerButton.classList.add('hidden');namedResults.replaceChildren();namedStatus.textContent='';++namedLookupSerial;});
 namedInput.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();namedButton.click();}});
 async function chooseCity(item){
   const serial=++lookupSerial;++namedLookupSerial;city=item;catalog=[];selectedIds.clear();selectionTouched=false;
-  namedInput.value='';namedStatus.textContent='';namedResults.replaceChildren();
+  namedInput.value='';namedStatus.textContent='';namedResults.replaceChildren();widerButton.classList.add('hidden');
   $('cityResults').replaceChildren();$('chosenCity').textContent=cityLabel(item);$('placeFilter').value='';renderPlaces();$('placeStage').classList.remove('hidden');
   setCityStatus(`已選擇 ${cityLabel(item)}。可立即搜尋具名地點；附近清單正在背景載入…`);
   try{
@@ -133,7 +139,7 @@ $('destination').addEventListener('input',()=>{city=null;catalog=[];selectedIds.
 $('destination').addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();$('searchCity').click();}});
 
 // Discard delayed results for a city name the user has already changed.
-$('destination').addEventListener('input',()=>{++lookupSerial;++namedLookupSerial;namedResults.replaceChildren();namedStatus.textContent='';});
+$('destination').addEventListener('input',()=>{++lookupSerial;++namedLookupSerial;namedResults.replaceChildren();namedStatus.textContent='';widerButton.classList.add('hidden');});
 function selectedPlaces(){return [...selectedIds].filter(id=>catalog.some(p=>p.id===id));}
 function tripDays(){return buildWorldTrip({...trip,catalog},tripDNA(words),adjustments);}
 function dateLabel(index){const date=new Date(`${trip.date}T12:00:00`);date.setDate(date.getDate()+index);return `${date.getMonth()+1}/${date.getDate()}`;}

@@ -46,7 +46,7 @@ export async function searchPlaces(city,fetcher=fetch){
 
 // Explicit, single-name lookup only. Public Nominatim forbids autocomplete and
 // systematic POI harvesting; the caller must cache and throttle requests.
-export function namedPlaceUrl(city,query){
+export function namedPlaceUrl(city,query,scope='nearby'){
   if(!finite(city?.lat,-90,90)||!finite(city?.lng,-180,180))throw new TypeError('Invalid city coordinates');
   const name=String(query||'').trim();
   if(name.length<3||name.length>80)throw new Error('請輸入 3–80 個字的地點名稱。');
@@ -54,7 +54,7 @@ export function namedPlaceUrl(city,query){
   const bounds=[Math.max(-180,city.lng-lngDelta),Math.min(90,city.lat+latDelta),Math.min(180,city.lng+lngDelta),Math.max(-90,city.lat-latDelta)];
   const url=new URL(NAMED_PLACE_API);
   url.searchParams.set('q',name);url.searchParams.set('format','jsonv2');url.searchParams.set('limit','8');
-  url.searchParams.set('viewbox',bounds.join(','));url.searchParams.set('bounded','1');
+  url.searchParams.set('viewbox',bounds.join(','));url.searchParams.set('bounded',scope==='wider'?'0':'1');
   url.searchParams.set('namedetails','1');url.searchParams.set('extratags','1');url.searchParams.set('accept-language','zh,en');
   return url;
 }
@@ -76,10 +76,11 @@ export function normalizeNamedPlaces(payload,city,query=''){
     return {id:key,name,lat,lng,kind,category,minutes:60,note:'營業資訊未驗證',source:`https://www.openstreetmap.org/${type}/${id}`,cityId:city.id,quality:quality(item.extratags||{}),importance:Number(item.importance)||0};
   }).filter(Boolean);
 }
-export async function searchNamedPlaces(city,query,fetcher=fetch){
-  const response=await fetcher(namedPlaceUrl(city,query).toString(),{signal:timeout(12000)});
+export async function searchNamedPlaces(city,query,fetcher=fetch,scope='nearby'){
+  const response=await fetcher(namedPlaceUrl(city,query,scope).toString(),{signal:timeout(12000)});
   if(!response.ok)throw new Error(`具名地點搜尋暫時無法使用（${response.status}）。請稍後再試。`);
-  return normalizeNamedPlaces(await response.json(),city,query);
+  const places=normalizeNamedPlaces(await response.json(),city,query);
+  return scope==='wider'?places.filter(place=>distance(city,place)<=120):places;
 }
 
 export function mergePlaces(nearby,alreadyAdded){

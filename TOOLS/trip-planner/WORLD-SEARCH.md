@@ -2,6 +2,8 @@
 
 2026-09-26 extension: the selected-city screen also offers an explicit named-place search through public Nominatim, bounded around the city (approximately 40 km rather than the initial 6-km nearby list). Users choose a returned OSM feature before it joins the candidate list. If Overpass nearby discovery times out, this path remains available. Results can include similarly named venues within a landmark, so users must check the visible type, position, source link, and current access/opening details. This is a low-volume local prototype only; see [RESEARCH-LOG.md](RESEARCH-LOG.md) for provider usage restrictions.
 
+2026-09-26 scope expansion: if a named-place lookup has no match, an explicit “擴大範圍再查一次” action offers a wider city-biased search. It does not run automatically, and only same-name results within 120 km of the chosen city are eligible. Search coverage remains incomplete; users should verify the OSM source and current visitor details.
+
 2026-09-26 itinerary editing: after generating a trip, each stop can be moved earlier/later on its day or transferred to another day. The interface enforces 1–4 selected stops per day, recalculates the affected distance-model legs, and keeps the arrangement in session storage. Manual edits clear provisional weather/fatigue adjustments and selected transport options; these are not verified bookings.
 
 2026-09-26 loading behavior: after city selection the named-place search is immediately usable. The nearby Overpass request continues in the background and, if it succeeds, merges results without removing user-added named places or their selections. If it fails, named search and itinerary generation remain available.

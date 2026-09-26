@@ -33,6 +33,16 @@ test('named landmark lookup is explicit, bounded and uses real OSM IDs',async()=
   const misleading=[{osm_type:'node',osm_id:502,lat:'48.858',lon:'2.294',category:'amenity',type:'restaurant',display_name:'Le Jules Verne, Tour Eiffel, Paris'}];
   assert.deepEqual(normalizeNamedPlaces(misleading,city,'Tour Eiffel'),[]);
 });
+test('user-requested wider named search stays local and excludes distant matches',async()=>{
+  assert.equal(namedPlaceUrl(city,'Tour Eiffel','wider').searchParams.get('bounded'),'0');
+  const payload=[
+    {osm_type:'way',osm_id:11,lat:'48.858',lon:'2.294',category:'tourism',type:'attraction',display_name:'Tour Eiffel, Paris'},
+    {osm_type:'way',osm_id:12,lat:'43.0',lon:'5.0',category:'tourism',type:'attraction',display_name:'Tour Eiffel, elsewhere'}
+  ];
+  const fetcher=async request=>{assert.equal(new URL(request).searchParams.get('bounded'),'0');return {ok:true,json:async()=>payload};};
+  const places=await searchNamedPlaces(city,'Tour Eiffel',fetcher,'wider');
+  assert.deepEqual(places.map(place=>place.id),['way-11']);
+});
 test('late nearby response keeps named places added while it was loading',()=>{
   const named={id:'way-1',name:'Chosen landmark'},nearby={id:'node-2',name:'Nearby park'};
   assert.deepEqual(mergePlaces([nearby],[named]),[nearby,named]);
