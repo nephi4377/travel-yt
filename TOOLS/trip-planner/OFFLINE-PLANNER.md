@@ -1,4 +1,6 @@
-# V0.2 可操作離線規劃（目前版本）
+# V0.2 釜山離線規劃（歷史版本）
+
+此文件描述釜山離線版歷史實作；目前網頁入口已切換為可搜尋世界各地的 [WORLD-SEARCH.md](WORLD-SEARCH.md)。
 
 舊的六天 mock 模板仍保留在 `prototype/planner.js` 作為歷史參考，但網頁入口已改用 `app-v3.js`、`catalog.js`、`offline-planner.js`，不再載入該模板。`IMPLEMENTATION.md` 下方多數 2026-09-22/23 記錄描述舊版，不代表目前畫面。
 
