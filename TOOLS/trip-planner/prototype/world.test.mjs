@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {normalizeCities,normalizePlaces,overpassQuery,searchCities,searchPlaces} from './world-data.js';
+import {normalizeCities,normalizePlaces,overpassQuery,searchCities,searchPlaces,namedPlaceUrl,normalizeNamedPlaces,searchNamedPlaces} from './world-data.js';
 import {buildWorldTrip,transportOptions,suggestedPlaceIds,rankPlaces,recommendPlaces} from './world-planner.js';
 import {tripDNA} from './engine.js';
 
@@ -16,6 +16,22 @@ test('Overpass query is bounded and place results retain source IDs',async()=>{
   const fetcher=async url=>{assert.match(url,/overpass-api\.de/);return {ok:true,json:async()=>({elements:items})};};
   const places=await searchPlaces(city,fetcher);assert.equal(places.length,8);assert.equal(places[0].source,'https://www.openstreetmap.org/node/1');
   assert.equal(normalizePlaces({elements:[{type:'node',id:9,lat:0,lon:0,tags:{}}]},city).length,0);
+});
+test('named landmark lookup is explicit, bounded and uses real OSM IDs',async()=>{
+  const url=namedPlaceUrl(city,'Tour Eiffel');
+  assert.equal(url.hostname,'nominatim.openstreetmap.org');
+  assert.equal(url.searchParams.get('bounded'),'1');
+  assert.equal(url.searchParams.get('limit'),'8');
+  assert.throws(()=>namedPlaceUrl(city,'a'),/3–80/);
+  const payload=[{osm_type:'way',osm_id:501,lat:'48.858',lon:'2.294',category:'tourism',type:'attraction',display_name:'Tour Eiffel, Paris',importance:0.9},{osm_type:'way',osm_id:501,lat:'48.858',lon:'2.294',category:'tourism',type:'attraction',display_name:'duplicate'},{osm_type:'node',osm_id:9,lat:'48.85',lon:'2.35',category:'place',type:'city',display_name:'Paris'}];
+  const fetcher=async request=>{assert.equal(new URL(request).searchParams.get('q'),'Tour Eiffel');return {ok:true,json:async()=>payload};};
+  const places=await searchNamedPlaces(city,'Tour Eiffel',fetcher);
+  assert.equal(places.length,1);
+  assert.equal(places[0].id,'way-501');
+  assert.equal(places[0].source,'https://www.openstreetmap.org/way/501');
+  assert.deepEqual(normalizeNamedPlaces(payload,city),places);
+  const misleading=[{osm_type:'node',osm_id:502,lat:'48.858',lon:'2.294',category:'amenity',type:'restaurant',display_name:'Le Jules Verne, Tour Eiffel, Paris'}];
+  assert.deepEqual(normalizeNamedPlaces(misleading,city,'Tour Eiffel'),[]);
 });
 test('documented major places rank above incidental nearby attractions',()=>{
   const ranked=normalizePlaces({elements:[

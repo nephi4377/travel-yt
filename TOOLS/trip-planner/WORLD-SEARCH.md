@@ -1,5 +1,7 @@
 # V0.2 全球城市搜尋版（目前網頁入口）
 
+2026-09-26 extension: the selected-city screen also offers an explicit named-place search through public Nominatim, bounded around the city (approximately 40 km rather than the initial 6-km nearby list). Users choose a returned OSM feature before it joins the candidate list. If Overpass nearby discovery times out, this path remains available. Results can include similarly named venues within a landmark, so users must check the visible type, position, source link, and current access/opening details. This is a low-volume local prototype only; see [RESEARCH-LOG.md](RESEARCH-LOG.md) for provider usage restrictions.
+
 使用者不必先選釜山。開啟 `prototype/` 後，選旅行形容詞、搜尋世界各地城市／地區、挑選正確國家，再查詢城市中心附近的具名景點，勾選後產生 1–6 天行程。已在瀏覽器實際查到河內的地點並排出三日行程，也查到巴黎的城市候選。`catalog.js`、`app-v3.js` 及 `OFFLINE-PLANNER.md` 是先前釜山離線版本的歷史資料，現行入口為 `index.html` → `app-v4.js`。
 
 ## 啟動與驗證

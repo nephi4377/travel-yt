@@ -1,6 +1,7 @@
 // Replaceable read-only providers. Requests run only after an explicit user action.
 export const CITY_API='https://geocoding-api.open-meteo.com/v1/search';
 export const PLACES_API='https://overpass-api.de/api/interpreter';
+export const NAMED_PLACE_API='https://nominatim.openstreetmap.org/search';
 const timeout=(ms)=>AbortSignal.timeout(ms);
 const finite=(n,min,max)=>Number.isFinite(n)&&n>=min&&n<=max;
 
@@ -41,4 +42,42 @@ export async function searchPlaces(city,fetcher=fetch){
   const response=await fetcher(`${PLACES_API}?data=${encodeURIComponent(query)}`,{signal:timeout(35000)});
   if(!response.ok)throw new Error(`地點搜尋暫時無法使用（${response.status}）。請稍後重試。`);
   return normalizePlaces(await response.json(),city);
+}
+
+// Explicit, single-name lookup only. Public Nominatim forbids autocomplete and
+// systematic POI harvesting; the caller must cache and throttle requests.
+export function namedPlaceUrl(city,query){
+  if(!finite(city?.lat,-90,90)||!finite(city?.lng,-180,180))throw new TypeError('Invalid city coordinates');
+  const name=String(query||'').trim();
+  if(name.length<3||name.length>80)throw new Error('請輸入 3–80 個字的地點名稱。');
+  const latDelta=0.36,lngDelta=Math.min(10,0.36/Math.max(.1,Math.cos(city.lat*Math.PI/180)));
+  const bounds=[Math.max(-180,city.lng-lngDelta),Math.min(90,city.lat+latDelta),Math.min(180,city.lng+lngDelta),Math.max(-90,city.lat-latDelta)];
+  const url=new URL(NAMED_PLACE_API);
+  url.searchParams.set('q',name);url.searchParams.set('format','jsonv2');url.searchParams.set('limit','8');
+  url.searchParams.set('viewbox',bounds.join(','));url.searchParams.set('bounded','1');
+  url.searchParams.set('namedetails','1');url.searchParams.set('extratags','1');url.searchParams.set('accept-language','zh,en');
+  return url;
+}
+export function normalizeNamedPlaces(payload,city,query=''){
+  const seen=new Set();
+  return (Array.isArray(payload)?payload:[]).map(item=>{
+    const lat=Number(item.lat),lng=Number(item.lon),type=item.osm_type,id=Number(item.osm_id);
+    if(!finite(lat,-90,90)||!finite(lng,-180,180)||!['node','way','relation'].includes(type)||!Number.isSafeInteger(id))return null;
+    const group=item.category||item.class||'',subtype=item.type||'';
+    if(!['tourism','historic','leisure','natural','amenity','shop','man_made','building'].includes(group))return null;
+    const name=item.namedetails?.['name:zh']||item.namedetails?.name||item.name||String(item.display_name||'').split(',')[0].trim();
+    if(typeof name!=='string'||name.length<2)return null;
+    const sought=query.trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase();
+    const aliases=[name,...Object.values(item.namedetails||{}).filter(value=>typeof value==='string')];
+    if(sought&&!aliases.some(alias=>alias.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase().includes(sought)))return null;
+    const key=`${type}-${id}`;if(seen.has(key))return null;seen.add(key);
+    const category=group==='historic'?'歷史地點':group==='leisure'&&subtype==='park'?'公園':group==='natural'?'自然景點':group==='tourism'&&['museum','gallery'].includes(subtype)?'室內文化':group==='tourism'&&subtype==='viewpoint'?'展望點':group==='amenity'&&['restaurant','cafe','fast_food'].includes(subtype)?'餐飲':group==='shop'||subtype==='marketplace'?'購物':'景點';
+    const kind=['室內文化','餐飲','購物'].includes(category)?'indoor':['公園','展望點','自然景點'].includes(category)?'outdoor':'unknown';
+    return {id:key,name,lat,lng,kind,category,minutes:60,note:'營業資訊未驗證',source:`https://www.openstreetmap.org/${type}/${id}`,cityId:city.id,quality:quality(item.extratags||{}),importance:Number(item.importance)||0};
+  }).filter(Boolean);
+}
+export async function searchNamedPlaces(city,query,fetcher=fetch){
+  const response=await fetcher(namedPlaceUrl(city,query).toString(),{signal:timeout(12000)});
+  if(!response.ok)throw new Error(`具名地點搜尋暫時無法使用（${response.status}）。請稍後再試。`);
+  return normalizeNamedPlaces(await response.json(),city,query);
 }
