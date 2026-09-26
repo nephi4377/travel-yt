@@ -1,10 +1,16 @@
 # AI Travel Planner V0.2 Prototype
 
+## Current handoff (2026-09-27, discovery only on explicit request)
+
+- Choosing a city no longer fires the slow six-part nearby Overpass request. The user instead clicks one of four bounded category searches or enters a named place; changing a city still clears its old candidates. During a category request, the other category buttons are disabled to avoid concurrent public-service calls from one tab. Existing city/category session caching and source-linked itinerary flow remain.
+- Verified: Kyoto city selection immediately displayed exploration controls with no background-loading status. One clicked history lookup returned 59 OSM features; the earlier Paris culture lookup returned 60 and generated a three-day trip. 41 unit tests, JavaScript syntax and diff checks pass. The query cap can still produce many minor OSM features, and opening/transit/fare claims remain unverified.
+- Next priority: improve discovery relevance and default selection so minor monuments/galleries do not become a poor automatic trip; exclude non-city Open-Meteo candidates such as heliports/landmarks; test small-phone layout. A production provider or self-hosted catalog with quota enforcement remains necessary for robust worldwide use.
+
 ## Current handoff (2026-09-27, user-directed worldwide place categories)
 
-- After selecting any city, users can explicitly look up nearby culture, history, parks, or food using a separate bounded Overpass query (3 km, one category, maximum 60 returned objects). Results merge with manually found places and keep prior selections. The existing broad background nearby query remains for now; the focused buttons provide a practical fallback when it times out, not a guarantee of worldwide POI completeness.
+- After selecting any city, users can explicitly look up nearby culture, history, parks, or food using a bounded Overpass query (3 km, one category, maximum 60 returned objects). Results merge with manually found places and keep prior selections. The broad background request was removed in the subsequent handoff above; this remains no guarantee of worldwide POI completeness.
 - Verified: 41 unit tests pass, including bounded category-query construction and one-request behavior. In a local-browser Paris walkthrough, the broad background request failed, a clicked culture request returned 60 real OSM features, and the selected places generated a three-day itinerary with source links and transport comparison. Do not infer opening hours, transit service or fares from these OSM tags.
-- Next priority: remove or replace the slow broad background query after assessing public-service load; refine category result quality (many minor gallery objects can outrank important landmarks) and do narrow-phone visual QA. Research a production-suitable worldwide POI provider or self-hosting with quota enforcement before public use.
+- Next priority (now addressed above): replace the slow broad background query; category result quality and narrow-phone QA remain open.
 
 ## Current handoff (2026-09-27, independent multi-day timing)
 

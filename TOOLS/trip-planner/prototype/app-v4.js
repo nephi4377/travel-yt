@@ -1,5 +1,5 @@
 import {dimensions,adjectives,tripDNA,parseAdjustment} from './engine.js';
-import {searchCities,searchFallbackCities,searchPlaces,searchCategoryPlaces,DISCOVERY_CATEGORIES,searchNamedPlaces,parseOsmPlaceUrl,lookupOsmPlace,mergePlaces} from './world-data.js';
+import {searchCities,searchFallbackCities,searchCategoryPlaces,DISCOVERY_CATEGORIES,searchNamedPlaces,parseOsmPlaceUrl,lookupOsmPlace,mergePlaces} from './world-data.js';
 import {buildWorldTrip,groupPlaceIds,sameTripSelection,km,mapUrl,directionsUrl,suggestedPlaceIds,rankPlaces,recommendedStartTime,startTimeMinutes,normalizeDayStartTimes} from './world-planner.js';
 import {fetchRoadRoute} from './route-data.js';
 
@@ -11,6 +11,7 @@ let city=null,catalog=[],trip=null,activeDay=0,adjustments=[],routeChoices=[],ex
 let startTimeTouched=false;
 let namedLookupAt=0,namedLookupSerial=0;
 let roadLookupAt=0;
+let discoveryBusy=false;
 const cityCachePrefix='trip-planner-cities-v1-';
 const startLabel=element('label','','每日出發時間'),startInput=element('input');startInput.id='startTime';startInput.type='time';startInput.min='06:00';startInput.max='14:00';startInput.value='10:00';startInput.required=true;
 startInput.addEventListener('input',()=>{startTimeTouched=true;});startLabel.append(startInput,element('small','','「不想早起」建議 11:30，「緊湊」建議 09:00；可自行修改，人工設定優先。'));$('date').parentElement.after(startLabel);
@@ -35,8 +36,9 @@ osmLabel.append(osmInput);osmImport.append(osmSummary,osmHelp,osmLabel,osmButton
 namedLabel.append(namedInput);namedSearch.append(namedLabel,namedButton,widerButton,namedStatus,namedResults,namedHelp,osmImport);
 $('placeStage').insertBefore(namedSearch,$('placeFilter').parentElement);
 const itineraryEditStatus=element('p','hint');itineraryEditStatus.setAttribute('role','status');$('schedule').before(itineraryEditStatus);
+$('placeStage').querySelector('p.muted').textContent='選好城市後，按類型查詢附近地點，或直接搜尋想去的具名地點。地點、營業與交通資訊仍需自行核對。';
 const discovery=element('div','discovery'),discoveryTitle=element('h4','','依類型找附近地點');
-const discoveryHelp=element('p','hint','選一種類型才額外查詢；每次只看市中心約 3 公里，查不到可用具名搜尋。');
+const discoveryHelp=element('p','hint','選一種類型才查詢；每次只看市中心約 3 公里，查不到可用具名搜尋。');
 const discoveryButtons=element('div','discovery-buttons'),discoveryStatus=element('p','hint');discoveryStatus.setAttribute('role','status');
 for(const [key,{label}] of Object.entries(DISCOVERY_CATEGORIES)){
   const button=element('button','chip',label);button.type='button';button.onclick=()=>loadNearbyCategory(key);
@@ -146,29 +148,19 @@ osmButton.onclick=async()=>{
   finally{osmButton.disabled=false;}
 };
 async function chooseCity(item){
-  const serial=++lookupSerial;++namedLookupSerial;city=item;catalog=[];selectedIds.clear();selectionTouched=false;
+  ++lookupSerial;++namedLookupSerial;city=item;catalog=[];selectedIds.clear();selectionTouched=false;
   namedInput.value='';namedStatus.textContent='';namedResults.replaceChildren();widerButton.classList.add('hidden');osmInput.value='';osmStatus.textContent='';
   $('cityResults').replaceChildren();$('chosenCity').textContent=cityLabel(item);$('placeFilter').value='';renderPlaces();$('placeStage').classList.remove('hidden');
-  setCityStatus(`已選擇 ${cityLabel(item)}。可立即搜尋具名地點；附近清單正在背景載入…`);
-  try{
-    const cacheKey=placeCachePrefix+item.id;
-    let result;try{const cached=JSON.parse(sessionStorage.getItem(cacheKey));if(cached?.savedAt>Date.now()-86400000&&Array.isArray(cached.places))result=cached.places;}catch{}
-    if(!result){result=await searchPlaces(item);try{sessionStorage.setItem(cacheKey,JSON.stringify({savedAt:Date.now(),places:result}));}catch{}}
-    if(serial!==lookupSerial)return;
-    catalog=mergePlaces(result,catalog);
-    if(!selectionTouched){selectedIds.clear();suggestedPlaceIds(catalog,[...words]).forEach(id=>selectedIds.add(id));}
-    renderPlaces();if(trip?.city?.id===city.id)save();
-    setCityStatus(result.length?`附近查到 ${result.length} 個具名地點；自行加入的地點已保留。偏好排序僅依可用證據。`:'附近清單沒有結果；仍可搜尋想去的具名地點。');
-  }catch(error){if(serial===lookupSerial){
-    setCityStatus('附近清單暫時無法載入；仍可依名稱搜尋地點，或換個城市再試。',true);
-  }}
+  discoveryStatus.textContent='';setCityStatus(`已選擇 ${cityLabel(item)}。按類型探索附近地點，或直接搜尋想去的具名地點。`);
 }
 async function loadNearbyCategory(category){
-  if(!city)return;
-  const cityId=city.id,serial=lookupSerial,button=discoveryButtons.children[Object.keys(DISCOVERY_CATEGORIES).indexOf(category)];
+  if(!city||discoveryBusy)return;
+  discoveryBusy=true;
+  const cityId=city.id,serial=lookupSerial;
   const cacheKey=placeCachePrefix+`category-${category}-${cityId}`;
   let result;try{const cached=JSON.parse(sessionStorage.getItem(cacheKey));if(cached?.savedAt>Date.now()-86400000&&Array.isArray(cached.places))result=cached.places;}catch{}
-  button.disabled=true;discoveryStatus.textContent=`正在查詢附近${DISCOVERY_CATEGORIES[category].label}…`;
+  for(const item of discoveryButtons.children)item.disabled=true;
+  discoveryStatus.textContent=`正在查詢附近${DISCOVERY_CATEGORIES[category].label}…`;
   try{
     if(!result){result=await searchCategoryPlaces(city,category);try{sessionStorage.setItem(cacheKey,JSON.stringify({savedAt:Date.now(),places:result}));}catch{}}
     if(serial!==lookupSerial||city?.id!==cityId)return;
@@ -177,7 +169,7 @@ async function loadNearbyCategory(category){
     renderPlaces();if(trip?.city?.id===city.id)save();
     discoveryStatus.textContent=result.length?`找到 ${result.length} 個附近${DISCOVERY_CATEGORIES[category].label}；已保留先前選的地點。`:'這類附近地點沒有結果；可改用名稱搜尋。';
   }catch(error){if(serial===lookupSerial)discoveryStatus.textContent=error.message||'查詢暫時失敗；可改用名稱搜尋。';}
-  finally{button.disabled=false;}
+  finally{discoveryBusy=false;for(const item of discoveryButtons.children)item.disabled=false;}
 }
 $('searchCity').onclick=async()=>{
   const query=$('destination').value.trim(),serial=++lookupSerial,button=$('searchCity');++namedLookupSerial;

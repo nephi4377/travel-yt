@@ -24,7 +24,7 @@
 
 2026-09-26 itinerary editing: after generating a trip, each stop can be moved earlier/later on its day or transferred to another day. The interface enforces 1–4 selected stops per day, recalculates the affected distance-model legs, and keeps the arrangement in session storage. Manual edits clear provisional weather/fatigue adjustments and selected transport options; these are not verified bookings.
 
-2026-09-26 loading behavior: after city selection the named-place search is immediately usable. The nearby Overpass request continues in the background and, if it succeeds, merges results without removing user-added named places or their selections. If it fails, named search and itinerary generation remain available.
+2026-09-27 loading behavior: after city selection, the named-place search and bounded category buttons are immediately usable. No nearby Overpass request runs automatically. A clicked category response merges without removing user-added named places or selections; if it fails, named search remains available. This replaces the older 2026-09-26 background-loading behavior.
 
 2026-09-26 editing behavior: changing date, travelers, budget, or TripDNA words after manually ordering stops retains the itinerary when the chosen city, number of days, and selected place set stay the same. If the preference words changed, provisional transport selections reset; a changed city/day count/place set regenerates the arrangement. Draft loading validates the saved assignment before displaying it.
 
