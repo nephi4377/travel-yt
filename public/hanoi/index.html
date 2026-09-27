@@ -209,7 +209,7 @@ const days=[
   {p:"airport",t:"內排國際機場",d:"不同航班分開計算車程；國際線仍預留報到與安檢時間。",tags:["回程"]}
  ]}
 ];
-function gmap(p){return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(p.q||p.n)}
+function gmap(p){return "https://www.google.com/maps/dir/?api=1&destination="+encodeURIComponent(p.q||p.n)+"&travelmode=driving"}
 function tagClass(x){if(x.includes("網紅"))return"web";if(x.includes("名物")||x.includes("必吃")||x.includes("在地"))return"food";if(x.includes("可選"))return"opt";return"mine"}
 const map=L.map("map",{zoomControl:true});
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"&copy; OpenStreetMap"}).addTo(map);
