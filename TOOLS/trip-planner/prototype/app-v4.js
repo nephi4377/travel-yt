@@ -24,7 +24,7 @@ let namedLookupAt=0,namedLookupSerial=0;
 let roadLookupAt=0;
 let discoveryBusy=false;
 let visiblePlaceCount=12;
-const cityCachePrefix='trip-planner-cities-v1-';
+const cityCachePrefix='trip-planner-cities-v2-';
 const startLabel=element('label','','每日出發時間'),startInput=element('input');startInput.id='startTime';startInput.type='time';startInput.min='06:00';startInput.max='14:00';startInput.value='10:00';startInput.required=true;
 startInput.addEventListener('input',()=>{startTimeTouched=true;});startLabel.append(startInput,element('small','','「不想早起」建議 11:30，「緊湊」建議 09:00；可自行修改，人工設定優先。'));$('date').parentElement.after(startLabel);
 const fallbackCityButton=element('button','hidden','找不到正確城市？改用 OpenStreetMap 搜尋');fallbackCityButton.type='button';

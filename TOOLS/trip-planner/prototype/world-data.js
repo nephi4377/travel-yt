@@ -20,19 +20,23 @@ async function fetchNominatim(url,fetcher){
   return response.status===404?fetcher(upstream,{signal:timeout(12000)}):response;
 }
 
-export function normalizeCities(payload){
-  return (Array.isArray(payload?.results)?payload.results:[])
+const comparableName=value=>String(value||'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').trim().toLocaleLowerCase();
+export function normalizeCities(payload,query=''){
+  const candidates=(Array.isArray(payload?.results)?payload.results:[])
     .filter(x=>finite(x.latitude,-90,90)&&finite(x.longitude,-180,180)&&typeof x.name==='string')
     .filter(x=>!x.feature_code||(/^PPL(?:A[2-5]?|C|F|G|L|R|S)?$/.test(x.feature_code)))
     .map(x=>({id:String(x.id),name:x.name,region:x.admin1||'',country:x.country||x.country_code||'',lat:x.latitude,lng:x.longitude,timezone:x.timezone||''}));
+  const wanted=comparableName(String(query).split(',')[0]);
+  const exact=candidates.filter(city=>comparableName(city.name)===wanted);
+  return exact.length?exact:candidates;
 }
 export async function searchCities(query,fetcher=fetch){
   const name=String(query||'').trim();
   if(name.length<2)throw new Error('請輸入至少兩個字的城市名稱。');
-  const url=new URL(CITY_API);url.searchParams.set('name',name);url.searchParams.set('count','8');url.searchParams.set('language','zh');
+  const url=new URL(CITY_API);url.searchParams.set('name',name);url.searchParams.set('count','8');url.searchParams.set('language',/[\u3400-\u9fff]/u.test(name)?'zh':'en');
   const response=await fetcher(url.toString(),{signal:timeout(12000)});
   if(!response.ok)throw new Error(`城市搜尋暫時無法使用（${response.status}）。`);
-  return normalizeCities(await response.json());
+  return normalizeCities(await response.json(),name);
 }
 // A deliberate, separately selected fallback when the primary city service is unavailable.
 export function fallbackCityUrl(query){

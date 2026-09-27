@@ -34,6 +34,21 @@ test('city search is explicit, global and safely encoded',async()=>{
   const result=await searchCities('Paris, France',fetcher);assert.equal(result[0].country,'France');assert.match(requested,/name=Paris%2C\+France/);
   assert.equal(normalizeCities({results:[{name:'bad',latitude:999,longitude:0}]}).length,0);
 });
+test('exact city names outrank similarly prefixed districts without losing namesakes',async()=>{
+  const payload={results:[
+    {id:1,name:'Paris',country:'France',latitude:48.85,longitude:2.35,feature_code:'PPLC'},
+    {id:2,name:'Paris 15 Vaugirard',country:'France',latitude:48.84,longitude:2.30,feature_code:'PPL'},
+    {id:3,name:'Paris',country:'United States',latitude:33.66,longitude:-95.55,feature_code:'PPL'},
+  ]};
+  const requested=[];
+  const fetcher=async url=>{requested.push(new URL(url));return {ok:true,json:async()=>payload};};
+  const cities=await searchCities('Paris',fetcher);
+  assert.deepEqual(cities.map(city=>city.name),['Paris','Paris']);
+  assert.equal(requested[0].searchParams.get('language'),'en');
+  assert.deepEqual(normalizeCities({results:[payload.results[1]]},'Paris').map(city=>city.name),['Paris 15 Vaugirard']);
+  await searchCities('巴黎',fetcher);
+  assert.equal(requested[1].searchParams.get('language'),'zh');
+});
 test('city candidates exclude landmarks and transport features while keeping populated places',()=>{
   const place=(id,feature_code)=>({id,name:`Kyoto ${id}`,latitude:35,longitude:135,feature_code});
   const results=normalizeCities({results:[place(1,'PPLA'),place(2,'PPL'),place(3,'AIRH'),place(4,'PAL'),place(5,'PPLX'),place(6,'PPLQ')]});

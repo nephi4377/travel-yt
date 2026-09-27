@@ -1,5 +1,10 @@
 # AI Travel Planner V0.2 Prototype
 
+## Current handoff (2026-09-27, precise city candidates)
+
+- Primary city search now asks for labels in the input script's language (English for Latin-script queries, Chinese for Han-script queries) and, when an exact city-name match exists, hides merely prefix-matching districts/subplaces. Same-name cities in different countries remain selectable, and prefix results remain available when no exact name is returned. The city-search session cache version was bumped so previous results do not mask the change. This addresses the Paris-district confusion seen in the live browser without extra public requests.
+- Verification: 49 unit tests pass, including exact versus prefix results, namesakes, and language selection. JavaScript syntax and diff checks pass. A fresh live-browser retest of Paris and a non-Latin query is still required; source translation/alias behavior may vary by city. Next: browser-verify this filter, inspect the actual exported file if tooling allows, test the alternate Overpass failure UI, and continue assessing production-safe worldwide POI coverage.
+
 ## Current handoff (2026-09-27, real browser export check)
 
 - A live Paris two-day trip was built from separately searched, source-linked Louvre Museum and Eiffel Tower records on the current port-8001 preview. Reloading the already-open tab was needed to pick up the new JavaScript; the draft survived, and the full-itinerary download button then appeared. The button was clicked successfully. The IAB did not expose a downloaded file in the standard Windows Downloads folder, so the resulting bytes could not be inspected in this browser run. The UI now shows a clear status after dispatching the browser download, without claiming the file was saved.
