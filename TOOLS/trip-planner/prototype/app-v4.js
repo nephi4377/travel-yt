@@ -409,8 +409,8 @@ try{
     trip.dayStartTimes=normalizeDayStartTimes(trip.dayStartTimes,trip.days,trip.startTime);
     for(const chip of $('chips').children)chip.setAttribute('aria-pressed',String(words.has(chip.textContent)));
     $('destination').value=city.name;$('chosenCity').textContent=cityLabel(city);$('placeStage').classList.remove('hidden');
-    for(const id of trip.placeIds)selectedIds.add(id);selectionTouched=true;renderPlaces();
     for(const id of ['date','days','travelers','budget','currency'])$(id).value=trip[id];startInput.value=trip.startTime||recommendedStartTime([...words]);
+    for(const id of trip.placeIds)selectedIds.add(id);selectionTouched=true;renderPlaces();
     renderDNA();renderSummary();renderTrip();show('result');
   }
 }catch{}

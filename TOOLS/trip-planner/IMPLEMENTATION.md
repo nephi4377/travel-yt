@@ -1,5 +1,10 @@
 # AI Travel Planner V0.2 Prototype
 
+## Current handoff (2026-09-27, live city retest and restored draft count)
+
+- Fresh port-8001 browser searches returned exactly one `Paris · Île-de-France Region · France` candidate for `Paris, France` (previously the list also showed Paris districts), and one `京都 · 京都府 · 日本` candidate for `京都, Japan`. This confirms the exact-name filter and Han-script language selection for these two examples only, not all world-city aliases.
+- The same session exposed a restored-draft count mismatch: a saved two-day plan showed a stale three-day place requirement after entering the edit screen. Restore now sets the trip condition fields before rendering the place count. After reloading and reopening that real two-day draft, the UI correctly displayed “已選 2 個地點；可排 2 天，最多 8 個”. All 49 tests, JavaScript syntax, and diff checks pass. Next: test the secondary Overpass failure path and inspect export bytes where the browser permits. Production-grade provider availability and worldwide POI quality remain open.
+
 ## Current handoff (2026-09-27, precise city candidates)
 
 - Primary city search now asks for labels in the input script's language (English for Latin-script queries, Chinese for Han-script queries) and, when an exact city-name match exists, hides merely prefix-matching districts/subplaces. Same-name cities in different countries remain selectable, and prefix results remain available when no exact name is returned. The city-search session cache version was bumped so previous results do not mask the change. This addresses the Paris-district confusion seen in the live browser without extra public requests.
