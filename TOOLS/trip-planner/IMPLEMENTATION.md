@@ -1,5 +1,11 @@
 # AI Travel Planner V0.2 Prototype
 
+## Current handoff (2026-09-27, manageable multi-day place selection)
+
+- The worldwide place picker now reveals 12 ranked entries at a time with an explicit “show more” button, while always keeping selected entries visible even beyond the current page. Its live count states how many more places are needed for the chosen day count, or warns if the 4-per-day maximum is exceeded. Filtering resets the visible window and searches the full returned catalog. This is a UI change; it sends no extra provider requests.
+- Verified: 44 unit tests pass, including selected-item visibility beyond the first page. In a local-browser Paris culture query, a 60-item source-linked catalog initially showed 12 entries, then 24 after one tap; the three-day requirement and six selected places were visible. At a temporary 390px viewport, document scroll width was 375px, so no horizontal overflow was detected. The viewport override was reset. Syntax and diff checks pass.
+- Next priority: improve the actual relevance and geographic spread of returned places, including when one category offers fewer documented picks than trip days; inspect day editing on a narrow phone screen. Public API coverage, fares, live transit, opening hours and a production-safe data provider remain unresolved.
+
 ## Current handoff (2026-09-27, safer global search and suggestions)
 
 - Open-Meteo city candidates with a feature code are now restricted to current populated-place types; unrelated facilities and sights no longer appear as selectable cities. Nearby OSM category results are no longer blindly preselected: only candidates with an external Wikipedia/Wikidata cross-reference meet the automatic-suggestion threshold, while every returned place remains available for user choice. A cross-reference is an identity signal, not proof of quality, hours, accessibility or suitability.

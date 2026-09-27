@@ -65,6 +65,10 @@ export function suggestedPlaceIds(catalog,words=[],count=6){return recommendPlac
 export function suggestedDocumentedPlaceIds(catalog,words=[],count=6){
   return suggestedPlaceIds(catalog.filter(place=>(Number(place.quality)||0)>=60),words,count);
 }
+export function visibleRankedPlaces(ranked,selectedIds,limit=12){
+  const count=Math.max(0,Math.floor(Number(limit)||0));
+  return ranked.filter(({place},index)=>index<count||selectedIds.has(place.id));
+}
 export function sameTripSelection(previous,next){
   if(!previous||!next||previous.city?.id!==next.city?.id||previous.days!==next.days)return false;
   const a=previous.placeIds,b=next.placeIds;

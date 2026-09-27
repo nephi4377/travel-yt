@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {normalizeCities,normalizeFallbackCities,fallbackCityUrl,searchFallbackCities,normalizePlaces,overpassQuery,searchCities,searchPlaces,categoryPlacesQuery,searchCategoryPlaces,DISCOVERY_CATEGORIES,namedPlaceUrl,normalizeNamedPlaces,searchNamedPlaces,parseOsmPlaceUrl,osmLookupUrl,lookupOsmPlace,mergePlaces} from './world-data.js';
-import {buildWorldTrip,groupPlaceIds,sameTripSelection,transportOptions,directionsUrl,recommendedStartTime,startTimeMinutes,normalizeDayStartTimes,suggestedPlaceIds,suggestedDocumentedPlaceIds,rankPlaces,recommendPlaces} from './world-planner.js';
+import {buildWorldTrip,groupPlaceIds,sameTripSelection,transportOptions,directionsUrl,recommendedStartTime,startTimeMinutes,normalizeDayStartTimes,suggestedPlaceIds,suggestedDocumentedPlaceIds,rankPlaces,visibleRankedPlaces,recommendPlaces} from './world-planner.js';
 import {tripDNA} from './engine.js';
 
 const city={id:'1',name:'Example',lat:48.85,lng:2.35};
@@ -134,6 +134,14 @@ test('automatic place suggestions require an external OSM cross-reference',()=>{
   ]},city);
   assert.deepEqual(suggestedDocumentedPlaceIds(candidates),['way-102']);
   assert.deepEqual(suggestedDocumentedPlaceIds(candidates.filter(place=>place.id==='node-101')),[]);
+});
+test('progressive place list keeps selected items visible beyond the first page',()=>{
+  const ranked=Array.from({length:20},(_,index)=>({place:{id:`place-${index}`}}));
+  assert.deepEqual(visibleRankedPlaces(ranked,new Set(['place-17']),12).map(item=>item.place.id),[
+    ...Array.from({length:12},(_,index)=>`place-${index}`),'place-17'
+  ]);
+  assert.equal(visibleRankedPlaces(ranked,new Set(),24).length,20);
+  assert.equal(visibleRankedPlaces(ranked,new Set(),0).length,0);
 });
 test('world trip uses only returned places and never invents fares',()=>{
   const catalog=normalizePlaces({elements:items},city),dna=tripDNA(['舒服']);

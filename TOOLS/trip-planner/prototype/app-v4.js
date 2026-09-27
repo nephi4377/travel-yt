@@ -1,6 +1,6 @@
 import {dimensions,adjectives,tripDNA,parseAdjustment} from './engine.js';
 import {searchCities,searchFallbackCities,searchCategoryPlaces,DISCOVERY_CATEGORIES,searchNamedPlaces,parseOsmPlaceUrl,lookupOsmPlace,mergePlaces} from './world-data.js';
-import {buildWorldTrip,groupPlaceIds,sameTripSelection,km,mapUrl,directionsUrl,suggestedDocumentedPlaceIds,rankPlaces,recommendedStartTime,startTimeMinutes,normalizeDayStartTimes} from './world-planner.js';
+import {buildWorldTrip,groupPlaceIds,sameTripSelection,km,mapUrl,directionsUrl,suggestedDocumentedPlaceIds,rankPlaces,visibleRankedPlaces,recommendedStartTime,startTimeMinutes,normalizeDayStartTimes} from './world-planner.js';
 import {fetchRoadRoute} from './route-data.js';
 
 const $=id=>document.getElementById(id);
@@ -12,6 +12,7 @@ let startTimeTouched=false;
 let namedLookupAt=0,namedLookupSerial=0;
 let roadLookupAt=0;
 let discoveryBusy=false;
+let visiblePlaceCount=12;
 const cityCachePrefix='trip-planner-cities-v1-';
 const startLabel=element('label','','每日出發時間'),startInput=element('input');startInput.id='startTime';startInput.type='time';startInput.min='06:00';startInput.max='14:00';startInput.value='10:00';startInput.required=true;
 startInput.addEventListener('input',()=>{startTimeTouched=true;});startLabel.append(startInput,element('small','','「不想早起」建議 11:30，「緊湊」建議 09:00；可自行修改，人工設定優先。'));$('date').parentElement.after(startLabel);
@@ -36,6 +37,8 @@ osmLabel.append(osmInput);osmImport.append(osmSummary,osmHelp,osmLabel,osmButton
 namedLabel.append(namedInput);namedSearch.append(namedLabel,namedButton,widerButton,namedStatus,namedResults,namedHelp,osmImport);
 $('placeStage').insertBefore(namedSearch,$('placeFilter').parentElement);
 const itineraryEditStatus=element('p','hint');itineraryEditStatus.setAttribute('role','status');$('schedule').before(itineraryEditStatus);
+const morePlacesButton=element('button','more-places hidden','顯示更多地點');morePlacesButton.type='button';
+morePlacesButton.onclick=()=>{visiblePlaceCount+=12;renderPlaces();};$('placeChoices').after(morePlacesButton);
 $('placeStage').querySelector('p.muted').textContent='選好城市後，按類型查詢附近地點，或直接搜尋想去的具名地點。地點、營業與交通資訊仍需自行核對。';
 const discovery=element('div','discovery'),discoveryTitle=element('h4','','依類型找附近地點');
 const discoveryHelp=element('p','hint','選一種類型才查詢；每次只看市中心約 3 公里，查不到可用具名搜尋。');
@@ -84,10 +87,16 @@ $('restart').onclick=()=>{
 
 function cityLabel(item){return [item.name,item.region,item.country].filter(Boolean).join(' · ');}
 function setCityStatus(message,isError=false){$('cityStatus').textContent=message;$('cityStatus').classList.toggle('error',isError);}
-function countPlaces(){$('placeCount').textContent=`已選 ${selectedIds.size} 個地點；清單共 ${catalog.length} 個。` ;}
+function countPlaces(){
+  const days=Number($('days').value)||1,remaining=Math.max(0,days-selectedIds.size),excess=Math.max(0,selectedIds.size-days*4);
+  const progress=remaining?`還需至少 ${remaining} 個才可排 ${days} 天`:excess?`超過 ${days} 天上限 ${excess} 個，請取消部分地點`:`可排 ${days} 天，最多 ${days*4} 個`;
+  $('placeCount').textContent=`已選 ${selectedIds.size} 個地點；${progress}；清單共 ${catalog.length} 個。`;
+}
 function renderPlaces(){
   const box=$('placeChoices'),filter=$('placeFilter').value.trim().toLocaleLowerCase();box.replaceChildren();
-  for(const {place,reasons} of rankPlaces(catalog,[...words]).filter(({place})=>!filter||place.name.toLocaleLowerCase().includes(filter)||place.category.includes(filter))){
+  const ranked=rankPlaces(catalog,[...words]).filter(({place})=>!filter||place.name.toLocaleLowerCase().includes(filter)||place.category.includes(filter));
+  const visible=visibleRankedPlaces(ranked,selectedIds,visiblePlaceCount);
+  for(const {place,reasons} of visible){
     const label=element('label','place-choice'),checkbox=element('input');checkbox.type='checkbox';checkbox.value=place.id;checkbox.checked=selectedIds.has(place.id);
     checkbox.onchange=()=>{selectionTouched=true;checkbox.checked?selectedIds.add(place.id):selectedIds.delete(place.id);countPlaces();};
     const details=element('span','place-body');
@@ -95,9 +104,12 @@ function renderPlaces(){
     label.append(checkbox,details);box.append(label);
   }
   if(!box.children.length)box.append(element('p','muted','沒有符合篩選的地點。'));
+  morePlacesButton.classList.toggle('hidden',visible.length>=ranked.length);
+  morePlacesButton.textContent=`顯示更多地點（目前 ${visible.length} / ${ranked.length}）`;
   countPlaces();
 }
-$('placeFilter').oninput=renderPlaces;
+$('placeFilter').oninput=()=>{visiblePlaceCount=12;renderPlaces();};
+$('days').oninput=countPlaces;
 async function lookupNamedPlace(scope='nearby'){
   if(!city){namedStatus.textContent='請先選擇城市。';return;}
   const query=namedInput.value.trim(),cityId=city.id,citySerial=lookupSerial,serial=++namedLookupSerial;
@@ -148,7 +160,7 @@ osmButton.onclick=async()=>{
   finally{osmButton.disabled=false;}
 };
 async function chooseCity(item){
-  ++lookupSerial;++namedLookupSerial;city=item;catalog=[];selectedIds.clear();selectionTouched=false;
+  ++lookupSerial;++namedLookupSerial;city=item;catalog=[];selectedIds.clear();selectionTouched=false;visiblePlaceCount=12;
   namedInput.value='';namedStatus.textContent='';namedResults.replaceChildren();widerButton.classList.add('hidden');osmInput.value='';osmStatus.textContent='';
   $('cityResults').replaceChildren();$('chosenCity').textContent=cityLabel(item);$('placeFilter').value='';renderPlaces();$('placeStage').classList.remove('hidden');
   discoveryStatus.textContent='';setCityStatus(`已選擇 ${cityLabel(item)}。按類型探索附近地點，或直接搜尋想去的具名地點。`);
