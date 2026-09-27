@@ -8,6 +8,9 @@ const $=id=>document.getElementById(id);
 const element=(tag,className='',text='')=>{const item=document.createElement(tag);item.className=className;item.textContent=text;return item;};
 const downloadButton=element('button','download-trip','下載完整行程（文字）');downloadButton.type='button';$('editTrip').after(downloadButton);
 const downloadStatus=element('p','hint');downloadStatus.setAttribute('role','status');downloadButton.after(downloadStatus);
+const fullPreview=element('details','full-trip-preview'),fullPreviewSummary=element('summary','','檢視／複製完整行程');
+const fullPreviewText=element('textarea');fullPreviewText.readOnly=true;fullPreviewText.rows=12;fullPreviewText.setAttribute('aria-label','完整多日行程文字');
+fullPreview.append(fullPreviewSummary,fullPreviewText);downloadStatus.after(fullPreview);
 downloadButton.onclick=()=>{
   if(!trip)return;
   const content=formatTripText(trip,tripDays(),routeChoices);
@@ -314,7 +317,8 @@ function editDayPlace(index,targetDay,targetIndex){
   $('preview').replaceChildren();renderTrip();save();
 }
 function renderTrip(){
-  renderTabs();const day=tripDays()[activeDay],box=$('schedule');box.replaceChildren();
+  renderTabs();const days=tripDays(),day=days[activeDay],box=$('schedule');box.replaceChildren();
+  fullPreviewText.value=formatTripText(trip,days,routeChoices);
   box.append(element('h3','',`第 ${activeDay+1} 天 · ${day.stops.length} 個地點`));
   const dayStartLabel=element('label','day-start',`第 ${activeDay+1} 天出發時間`),dayStartInput=element('input');
   dayStartInput.type='time';dayStartInput.min='06:00';dayStartInput.max='14:00';dayStartInput.required=true;dayStartInput.value=trip.dayStartTimes[activeDay];

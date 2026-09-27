@@ -1,5 +1,10 @@
 # AI Travel Planner V0.2 Prototype
 
+## Current handoff (2026-09-27, complete itinerary visible on-page)
+
+- The results screen now has a collapsed “檢視／複製完整行程” area containing the same text as the download, across all days. It stays synchronized when a day, stop order, start time, route choice or supported rule-based adjustment changes. This provides a directly inspectable and copyable itinerary even when an in-app browser does not expose downloaded files.
+- Verified in the local browser with the saved two-day Paris trip: opening the preview showed both dated days, the Louvre and Eiffel Tower OSM source links, and the explicit money/time caveat. Changing only day 2 departure from 10:00 to 12:30 immediately changed the preview's day 2 times while day 1 remained 10:00. Automated export formatting tests pass. A narrow-phone viewport check and inspection of the browser-downloaded file remain open. Next priority remains production-suitable place discovery and controlled failure-only alternate-provider testing; this preview does not validate live transit, fares or venue hours.
+
 ## Current handoff (2026-09-27, live city retest and restored draft count)
 
 - Fresh port-8001 browser searches returned exactly one `Paris · Île-de-France Region · France` candidate for `Paris, France` (previously the list also showed Paris districts), and one `京都 · 京都府 · 日本` candidate for `京都, Japan`. This confirms the exact-name filter and Han-script language selection for these two examples only, not all world-city aliases.
