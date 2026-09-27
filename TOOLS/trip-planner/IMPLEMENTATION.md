@@ -1,5 +1,11 @@
 # AI Travel Planner V0.2 Prototype
 
+## Current handoff (2026-09-27, downloadable full itinerary)
+
+- The result screen now has a local text download for the entire 1–6-day itinerary, not just the visible day. It includes each day's actual start time, ordered named stops, chosen transport option, source and directions links, and explicit unverified-money/time caveats. The download reflects current day moves, route selections, and rule-based adjustments; it requires no additional service or account.
+- Verified: 48 tests pass, including a two-day export with a non-default route, source URLs, distinct start times, and cost caveats. JavaScript syntax and diff checks pass. The download itself has not yet been clicked in a browser; that is the next direct UI check. This is an export convenience, not a claim that OSM coverage, hours, transit, prices, or AI natural-language parsing is production-ready.
+- Next priority: perform an actual mobile-browser download and inspect the resulting text for a real multi-day plan. Then verify the failure-only secondary Overpass UI path under controlled conditions and continue venue relevance/provider work. Continue using the current repo; the Dropbox clone remains stale and write-blocked.
+
 ## Current handoff (2026-09-27, active local preview)
 
 - The previously running `localhost:8000` process predates the Nominatim proxy change: a read-only unsupported-operation probe returned a static 404. Its process could not be stopped through the current execution environment, so it was left in place rather than risking another service. The current code was started separately on `localhost:8001`; the same probe returned the proxy's explicit JSON 400, and the prototype page returned HTTP 200. The 8001 page was opened for the user and kept as the current preview.

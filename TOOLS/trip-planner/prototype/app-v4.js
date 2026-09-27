@@ -2,9 +2,18 @@ import {dimensions,adjectives,tripDNA,parseAdjustment} from './engine.js';
 import {searchCities,searchFallbackCities,searchCategoryPlaces,DISCOVERY_CATEGORIES,searchNamedPlaces,parseOsmPlaceUrl,lookupOsmPlace,mergePlaces} from './world-data.js';
 import {buildWorldTrip,groupPlaceIds,sameTripSelection,km,mapUrl,directionsUrl,suggestedDocumentedPlaceIds,rankPlaces,visibleRankedPlaces,recommendedStartTime,startTimeMinutes,normalizeDayStartTimes} from './world-planner.js';
 import {fetchRoadRoute} from './route-data.js';
+import {formatTripText} from './export-trip.js';
 
 const $=id=>document.getElementById(id);
 const element=(tag,className='',text='')=>{const item=document.createElement(tag);item.className=className;item.textContent=text;return item;};
+const downloadButton=element('button','download-trip','下載完整行程（文字）');downloadButton.type='button';$('editTrip').after(downloadButton);
+downloadButton.onclick=()=>{
+  if(!trip)return;
+  const content=formatTripText(trip,tripDays(),routeChoices);
+  const url=URL.createObjectURL(new Blob(['\ufeff',content],{type:'text/plain;charset=utf-8'}));
+  const link=document.createElement('a');link.href=url;link.download=`trip-planner-${trip.date}.txt`;document.body.append(link);link.click();link.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),60000);
+};
 const draftKey='trip-planner-world-v1',placeCachePrefix='trip-planner-places-v4-';
 const words=new Set(),selectedIds=new Set();
 let city=null,catalog=[],trip=null,activeDay=0,adjustments=[],routeChoices=[],expandedRoutes=[],lookupSerial=0,selectionTouched=false;
