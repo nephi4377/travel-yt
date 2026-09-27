@@ -1,6 +1,7 @@
 // Replaceable read-only providers. Requests run only after an explicit user action.
 export const CITY_API='https://geocoding-api.open-meteo.com/v1/search';
 export const PLACES_API='https://overpass-api.de/api/interpreter';
+export const ALTERNATE_PLACES_API='https://overpass.private.coffee/api/interpreter';
 export const NAMED_PLACE_API='https://nominatim.openstreetmap.org/search';
 export const OSM_LOOKUP_API='https://nominatim.openstreetmap.org/lookup';
 const timeout=(ms)=>AbortSignal.timeout(ms);
@@ -115,11 +116,15 @@ export function categoryPlacesQuery(city,category,radius=3000){
   if(![3000,6000].includes(radius))throw new TypeError('Invalid discovery radius');
   return `[out:json][timeout:15];nwr(around:${radius},${city.lat},${city.lng})["name"]${selected.filter};out center qt 60;`;
 }
-export async function searchCategoryPlaces(city,category,fetcher=fetch,radius=3000){
+export async function searchCategoryPlaces(city,category,fetcher=fetch,radius=3000,provider='primary'){
   const query=categoryPlacesQuery(city,category,radius);
-  const response=await fetcher(`${PLACES_API}?data=${encodeURIComponent(query)}`,{signal:timeout(22000)});
-  if(!response.ok)throw new Error(`附近地點服務暫時無法使用（${response.status}）；請改用名稱搜尋。`);
-  return normalizePlaces(await response.json(),city);
+  if(!['primary','alternate'].includes(provider))throw new TypeError('Invalid places provider');
+  const endpoint=provider==='primary'?PLACES_API:ALTERNATE_PLACES_API;
+  const response=await fetcher(`${endpoint}?data=${encodeURIComponent(query)}`,{signal:timeout(22000)});
+  if(!response.ok){const error=new Error(`附近地點服務暫時無法使用（${response.status}）；請改用名稱搜尋。`);error.status=response.status;throw error;}
+  let payload;try{payload=await response.json();}catch{}
+  if(!Array.isArray(payload?.elements))throw new Error('附近地點服務沒有回傳有效地點資料；請改用名稱搜尋。');
+  return normalizePlaces(payload,city);
 }
 
 // Explicit, single-name lookup only. Public Nominatim forbids autocomplete and

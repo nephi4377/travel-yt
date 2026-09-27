@@ -1,5 +1,7 @@
 # V0.2 全球城市搜尋版（目前網頁入口）
 
+2026-09-27 provider resilience: a failed, user-clicked nearby category lookup may now be retried explicitly against a second documented global Overpass public instance; there is no automatic double request. Successful provider/radius/category responses have separate session-cache keys, while HTTP 406/429 does not immediately offer the extra query. The backup instance also returned a server-busy error in one live bounded test, so this remains a low-volume local evaluation path rather than dependable worldwide production search.
+
 2026-09-27 category coverage: the explicit local Overpass search now exposes culture, history, parks, food, shopping centers, and family attractions as separate user-clicked categories. The matching TripDNA words mark related category buttons before search, then rank returned candidates by mapped type and available source evidence. It does not automatically query all six categories, and a public Overpass HTTP 504 remains possible. This is not a worldwide attraction index or proof of suitability.
 
 2026-09-27 multi-day timing: every generated day now has its own editable departure time and an approximate last-stop finish. Day tabs display the override, unrelated condition edits retain it, and a projected finish after 20:00 warns that the day may be too long. The local browser verified two different day times with real Paris POIs. This schedule still does not verify opening hours, queue times, or transit availability.

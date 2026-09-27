@@ -1,5 +1,11 @@
 # AI Travel Planner V0.2 Prototype
 
+## Current handoff (2026-09-27, explicit second Overpass provider)
+
+- If an explicitly clicked category search fails on the primary public Overpass instance, the city screen offers a separate, user-clicked retry through the globally covering Private.coffee Overpass instance. The app never launches both requests automatically, caches successful results separately by provider/category/radius/city, and does not offer an immediate second-service button for HTTP 406/429. Malformed/HTML error responses are reported as failures instead of an empty place list. Named-place search remains available.
+- Verified: 46 unit tests pass, covering the alternate URL, same bounded query, invalid provider, malformed response, and 429 status. In the local browser, a 3-km Paris family-category request to the primary service succeeded with one real OSM place, so the failure-only retry button could not be exercised through that UI. A separate, single bounded request to the published alternate endpoint displayed a server-busy/dispatcher-timeout error; alternate availability is **not** verified. JavaScript syntax and diff checks pass.
+- Next priority: verify the failure-to-alternate UI path under controlled local test conditions, then find a production-suitable shared-quota/paid-or-self-hosted provider strategy. Do not market either public instance as a reliable worldwide backend. Narrow-phone day editing is still unverified.
+
 ## Current handoff (2026-09-27, TripDNA-linked worldwide category choices)
 
 - The explicit worldwide place-discovery step now includes shopping centers and family attractions (OSM `shop=mall/department_store` and `tourism=zoo/theme_park`) alongside culture, history, parks, and food. Choosing the corresponding TripDNA words marks the matching discovery buttons as suggestions; it does not issue background requests or pretend that an OSM tag verifies quality, prices, opening, or age suitability. Existing preference-aware place ranking consumes these newly discoverable types.

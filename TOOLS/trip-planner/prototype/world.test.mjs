@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {normalizeCities,normalizeFallbackCities,fallbackCityUrl,searchFallbackCities,normalizePlaces,overpassQuery,searchCities,searchPlaces,categoryPlacesQuery,searchCategoryPlaces,DISCOVERY_CATEGORIES,namedPlaceUrl,normalizeNamedPlaces,searchNamedPlaces,parseOsmPlaceUrl,osmLookupUrl,lookupOsmPlace,mergePlaces} from './world-data.js';
+import {normalizeCities,normalizeFallbackCities,fallbackCityUrl,searchFallbackCities,normalizePlaces,overpassQuery,searchCities,searchPlaces,categoryPlacesQuery,searchCategoryPlaces,DISCOVERY_CATEGORIES,ALTERNATE_PLACES_API,namedPlaceUrl,normalizeNamedPlaces,searchNamedPlaces,parseOsmPlaceUrl,osmLookupUrl,lookupOsmPlace,mergePlaces} from './world-data.js';
 import {buildWorldTrip,groupPlaceIds,sameTripSelection,transportOptions,directionsUrl,recommendedStartTime,startTimeMinutes,normalizeDayStartTimes,suggestedPlaceIds,suggestedDocumentedPlaceIds,rankPlaces,visibleRankedPlaces,recommendPlaces} from './world-planner.js';
 import {tripDNA} from './engine.js';
 
@@ -89,6 +89,16 @@ test('shopping and family discovery feed the existing TripDNA place ranking',()=
   assert.deepEqual(new Set(places.map(place=>place.category)),new Set(['購物','動物園']));
   assert.equal(rankPlaces(places,['購物'])[0].place.name,'City Mall');
   assert.equal(rankPlaces(places,['親子'])[0].place.name,'City Zoo');
+});
+test('alternate public Overpass endpoint is explicit and uses the same bounded query',async()=>{
+  let requested='';
+  const places=await searchCategoryPlaces(city,'family',async url=>{requested=url;return {ok:true,json:async()=>({elements:items})};},3000,'alternate');
+  assert.equal(new URL(requested).origin,new URL(ALTERNATE_PLACES_API).origin);
+  assert.match(decodeURIComponent(requested),/around:3000/);
+  assert.equal(places.length,8);
+  await assert.rejects(searchCategoryPlaces(city,'family',async()=>{throw new Error('must not fetch');},3000,'unexpected'),/Invalid places provider/);
+  await assert.rejects(searchCategoryPlaces(city,'family',async()=>({ok:true,json:async()=>{throw new SyntaxError('HTML error page');}}),3000,'alternate'),/沒有回傳有效地點資料/);
+  await assert.rejects(searchCategoryPlaces(city,'family',async()=>({ok:false,status:429}),3000,'primary'),error=>error.status===429);
 });
 test('named landmark lookup is explicit, bounded and uses real OSM IDs',async()=>{
   const url=namedPlaceUrl(city,'Tour Eiffel');
