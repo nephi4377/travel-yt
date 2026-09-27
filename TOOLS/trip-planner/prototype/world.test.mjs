@@ -158,6 +158,9 @@ test('automatic place suggestions require an external OSM cross-reference',()=>{
   ]},city);
   assert.deepEqual(suggestedDocumentedPlaceIds(candidates),['way-102']);
   assert.deepEqual(suggestedDocumentedPlaceIds(candidates.filter(place=>place.id==='node-101')),[]);
+  const generic=normalizePlaces({elements:[{type:'node',id:103,lat:48.87,lon:2.37,tags:{name:'Documented generic attraction',tourism:'attraction',wikidata:'Q456'}}]},city);
+  assert.deepEqual(suggestedDocumentedPlaceIds(generic),[]);
+  assert.deepEqual(suggestedDocumentedPlaceIds(candidates,[],1),['way-102']);
 });
 test('progressive place list keeps selected items visible beyond the first page',()=>{
   const ranked=Array.from({length:20},(_,index)=>({place:{id:`place-${index}`}}));

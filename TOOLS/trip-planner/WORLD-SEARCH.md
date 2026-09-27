@@ -1,5 +1,7 @@
 # V0.2 全球城市搜尋版（目前網頁入口）
 
+2026-09-27 place-suggestion restraint: the page now automatically ticks at most one externally cross-linked, specifically mapped place per requested day; generic attractions remain manual choices. This is only a cautious starting selection, not a curated or verified trip. A live Paris culture lookup returned 60 source-linked OSM objects and the mobile multi-day editing controls worked, but data quality and public-provider uptime still need substantial work.
+
 2026-09-27 provider resilience: a failed, user-clicked nearby category lookup may now be retried explicitly against a second documented global Overpass public instance; there is no automatic double request. Successful provider/radius/category responses have separate session-cache keys, while HTTP 406/429 does not immediately offer the extra query. The backup instance also returned a server-busy error in one live bounded test, so this remains a low-volume local evaluation path rather than dependable worldwide production search.
 
 2026-09-27 category coverage: the explicit local Overpass search now exposes culture, history, parks, food, shopping centers, and family attractions as separate user-clicked categories. The matching TripDNA words mark related category buttons before search, then rank returned candidates by mapped type and available source evidence. It does not automatically query all six categories, and a public Overpass HTTP 504 remains possible. This is not a worldwide attraction index or proof of suitability.

@@ -1,5 +1,11 @@
 # AI Travel Planner V0.2 Prototype
 
+## Current handoff (2026-09-27, less presumptive multi-day suggestions)
+
+- The place list now preselects at most one documented, specifically typed candidate per requested travel day instead of six by default; generic `tourism=attraction` entries are still searchable/selectable but are never automatically recommended from that tag alone. Changing the day count refreshes automatic picks only until the traveler makes a manual place choice. This keeps a viable one-stop-per-day starting plan when enough sourced candidates exist, while leaving room for the traveler to add desired stops rather than presenting arbitrary minor objects as a full itinerary.
+- Verified: 46 unit tests pass, including exclusion of a cross-linked generic attraction. In the local mobile browser, an explicit Paris culture query returned 60 OSM objects; the new three-day default selected three non-generic records, changing to four days selected four, and the place screen had no horizontal overflow at a temporary 390px viewport. Separately, before the code change, a real three-day Paris itinerary had no overflow at 390px; moving a stop from day 1 to day 2 changed the day counts from 2/2 to 1/3 and transport comparisons expanded cleanly. The viewport was reset; JavaScript syntax and diff checks pass.
+- Next priority: improve actual point-of-interest relevance beyond cross-links/type labels, and verify the failure-only alternate-provider UI path in a controlled local test. Public provider availability, opening hours, live transit/fare data and a production-safe backend remain unresolved. Do not call these picks curated or confirmed visit recommendations.
+
 ## Current handoff (2026-09-27, explicit second Overpass provider)
 
 - If an explicitly clicked category search fails on the primary public Overpass instance, the city screen offers a separate, user-clicked retry through the globally covering Private.coffee Overpass instance. The app never launches both requests automatically, caches successful results separately by provider/category/radius/city, and does not offer an immediate second-service button for HTTP 406/429. Malformed/HTML error responses are reported as failures instead of an empty place list. Named-place search remains available.

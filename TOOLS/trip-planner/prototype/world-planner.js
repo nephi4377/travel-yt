@@ -63,7 +63,7 @@ export function suggestedPlaceIds(catalog,words=[],count=6){return recommendPlac
 // Public OSM category tags alone do not justify preselecting minor monuments or galleries.
 // A cross-linked record is still only a candidate, not a verified endorsement.
 export function suggestedDocumentedPlaceIds(catalog,words=[],count=6){
-  return suggestedPlaceIds(catalog.filter(place=>(Number(place.quality)||0)>=60),words,count);
+  return suggestedPlaceIds(catalog.filter(place=>(Number(place.quality)||0)>=60&&place.category!=='景點'),words,count);
 }
 export function visibleRankedPlaces(ranked,selectedIds,limit=12){
   const count=Math.max(0,Math.floor(Number(limit)||0));

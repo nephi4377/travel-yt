@@ -86,9 +86,15 @@ function renderDNA(){
   }
   discoveryPreference.textContent=preferred.size?'依所選 TripDNA，已標出類型相符的搜尋入口；這只比對地圖類型，不代表地點品質或開放狀態。':'可自由選擇類型搜尋；TripDNA 的建議會在此標示。';
 }
+function refreshAutomaticPlaces(){
+  if(selectionTouched)return;
+  selectedIds.clear();
+  const count=Math.max(1,Math.min(6,Number($('days').value)||1));
+  suggestedDocumentedPlaceIds(catalog,[...words],count).forEach(id=>selectedIds.add(id));
+}
 for(const word of Object.keys(adjectives)){
   const button=element('button','chip',word);button.type='button';button.setAttribute('aria-pressed','false');
-  button.onclick=()=>{words.has(word)?words.delete(word):words.add(word);button.setAttribute('aria-pressed',String(words.has(word)));if(!startTimeTouched)startInput.value=recommendedStartTime([...words]);renderDNA();if(catalog.length){if(!selectionTouched){selectedIds.clear();suggestedDocumentedPlaceIds(catalog,[...words]).forEach(id=>selectedIds.add(id));}renderPlaces();}};
+  button.onclick=()=>{words.has(word)?words.delete(word):words.add(word);button.setAttribute('aria-pressed',String(words.has(word)));if(!startTimeTouched)startInput.value=recommendedStartTime([...words]);renderDNA();if(catalog.length){refreshAutomaticPlaces();renderPlaces();}};
   $('chips').append(button);
 }
 renderDNA();
@@ -129,7 +135,7 @@ function renderPlaces(){
   countPlaces();
 }
 $('placeFilter').oninput=()=>{visiblePlaceCount=12;renderPlaces();};
-$('days').oninput=countPlaces;
+$('days').oninput=()=>{if(catalog.length&&!selectionTouched){refreshAutomaticPlaces();renderPlaces();}else countPlaces();};
 async function lookupNamedPlace(scope='nearby'){
   if(!city){namedStatus.textContent='請先選擇城市。';return;}
   const query=namedInput.value.trim(),cityId=city.id,citySerial=lookupSerial,serial=++namedLookupSerial;
@@ -199,9 +205,9 @@ async function loadNearbyCategory(category,provider='primary'){
     if(!result){result=await searchCategoryPlaces(city,category,fetch,radius,provider);try{sessionStorage.setItem(cacheKey,JSON.stringify({savedAt:Date.now(),places:result}));}catch{}}
     if(serial!==lookupSerial||city?.id!==cityId)return;
     catalog=mergePlaces(catalog,result);
-    if(!selectionTouched){selectedIds.clear();suggestedDocumentedPlaceIds(catalog,[...words]).forEach(id=>selectedIds.add(id));}
+    refreshAutomaticPlaces();
     renderPlaces();if(trip?.city?.id===city.id)save();
-    discoveryStatus.textContent=result.length?`從${provider==='alternate'?'備援':'主要'}服務找到 ${result.length} 個 ${radius/1000} 公里內的${DISCOVERY_CATEGORIES[category].label}${result.length>=60?'（已達顯示上限，重要地點可能未列出）':''}；僅預選附有外部參考的候選地點，請檢查並自行勾選想去的地方。`:'這個範圍內沒有結果；可擴大範圍或改用名稱搜尋。';
+    discoveryStatus.textContent=result.length?`從${provider==='alternate'?'備援':'主要'}服務找到 ${result.length} 個 ${radius/1000} 公里內的${DISCOVERY_CATEGORIES[category].label}${result.length>=60?'（已達顯示上限，重要地點可能未列出）':''}；每個旅遊日最多預選 1 個類型明確且附外部參考的地點，請自行檢查與補選。`:'這個範圍內沒有結果；可擴大範圍或改用名稱搜尋。';
   }catch(error){
     if(serial===lookupSerial&&city?.id===cityId){
       discoveryStatus.textContent=error.message||'查詢暫時失敗；可改用名稱搜尋。';
