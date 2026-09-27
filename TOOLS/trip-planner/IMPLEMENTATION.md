@@ -1,5 +1,11 @@
 # AI Travel Planner V0.2 Prototype
 
+## Current handoff (2026-09-27, active local preview)
+
+- The previously running `localhost:8000` process predates the Nominatim proxy change: a read-only unsupported-operation probe returned a static 404. Its process could not be stopped through the current execution environment, so it was left in place rather than risking another service. The current code was started separately on `localhost:8001`; the same probe returned the proxy's explicit JSON 400, and the prototype page returned HTTP 200. The 8001 page was opened for the user and kept as the current preview.
+- No product code changed this round. The Dropbox `D:\Dropbox\CodeBackups\TravelYT` clone remains at an older commit because its `.git/objects/pack` folder denied Git index writes even after filesystem access was granted; the failed-fetch temporary pack files were removed and its working tree remains clean. Do not retarget the hourly automation to that stale clone until the user resolves the folder write issue and the repo is fast-forwarded. The Codex local project entry still requires the user-facing app's Add new project flow.
+- Next iteration: continue in this current workspace unless the Dropbox migration is completed. Verify the secondary Overpass failure UI under controlled local conditions, or make a more substantial end-to-end usability improvement. If the 8001 server is no longer running, `npm run dev -- 8001` in `prototype/` restarts it; the older 8000 process may still own the default port.
+
 ## Current handoff (2026-09-27, multilingual place labels)
 
 - Worldwide OSM search results now display a Chinese name when supplied, otherwise an English name when supplied, then the original local name. The original aliases are still used for matching an explicitly searched place; no name is generated or translated by the app. The session cache keys for normalized place records were bumped so previously cached native-only labels do not hide the change.
