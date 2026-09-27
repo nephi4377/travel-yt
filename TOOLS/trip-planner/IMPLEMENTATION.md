@@ -1,5 +1,11 @@
 # AI Travel Planner V0.2 Prototype
 
+## Current handoff (2026-09-27, TripDNA-linked worldwide category choices)
+
+- The explicit worldwide place-discovery step now includes shopping centers and family attractions (OSM `shop=mall/department_store` and `tourism=zoo/theme_park`) alongside culture, history, parks, and food. Choosing the corresponding TripDNA words marks the matching discovery buttons as suggestions; it does not issue background requests or pretend that an OSM tag verifies quality, prices, opening, or age suitability. Existing preference-aware place ranking consumes these newly discoverable types.
+- Verified: 45 unit tests pass, including category query tags and preference ranking of returned mall/zoo records. In the local browser, Paris selection displayed both new buttons and selecting 親子 + 購物 marked exactly those categories. An explicitly clicked 3-km family query returned HTTP 504 from the public Overpass service; the page retained named-place search and reported the outage. JavaScript syntax and diff checks pass. A temporary 390px viewport showed no document overflow, but button widths were not measurable because the destination step was hidden at that moment; inspect the visible narrow-phone layout next round.
+- Next priority: public Overpass reliability and capped-result relevance, then narrow-phone editing of a multi-day itinerary. A production-safe worldwide data source remains necessary; no public deployment or paid API was used.
+
 ## Current handoff (2026-09-27, selectable bounded discovery radius)
 
 - Nearby place discovery now lets the traveler explicitly choose a city-center radius of 3 or 6 km before requesting one category. The selected radius is part of the session-cache key, so widening a search cannot incorrectly replay the 3-km result. The UI states the 60-place cap and warns when that cap is reached; a wider radius improves reach, not completeness or rank quality. No automatic provider requests were added.

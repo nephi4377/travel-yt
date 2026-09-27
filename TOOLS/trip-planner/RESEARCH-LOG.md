@@ -1,6 +1,6 @@
 # Research log for worldwide trip planning
 
-Last reviewed: 2026-09-26. Record only project-relevant source facts and design decisions here; do not store user searches, personal data, or large third-party datasets.
+Last reviewed: 2026-09-27. Record only project-relevant source facts and design decisions here; do not store user searches, personal data, or large third-party datasets.
 
 ## City lookup
 
@@ -14,6 +14,8 @@ Last reviewed: 2026-09-26. Record only project-relevant source facts and design 
 - Decision: keep lookup user-triggered and separate from POI lookup.
 
 ## Place discovery
+
+- 2026-09-27 review of the [Overpass QL reference](https://wiki.openstreetmap.org/wiki/OverpassQL) and [Overpass API guidance](https://wiki.openstreetmap.org/wiki/Overpass_API): sequential statements and multiple output statements are supported, but a second prioritized cross-linked-place query would increase work on an already unreliable shared endpoint. Decision: do not add that query; instead expose two additional bounded, user-clicked categories using the previously documented [OSM shop](https://wiki.openstreetmap.org/wiki/Key:shop) and [tourism](https://wiki.openstreetmap.org/wiki/Key:tourism) tags. A live 3-km Paris family-category attempt returned HTTP 504, so no returned POI coverage is claimed. OSM type matching can justify a TripDNA category suggestion, not venue quality, current opening, price or age suitability. The existing 15-second query timeout, 60-object cap and public-service limitations remain; no raw responses are stored here.
 
 - 2026-09-27 live local-browser query using the existing [Overpass API](https://wiki.openstreetmap.org/wiki/Overpass_API) and [Overpass QL](https://wiki.openstreetmap.org/wiki/OverpassQL) integration: an explicitly clicked Paris park query with a 6-km radius reached the shared service but returned HTTP 504. The UI correctly reported temporary unavailability and retained named-place search. Decision: offer a traveler-controlled 3/6-km bounded radius for reach when the service works, retain the 60-object cap and radius-specific cache, and make no claim of guaranteed results or production reliability. Shared Overpass resource/availability limitations recorded below still apply; no raw place response or personal data is stored.
 

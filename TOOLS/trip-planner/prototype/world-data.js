@@ -104,7 +104,9 @@ export const DISCOVERY_CATEGORIES=Object.freeze({
   culture:{label:'文化地標',filter:'["tourism"~"^(museum|gallery|attraction)$"]'},
   history:{label:'歷史古蹟',filter:'["historic"~"^(castle|monument|memorial|archaeological_site|ruins)$"]'},
   nature:{label:'公園景觀',filter:'["leisure"="park"]'},
-  food:{label:'餐飲',filter:'["amenity"~"^(restaurant|cafe|food_court)$"]'}
+  food:{label:'餐飲',filter:'["amenity"~"^(restaurant|cafe|food_court)$"]'},
+  shopping:{label:'購物',filter:'["shop"~"^(mall|department_store)$"]'},
+  family:{label:'親子遊玩',filter:'["tourism"~"^(zoo|theme_park)$"]'}
 });
 export function categoryPlacesQuery(city,category,radius=3000){
   if(!finite(city?.lat,-90,90)||!finite(city?.lng,-180,180))throw new TypeError('Invalid city coordinates');

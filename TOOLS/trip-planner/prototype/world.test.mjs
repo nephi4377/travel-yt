@@ -66,18 +66,29 @@ test('Overpass query is bounded and place results retain source IDs',async()=>{
   assert.equal(normalizePlaces({elements:[{type:'node',id:9,lat:0,lon:0,tags:{}}]},city).length,0);
 });
 test('explicit category discovery makes one small bounded Overpass request',async()=>{
-  assert.deepEqual(Object.keys(DISCOVERY_CATEGORIES),['culture','history','nature','food']);
+  assert.deepEqual(Object.keys(DISCOVERY_CATEGORIES),['culture','history','nature','food','shopping','family']);
   assert.match(categoryPlacesQuery(city,'history'),/around:3000/);
   assert.match(categoryPlacesQuery(city,'history'),/historic/);
   assert.match(categoryPlacesQuery(city,'history'),/out center qt 60/);
   assert.match(categoryPlacesQuery(city,'history',6000),/around:6000/);
   assert.doesNotMatch(categoryPlacesQuery(city,'food'),/historic/);
+  assert.match(categoryPlacesQuery(city,'shopping'),/shop.*mall\|department_store/);
+  assert.match(categoryPlacesQuery(city,'family'),/tourism.*zoo\|theme_park/);
   assert.throws(()=>categoryPlacesQuery(city,'all'));
   assert.throws(()=>categoryPlacesQuery(city,'food',7000));
   let calls=0;
   const result=await searchCategoryPlaces(city,'culture',async url=>{calls++;assert.match(decodeURIComponent(url),/tourism/);return {ok:true,json:async()=>({elements:items})};});
   assert.equal(calls,1);assert.equal(result.length,8);
   await searchCategoryPlaces(city,'nature',async url=>{assert.match(decodeURIComponent(url),/around:6000/);return {ok:true,json:async()=>({elements:items})};},6000);
+});
+test('shopping and family discovery feed the existing TripDNA place ranking',()=>{
+  const places=normalizePlaces({elements:[
+    {type:'node',id:801,lat:48.85,lon:2.35,tags:{name:'City Mall',shop:'mall'}},
+    {type:'node',id:802,lat:48.86,lon:2.36,tags:{name:'City Zoo',tourism:'zoo'}}
+  ]},city);
+  assert.deepEqual(new Set(places.map(place=>place.category)),new Set(['購物','動物園']));
+  assert.equal(rankPlaces(places,['購物'])[0].place.name,'City Mall');
+  assert.equal(rankPlaces(places,['親子'])[0].place.name,'City Zoo');
 });
 test('named landmark lookup is explicit, bounded and uses real OSM IDs',async()=>{
   const url=namedPlaceUrl(city,'Tour Eiffel');

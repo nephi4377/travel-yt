@@ -43,6 +43,7 @@ $('placeStage').querySelector('p.muted').textContent='選好城市後，按類�
 const discovery=element('div','discovery'),discoveryTitle=element('h4','','依類型找附近地點');
 const discoveryHelp=element('p','hint','選擇搜尋範圍和類型後才查詢；結果最多 60 筆，不是完整景點清單。查不到可用具名搜尋。');
 const discoveryButtons=element('div','discovery-buttons'),discoveryStatus=element('p','hint');discoveryStatus.setAttribute('role','status');
+const discoveryPreference=element('p','hint');
 const discoveryRadiusLabel=element('label','discovery-radius','搜尋範圍');
 const discoveryRadius=element('select');discoveryRadius.id='discoveryRadius';
 for(const [meters,label] of [[3000,'市中心 3 公里'],[6000,'市中心 6 公里（較廣，可能較慢）']]){
@@ -50,10 +51,10 @@ for(const [meters,label] of [[3000,'市中心 3 公里'],[6000,'市中心 6 公�
 }
 discoveryRadiusLabel.append(discoveryRadius);
 for(const [key,{label}] of Object.entries(DISCOVERY_CATEGORIES)){
-  const button=element('button','chip',label);button.type='button';button.onclick=()=>loadNearbyCategory(key);
+  const button=element('button','chip',label);button.type='button';button.dataset.category=key;button.onclick=()=>loadNearbyCategory(key);
   discoveryButtons.append(button);
 }
-discovery.append(discoveryTitle,discoveryHelp,discoveryRadiusLabel,discoveryButtons,discoveryStatus);
+discovery.append(discoveryTitle,discoveryHelp,discoveryPreference,discoveryRadiusLabel,discoveryButtons,discoveryStatus);
 $('placeStage').insertBefore(discovery,namedSearch);
 
 function show(id){
@@ -71,6 +72,18 @@ function renderDNA(){
     const value=tripDNA(words).weights[key],row=element('div','barrow'),track=element('div','track'),fill=element('div','fill');
     fill.style.width=`${value}%`;track.append(fill);row.append(element('span','',label),track,element('strong','',String(value)));box.append(row);
   }
+  const preferred=new Set();
+  if(words.has('自然'))preferred.add('nature');
+  if(words.has('深度')){preferred.add('culture');preferred.add('history');}
+  if(words.has('美食'))preferred.add('food');
+  if(words.has('購物'))preferred.add('shopping');
+  if(words.has('親子'))preferred.add('family');
+  for(const button of discoveryButtons.children){
+    const recommended=preferred.has(button.dataset.category);
+    button.dataset.recommended=String(recommended);
+    button.textContent=DISCOVERY_CATEGORIES[button.dataset.category].label+(recommended?' · TripDNA 建議':'');
+  }
+  discoveryPreference.textContent=preferred.size?'依所選 TripDNA，已標出類型相符的搜尋入口；這只比對地圖類型，不代表地點品質或開放狀態。':'可自由選擇類型搜尋；TripDNA 的建議會在此標示。';
 }
 for(const word of Object.keys(adjectives)){
   const button=element('button','chip',word);button.type='button';button.setAttribute('aria-pressed','false');

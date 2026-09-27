@@ -1,5 +1,7 @@
 # V0.2 全球城市搜尋版（目前網頁入口）
 
+2026-09-27 category coverage: the explicit local Overpass search now exposes culture, history, parks, food, shopping centers, and family attractions as separate user-clicked categories. The matching TripDNA words mark related category buttons before search, then rank returned candidates by mapped type and available source evidence. It does not automatically query all six categories, and a public Overpass HTTP 504 remains possible. This is not a worldwide attraction index or proof of suitability.
+
 2026-09-27 multi-day timing: every generated day now has its own editable departure time and an approximate last-stop finish. Day tabs display the override, unrelated condition edits retain it, and a projected finish after 20:00 warns that the day may be too long. The local browser verified two different day times with real Paris POIs. This schedule still does not verify opening hours, queue times, or transit availability.
 
 2026-09-27 local request coordination: the bundled localhost server can now proxy the explicitly clicked Nominatim city/place/object searches through one process-wide 1.1-second queue with short bounded memory caching and validation. This removes the per-tab-only throttle as the sole defense for local multi-tab use. The existing static preview still works directly, and a port-8000 server started before this change must be restarted to enable the proxy. Neither mode is a production-scale worldwide POI backend. Port-8001 API and browser searches were verified, then the temporary test server was stopped.
