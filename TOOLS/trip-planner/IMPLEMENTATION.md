@@ -1,5 +1,10 @@
 # AI Travel Planner V0.2 Prototype
 
+## Current handoff (2026-09-27, narrow-phone end-to-end route QA)
+
+- At a temporary 390×844 browser viewport, a real three-place/two-day Paris trip was generated from separately source-linked Louvre Museum, Eiffel Tower and Arc de Triomphe records. The day-1 Louvre→Eiffel leg displayed both car and transit comparisons, including Money/Time/Energy/Friction and mode-specific verification links. Choosing transit updated the full-trip preview and the next stop from 11:50 to 11:55. The page client and scroll widths were both 375px with the alternatives expanded, so no document-level horizontal overflow was found; route cards were 269px wide and the preview was 297px. The temporary viewport override was reset.
+- No product code changed in this check. Next: test the failure-only alternate Overpass UI path under controlled conditions and assess a sustainable worldwide POI provider; route time, transit service, fare and opening remain unverified estimates. The in-app browser's downloaded file bytes remain uninspected.
+
 ## Current handoff (2026-09-27, local proxy on any preview port)
 
 - The client now tries the bundled Nominatim coordination endpoint on any loopback preview port, rather than assuming only 8000/8001. This keeps the single-process 1.1-second outbound queue available when `npm run dev -- <port>` uses another free port. A non-loopback origin still never gets a local proxy URL; older static servers returning 404 retain the documented low-volume direct fallback.
