@@ -70,11 +70,14 @@ test('explicit category discovery makes one small bounded Overpass request',asyn
   assert.match(categoryPlacesQuery(city,'history'),/around:3000/);
   assert.match(categoryPlacesQuery(city,'history'),/historic/);
   assert.match(categoryPlacesQuery(city,'history'),/out center qt 60/);
+  assert.match(categoryPlacesQuery(city,'history',6000),/around:6000/);
   assert.doesNotMatch(categoryPlacesQuery(city,'food'),/historic/);
   assert.throws(()=>categoryPlacesQuery(city,'all'));
+  assert.throws(()=>categoryPlacesQuery(city,'food',7000));
   let calls=0;
   const result=await searchCategoryPlaces(city,'culture',async url=>{calls++;assert.match(decodeURIComponent(url),/tourism/);return {ok:true,json:async()=>({elements:items})};});
   assert.equal(calls,1);assert.equal(result.length,8);
+  await searchCategoryPlaces(city,'nature',async url=>{assert.match(decodeURIComponent(url),/around:6000/);return {ok:true,json:async()=>({elements:items})};},6000);
 });
 test('named landmark lookup is explicit, bounded and uses real OSM IDs',async()=>{
   const url=namedPlaceUrl(city,'Tour Eiffel');

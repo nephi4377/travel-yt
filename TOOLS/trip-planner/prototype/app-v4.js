@@ -41,13 +41,19 @@ const morePlacesButton=element('button','more-places hidden','顯示更多地點
 morePlacesButton.onclick=()=>{visiblePlaceCount+=12;renderPlaces();};$('placeChoices').after(morePlacesButton);
 $('placeStage').querySelector('p.muted').textContent='選好城市後，按類型查詢附近地點，或直接搜尋想去的具名地點。地點、營業與交通資訊仍需自行核對。';
 const discovery=element('div','discovery'),discoveryTitle=element('h4','','依類型找附近地點');
-const discoveryHelp=element('p','hint','選一種類型才查詢；每次只看市中心約 3 公里，查不到可用具名搜尋。');
+const discoveryHelp=element('p','hint','選擇搜尋範圍和類型後才查詢；結果最多 60 筆，不是完整景點清單。查不到可用具名搜尋。');
 const discoveryButtons=element('div','discovery-buttons'),discoveryStatus=element('p','hint');discoveryStatus.setAttribute('role','status');
+const discoveryRadiusLabel=element('label','discovery-radius','搜尋範圍');
+const discoveryRadius=element('select');discoveryRadius.id='discoveryRadius';
+for(const [meters,label] of [[3000,'市中心 3 公里'],[6000,'市中心 6 公里（較廣，可能較慢）']]){
+  const option=element('option','',label);option.value=String(meters);discoveryRadius.append(option);
+}
+discoveryRadiusLabel.append(discoveryRadius);
 for(const [key,{label}] of Object.entries(DISCOVERY_CATEGORIES)){
   const button=element('button','chip',label);button.type='button';button.onclick=()=>loadNearbyCategory(key);
   discoveryButtons.append(button);
 }
-discovery.append(discoveryTitle,discoveryHelp,discoveryButtons,discoveryStatus);
+discovery.append(discoveryTitle,discoveryHelp,discoveryRadiusLabel,discoveryButtons,discoveryStatus);
 $('placeStage').insertBefore(discovery,namedSearch);
 
 function show(id){
@@ -169,19 +175,20 @@ async function loadNearbyCategory(category){
   if(!city||discoveryBusy)return;
   discoveryBusy=true;
   const cityId=city.id,serial=lookupSerial;
-  const cacheKey=placeCachePrefix+`category-${category}-${cityId}`;
+  const radius=Number(discoveryRadius.value);
+  const cacheKey=placeCachePrefix+`category-${category}-${radius}-${cityId}`;
   let result;try{const cached=JSON.parse(sessionStorage.getItem(cacheKey));if(cached?.savedAt>Date.now()-86400000&&Array.isArray(cached.places))result=cached.places;}catch{}
-  for(const item of discoveryButtons.children)item.disabled=true;
-  discoveryStatus.textContent=`正在查詢附近${DISCOVERY_CATEGORIES[category].label}…`;
+  discoveryRadius.disabled=true;for(const item of discoveryButtons.children)item.disabled=true;
+  discoveryStatus.textContent=`正在查詢市中心 ${radius/1000} 公里內的${DISCOVERY_CATEGORIES[category].label}…`;
   try{
-    if(!result){result=await searchCategoryPlaces(city,category);try{sessionStorage.setItem(cacheKey,JSON.stringify({savedAt:Date.now(),places:result}));}catch{}}
+    if(!result){result=await searchCategoryPlaces(city,category,fetch,radius);try{sessionStorage.setItem(cacheKey,JSON.stringify({savedAt:Date.now(),places:result}));}catch{}}
     if(serial!==lookupSerial||city?.id!==cityId)return;
     catalog=mergePlaces(catalog,result);
     if(!selectionTouched){selectedIds.clear();suggestedDocumentedPlaceIds(catalog,[...words]).forEach(id=>selectedIds.add(id));}
     renderPlaces();if(trip?.city?.id===city.id)save();
-    discoveryStatus.textContent=result.length?`找到 ${result.length} 個附近${DISCOVERY_CATEGORIES[category].label}；僅預選附有外部參考的候選地點，請檢查並自行勾選想去的地方。`:'這類附近地點沒有結果；可改用名稱搜尋。';
+    discoveryStatus.textContent=result.length?`找到 ${result.length} 個 ${radius/1000} 公里內的${DISCOVERY_CATEGORIES[category].label}${result.length>=60?'（已達顯示上限，重要地點可能未列出）':''}；僅預選附有外部參考的候選地點，請檢查並自行勾選想去的地方。`:'這個範圍內沒有結果；可擴大範圍或改用名稱搜尋。';
   }catch(error){if(serial===lookupSerial)discoveryStatus.textContent=error.message||'查詢暫時失敗；可改用名稱搜尋。';}
-  finally{discoveryBusy=false;for(const item of discoveryButtons.children)item.disabled=false;}
+  finally{discoveryBusy=false;discoveryRadius.disabled=false;for(const item of discoveryButtons.children)item.disabled=false;}
 }
 $('searchCity').onclick=async()=>{
   const query=$('destination').value.trim(),serial=++lookupSerial,button=$('searchCity');++namedLookupSerial;

@@ -106,14 +106,15 @@ export const DISCOVERY_CATEGORIES=Object.freeze({
   nature:{label:'公園景觀',filter:'["leisure"="park"]'},
   food:{label:'餐飲',filter:'["amenity"~"^(restaurant|cafe|food_court)$"]'}
 });
-export function categoryPlacesQuery(city,category){
+export function categoryPlacesQuery(city,category,radius=3000){
   if(!finite(city?.lat,-90,90)||!finite(city?.lng,-180,180))throw new TypeError('Invalid city coordinates');
   const selected=DISCOVERY_CATEGORIES[category];
   if(!selected)throw new TypeError('Invalid discovery category');
-  return `[out:json][timeout:15];nwr(around:3000,${city.lat},${city.lng})["name"]${selected.filter};out center qt 60;`;
+  if(![3000,6000].includes(radius))throw new TypeError('Invalid discovery radius');
+  return `[out:json][timeout:15];nwr(around:${radius},${city.lat},${city.lng})["name"]${selected.filter};out center qt 60;`;
 }
-export async function searchCategoryPlaces(city,category,fetcher=fetch){
-  const query=categoryPlacesQuery(city,category);
+export async function searchCategoryPlaces(city,category,fetcher=fetch,radius=3000){
+  const query=categoryPlacesQuery(city,category,radius);
   const response=await fetcher(`${PLACES_API}?data=${encodeURIComponent(query)}`,{signal:timeout(22000)});
   if(!response.ok)throw new Error(`附近地點服務暫時無法使用（${response.status}）；請改用名稱搜尋。`);
   return normalizePlaces(await response.json(),city);

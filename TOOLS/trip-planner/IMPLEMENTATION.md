@@ -1,5 +1,11 @@
 # AI Travel Planner V0.2 Prototype
 
+## Current handoff (2026-09-27, selectable bounded discovery radius)
+
+- Nearby place discovery now lets the traveler explicitly choose a city-center radius of 3 or 6 km before requesting one category. The selected radius is part of the session-cache key, so widening a search cannot incorrectly replay the 3-km result. The UI states the 60-place cap and warns when that cap is reached; a wider radius improves reach, not completeness or rank quality. No automatic provider requests were added.
+- Verified: 44 unit tests pass, including allowed/invalid radii and a 6-km request. The local browser showed the 3/6-km control after choosing Paris and displayed the correct 6-km loading status for a user-triggered park search. The public Overpass server then returned HTTP 504; the page showed its named-search fallback without losing the city or form. A temporary 390px mobile viewport had no horizontal overflow (375px client and scroll widths), then was reset. JavaScript syntax and diff checks pass. This does not verify that a wider live request will return useful results.
+- Next priority: improve the relevance of capped category results and inspect narrow-phone day editing. Public Overpass availability, opening hours, live transit, fares, and a licensed production provider remain unresolved. Do not describe this as a complete global place catalog.
+
 ## Current handoff (2026-09-27, manageable multi-day place selection)
 
 - The worldwide place picker now reveals 12 ranked entries at a time with an explicit “show more” button, while always keeping selected entries visible even beyond the current page. Its live count states how many more places are needed for the chosen day count, or warns if the 4-per-day maximum is exceeded. Filtering resets the visible window and searches the full returned catalog. This is a UI change; it sends no extra provider requests.
