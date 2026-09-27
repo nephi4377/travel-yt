@@ -9,6 +9,8 @@ test('local prototype routes only Nominatim requests through its shared proxy',(
   assert.equal(local.pathname,'/api/nominatim/search');
   assert.equal(local.searchParams.get('q'),'Louvre Museum');
   assert.equal(new URL(localNominatimUrl(upstream,'http://localhost:8001')).pathname,'/api/nominatim/search');
+  assert.equal(new URL(localNominatimUrl(upstream,'http://127.0.0.1:8117')).port,'8117');
+  assert.equal(localNominatimUrl(upstream,'http://192.168.1.2:8001'),null);
   assert.equal(localNominatimUrl(upstream,'https://example.com'),null);
   assert.throws(()=>nominatimUrl('search',new URLSearchParams('q=Paris&format=jsonv2&limit=100')),/bounded/);
   assert.throws(()=>nominatimUrl('lookup',new URLSearchParams('osm_ids=N1,N2&format=jsonv2')),/one OSM object/);

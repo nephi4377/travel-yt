@@ -1,5 +1,10 @@
 # AI Travel Planner V0.2 Prototype
 
+## Current handoff (2026-09-27, local proxy on any preview port)
+
+- The client now tries the bundled Nominatim coordination endpoint on any loopback preview port, rather than assuming only 8000/8001. This keeps the single-process 1.1-second outbound queue available when `npm run dev -- <port>` uses another free port. A non-loopback origin still never gets a local proxy URL; older static servers returning 404 retain the documented low-volume direct fallback.
+- Verified: 49 tests pass, including arbitrary loopback-port mapping and refusal of a LAN origin; JavaScript syntax and diff checks pass. Started the bundled server temporarily on port 8117: the prototype page returned HTTP 200 and its proxy endpoint returned the expected JSON-route HTTP 400 for an unsupported operation, then the test process was stopped. This establishes the server route exists on an alternate port, but a full browser city/place query through that port remains untested. The local queue is not shared between processes, so it is still unsuitable as an unrestricted public backend; venue quality and provider reliability remain the main product gaps.
+
 ## Current handoff (2026-09-27, complete itinerary visible on-page)
 
 - The results screen now has a collapsed “檢視／複製完整行程” area containing the same text as the download, across all days. It stays synchronized when a day, stop order, start time, route choice or supported rule-based adjustment changes. This provides a directly inspectable and copyable itinerary even when an in-app browser does not expose downloaded files.

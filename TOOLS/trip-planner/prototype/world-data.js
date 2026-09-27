@@ -9,7 +9,7 @@ const finite=(n,min,max)=>Number.isFinite(n)&&n>=min&&n<=max;
 export function localNominatimUrl(url,origin=globalThis.location?.origin){
   if(!origin)return null;
   const base=new URL(origin);
-  if(!['localhost','127.0.0.1'].includes(base.hostname)||!['8000','8001'].includes(base.port))return null;
+  if(!['localhost','127.0.0.1'].includes(base.hostname)||!['http:','https:'].includes(base.protocol))return null;
   return new URL(`/api/nominatim${url.pathname}${url.search}`,base).toString();
 }
 async function fetchNominatim(url,fetcher){
