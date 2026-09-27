@@ -7,11 +7,13 @@ import {formatTripText} from './export-trip.js';
 const $=id=>document.getElementById(id);
 const element=(tag,className='',text='')=>{const item=document.createElement(tag);item.className=className;item.textContent=text;return item;};
 const downloadButton=element('button','download-trip','下載完整行程（文字）');downloadButton.type='button';$('editTrip').after(downloadButton);
+const downloadStatus=element('p','hint');downloadStatus.setAttribute('role','status');downloadButton.after(downloadStatus);
 downloadButton.onclick=()=>{
   if(!trip)return;
   const content=formatTripText(trip,tripDays(),routeChoices);
   const url=URL.createObjectURL(new Blob(['\ufeff',content],{type:'text/plain;charset=utf-8'}));
   const link=document.createElement('a');link.href=url;link.download=`trip-planner-${trip.date}.txt`;document.body.append(link);link.click();link.remove();
+  downloadStatus.textContent='已送出文字檔下載；若沒有看到檔案，請檢查瀏覽器下載紀錄。';
   setTimeout(()=>URL.revokeObjectURL(url),60000);
 };
 const draftKey='trip-planner-world-v1',placeCachePrefix='trip-planner-places-v4-';

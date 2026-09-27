@@ -1,5 +1,10 @@
 # AI Travel Planner V0.2 Prototype
 
+## Current handoff (2026-09-27, real browser export check)
+
+- A live Paris two-day trip was built from separately searched, source-linked Louvre Museum and Eiffel Tower records on the current port-8001 preview. Reloading the already-open tab was needed to pick up the new JavaScript; the draft survived, and the full-itinerary download button then appeared. The button was clicked successfully. The IAB did not expose a downloaded file in the standard Windows Downloads folder, so the resulting bytes could not be inspected in this browser run. The UI now shows a clear status after dispatching the browser download, without claiming the file was saved.
+- This test also revealed that Open-Meteo city results still list Paris districts alongside the intended city. It did not test a multi-stop transport leg or a narrow phone viewport; the 48 automated tests cover export formatting but not the browser download mechanism. Next: inspect actual exported bytes through a browser/download-capable route, verify the secondary Overpass failure path, and prioritize city-result disambiguation and dependable worldwide POI data.
+
 ## Current handoff (2026-09-27, downloadable full itinerary)
 
 - The result screen now has a local text download for the entire 1–6-day itinerary, not just the visible day. It includes each day's actual start time, ordered named stops, chosen transport option, source and directions links, and explicit unverified-money/time caveats. The download reflects current day moves, route selections, and rule-based adjustments; it requires no additional service or account.
