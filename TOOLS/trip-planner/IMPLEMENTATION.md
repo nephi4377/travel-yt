@@ -1,5 +1,11 @@
 # AI Travel Planner V0.2 Prototype
 
+## Current handoff (2026-09-27, multilingual place labels)
+
+- Worldwide OSM search results now display a Chinese name when supplied, otherwise an English name when supplied, then the original local name. The original aliases are still used for matching an explicitly searched place; no name is generated or translated by the app. The session cache keys for normalized place records were bumped so previously cached native-only labels do not hide the change.
+- Verified: 47 unit tests pass. In the local browser, Cairo, Egypt city search and an explicit `Egyptian Museum` lookup returned the real source-linked OSM museum; before the change its button showed only the Arabic label, and after the change it showed `Egyptian Museum`. Selecting it and changing the trip to one day produced a dated itinerary with that named stop. This checks one North African city, not worldwide coverage or opening/route accuracy.
+- Next priority: test the failure-only secondary Overpass UI path with controlled local conditions, then pursue a production-suitable POI provider/quota strategy and better venue relevance. The Dropbox `D:\Dropbox\CodeBackups\TravelYT` clone is 115 commits behind this workspace; keep working in the existing scoped workspace until the user confirms changing the primary directory. No files were moved.
+
 ## Current handoff (2026-09-27, less presumptive multi-day suggestions)
 
 - The place list now preselects at most one documented, specifically typed candidate per requested travel day instead of six by default; generic `tourism=attraction` entries are still searchable/selectable but are never automatically recommended from that tag alone. Changing the day count refreshes automatic picks only until the traveler makes a manual place choice. This keeps a viable one-stop-per-day starting plan when enough sourced candidates exist, while leaving room for the traveler to add desired stops rather than presenting arbitrary minor objects as a full itinerary.

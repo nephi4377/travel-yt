@@ -5,7 +5,7 @@ import {fetchRoadRoute} from './route-data.js';
 
 const $=id=>document.getElementById(id);
 const element=(tag,className='',text='')=>{const item=document.createElement(tag);item.className=className;item.textContent=text;return item;};
-const draftKey='trip-planner-world-v1',placeCachePrefix='trip-planner-places-v3-';
+const draftKey='trip-planner-world-v1',placeCachePrefix='trip-planner-places-v4-';
 const words=new Set(),selectedIds=new Set();
 let city=null,catalog=[],trip=null,activeDay=0,adjustments=[],routeChoices=[],expandedRoutes=[],lookupSerial=0,selectionTouched=false;
 let startTimeTouched=false;
@@ -141,7 +141,7 @@ async function lookupNamedPlace(scope='nearby'){
   const query=namedInput.value.trim(),cityId=city.id,citySerial=lookupSerial,serial=++namedLookupSerial;
   namedResults.replaceChildren();namedStatus.textContent='正在查詢具名地點…';
   if(query.length<3){namedStatus.textContent='請輸入至少 3 個字的地點名稱。';return;}
-  const cacheKey=`trip-planner-named-v3-${scope}-${cityId}-${query.toLocaleLowerCase()}`;
+  const cacheKey=`trip-planner-named-v4-${scope}-${cityId}-${query.toLocaleLowerCase()}`;
   let places;try{const cached=JSON.parse(sessionStorage.getItem(cacheKey));if(cached?.savedAt>Date.now()-86400000&&Array.isArray(cached.places))places=cached.places;}catch{}
   if(!places&&Date.now()-namedLookupAt<1100){namedStatus.textContent='公共地點服務每秒至多查詢一次，請稍候再按。';return;}
   namedButton.disabled=true;widerButton.disabled=true;widerButton.classList.add('hidden');
@@ -172,7 +172,7 @@ namedInput.addEventListener('keydown',event=>{if(event.key==='Enter'){event.prev
 osmButton.onclick=async()=>{
   if(!city){osmStatus.textContent='請先選擇城市。';return;}
   let parsed;try{parsed=parseOsmPlaceUrl(osmInput.value);}catch(error){osmStatus.textContent=error.message;return;}
-  const cityId=city.id,citySerial=lookupSerial,key=`trip-planner-osm-v1-${cityId}-${parsed.type}-${parsed.id}`;
+  const cityId=city.id,citySerial=lookupSerial,key=`trip-planner-osm-v2-${cityId}-${parsed.type}-${parsed.id}`;
   let place;try{const cached=JSON.parse(sessionStorage.getItem(key));if(cached?.savedAt>Date.now()-86400000&&cached.place?.id===`${parsed.type}-${parsed.id}`)place=cached.place;}catch{}
   if(!place&&Date.now()-namedLookupAt<1100){osmStatus.textContent='公共地點服務每秒至多查詢一次，請稍候再按。';return;}
   osmButton.disabled=true;osmStatus.textContent='正在核對 OSM 地點…';

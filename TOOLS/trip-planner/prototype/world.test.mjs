@@ -126,6 +126,18 @@ test('user-requested wider named search stays local and excludes distant matches
   const places=await searchNamedPlaces(city,'Tour Eiffel',fetcher,'wider');
   assert.deepEqual(places.map(place=>place.id),['way-11']);
 });
+test('worldwide place names prefer a readable translated label without losing native-only names',()=>{
+  const named=[
+    {osm_type:'way',osm_id:31,lat:'48.85',lon:'2.35',category:'tourism',type:'museum',name:'المتحف المصري',namedetails:{name:'المتحف المصري','name:en':'Egyptian Museum'}},
+    {osm_type:'way',osm_id:32,lat:'48.85',lon:'2.35',category:'tourism',type:'museum',name:'متحف آخر',namedetails:{name:'متحف آخر'}},
+    {osm_type:'way',osm_id:34,lat:'48.85',lon:'2.35',category:'tourism',type:'museum',name:'المتحف المصري',namedetails:{name:'المتحف المصري','name:en':'Egyptian Museum','name:zh':'埃及博物館'}}
+  ];
+  assert.equal(normalizeNamedPlaces(named,city,'Egyptian Museum')[0].name,'Egyptian Museum');
+  assert.equal(normalizeNamedPlaces(named,city)[1].name,'متحف آخر');
+  assert.equal(normalizeNamedPlaces(named,city)[2].name,'埃及博物館');
+  const nearby=normalizePlaces({elements:[{type:'node',id:33,lat:48.85,lon:2.35,tags:{name:'المتحف المصري','name:en':'Egyptian Museum',tourism:'museum'}}]},city);
+  assert.equal(nearby[0].name,'Egyptian Museum');
+});
 test('an official OSM object link can resolve one local named place',async()=>{
   const link='https://www.openstreetmap.org/way/5013364';
   assert.deepEqual(parseOsmPlaceUrl(link),{type:'way',id:5013364});

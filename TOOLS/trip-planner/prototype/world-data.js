@@ -76,7 +76,7 @@ const quality=tags=>(tags.wikipedia?80:0)+(tags.wikidata?60:0)+(tags.website||ta
 export function normalizePlaces(payload,city){
   const seen=new Set();
   const ranked=(Array.isArray(payload?.elements)?payload.elements:[]).map(x=>{
-    const tags=x.tags||{},lat=x.lat??x.center?.lat,lng=x.lon??x.center?.lon,name=tags['name:zh']||tags.name;
+    const tags=x.tags||{},lat=x.lat??x.center?.lat,lng=x.lon??x.center?.lon,name=tags['name:zh']||tags['name:en']||tags.name;
     if(!finite(lat,-90,90)||!finite(lng,-180,180)||typeof name!=='string'||name.trim().length<2)return null;
     const id=`${x.type}-${x.id}`;if(seen.has(id))return null;seen.add(id);
     const category=placeCategory(tags),kind=['室內文化','餐飲','購物'].includes(category)?'indoor':['公園','展望點','動物園','主題樂園','自然景點'].includes(category)?'outdoor':'unknown';
@@ -148,7 +148,7 @@ export function normalizeNamedPlaces(payload,city,query=''){
     if(!finite(lat,-90,90)||!finite(lng,-180,180)||!['node','way','relation'].includes(type)||!Number.isSafeInteger(id))return null;
     const group=item.category||item.class||'',subtype=item.type||'';
     if(!['tourism','historic','leisure','natural','amenity','shop','man_made','building'].includes(group))return null;
-    const name=item.namedetails?.['name:zh']||item.namedetails?.name||item.name||String(item.display_name||'').split(',')[0].trim();
+    const name=item.namedetails?.['name:zh']||item.namedetails?.['name:en']||item.namedetails?.name||item.name||String(item.display_name||'').split(',')[0].trim();
     if(typeof name!=='string'||name.length<2)return null;
     const sought=query.trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase();
     const aliases=[name,...Object.values(item.namedetails||{}).filter(value=>typeof value==='string')];
