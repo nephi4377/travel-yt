@@ -84,9 +84,9 @@
 <script>
 const P={
  airport:{n:"內排國際機場",lat:21.2187,lng:105.8042,k:"base",q:"Noi Bai International Airport Hanoi"},
- westlake:{n:"住宿｜C18 Xuân La",lat:21.0596756,lng:105.8040796,k:"base",q:"Chung cu C18 Xuan La 655 Lac Long Quan Hanoi"},
- xuanlafood:{n:"C18／Xuân La 周邊早餐搜尋",lat:21.0596756,lng:105.8040796,k:"food",q:"pho banh mi breakfast near Chung cu C18 Xuan La 655 Lac Long Quan Hanoi"},
- xuanlalunch:{n:"C18／Xuân La 周邊午餐搜尋",lat:21.0596756,lng:105.8040796,k:"food",q:"Vietnamese lunch near Chung cu C18 Xuan La 655 Lac Long Quan Hanoi"},
+ westlake:{n:"住宿｜C18 Xuân La",lat:21.0684536,lng:105.8108986,k:"base",q:"21.0684536,105.8108986"},
+ xuanlafood:{n:"C18／Xuân La 周邊早餐搜尋",lat:21.0684536,lng:105.8108986,k:"food",q:"pho banh mi breakfast near 21.0684536,105.8108986"},
+ xuanlalunch:{n:"C18／Xuân La 周邊午餐搜尋",lat:21.0684536,lng:105.8108986,k:"food",q:"Vietnamese lunch near 21.0684536,105.8108986"},
  tranquoc:{n:"鎮國寺",lat:21.0479,lng:105.8368,k:"place",q:"Tran Quoc Pagoda Hanoi"},
  quanthanh:{n:"Quan Thanh Temple／鎮武觀",lat:21.0436,lng:105.8360,k:"place",q:"Quan Thanh Temple Hanoi"},
  trucbach:{n:"竹帛湖／Ngũ Xã",lat:21.0449,lng:105.8420,k:"place",q:"Truc Bach Lake Hanoi"},
@@ -117,7 +117,7 @@ const P={
 };
 
 const DETAILS={
- westlake:{intro:"住宿已確認在 C18 Building／ngõ 655 Lạc Long Quân，位於西湖北偏西側。舊版地圖曾把住宿點放在西湖中心附近，已修正。",look:["建築名稱：C18 Xuân La","導航：655 Lạc Long Quân, Tây Hồ, Hà Nội"],stay:"住宿／集合點",tip:"給司機：toà nhà chung cư C18, ngõ 655 Lạc Long Quân, quận Tây Hồ. 公開頁不顯示房號與房東電話。"},
+ westlake:{intro:"住宿已確認在 C18 Building／ngõ 655 Lạc Long Quân，位於西湖北偏西側。地圖針依使用者指定的「20261005-10住宿地」更新（21.0684536, 105.8108986；Plus Code 3R96+99J）。",look:["建築名稱：C18 Xuân La","導航：655 Lạc Long Quân, Tây Hồ, Hà Nội","座標：21.0684536, 105.8108986"],stay:"住宿／集合點",tip:"給司機：toà nhà chung cư C18, ngõ 655 Lạc Long Quân, quận Tây Hồ. 使用者地圖 https://maps.app.goo.gl/2wuHk1bGdVRXua8a9 。公開頁不顯示房號與房東電話。"},
  xuanlafood:{intro:"10/10 早上在 C18／Xuân La 周邊找現做熱早餐，吃完短走再回住宿取行李。",recommend:["Phở 河粉","Bánh mì 越南法國麵包"],order:"看當日營業與距離，不為名店搭車跨區",meal:"10/10 約 08:00–10:00",tip:"地圖點是 C18 附近的搜尋起點，不是已選定店家；較早班機者按機票及路況抓離開時間。"},
  xuanlalunch:{intro:"10/10 洪同學較晚班機可在 C18／Xuân La 周邊吃午餐，前提是先處理退房與行李。",recommend:["當區現做熟食","尚未吃到的河內家常菜"],order:"看當日營業與出發時間，避免排隊過久",meal:"10/10 午餐",tip:"地圖點是住宿周邊搜尋起點；若不能寄放行李，可直接帶行李去機場用餐。"},
  tranquoc:{intro:"鎮國寺位在西湖小島上，是河內非常早期的佛寺之一；紅色多層塔與湖面關係比單獨拍塔更值得看。",look:["堤道進入寺院的空間轉換","紅色佛塔與湖面比例","寺院內仍是實際宗教空間"],stay:"30–45 分鐘",tip:"穿著遮肩膝、尊重禮佛者；不用為空景久等。"},
@@ -167,7 +167,7 @@ const days=[
  {p:"westlake",t:"西湖住宿區",d:"只進房、附近吃熱食、睡覺；不加景點。",tags:["住宿"]}
 ]},
 {id:"d6",lab:"10/6 3人",title:"10/6｜三人先行・順路走完，晚餐四人",route:["westlake","tranquoc","quanthanh","trucbach","phocuon","cuabac","melbie","westlake","ocditu"],items:[
- {p:"westlake",t:"08:15｜C18／655 Lạc Long Quân",d:"住宿已改成真正的 C18 位置。早餐後用 Grab 前往西湖南側，不再把住宿誤當成湖中心。",tags:["住宿","已確認"]},
+ {p:"westlake",t:"08:15｜C18／655 Lạc Long Quân",d:"住宿針：21.0684536, 105.8108986（使用者指定）。早餐後用 Grab 前往西湖南側，不再把住宿誤當成湖中心。",tags:["住宿","已確認"]},
  {p:"tranquoc",t:"09:30｜鎮國寺",d:"看寺院、佛塔、湖面與堤道空間。",tags:["我私心推","建築"]},
  {p:"quanthanh",t:"10:20｜Quan Thanh Temple／鎮武觀",d:"和鎮國寺自然串成一條歷史建築線。",tags:["我私心推","建築"]},
  {p:"trucbach",t:"11:05｜竹帛湖／Ngũ Xã",d:"小湖與住宅街慢走，直接接午餐。",tags:["符合豪哥","在地生活"]},
