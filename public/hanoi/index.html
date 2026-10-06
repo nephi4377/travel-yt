@@ -84,6 +84,11 @@
 <script>
 const P={
  airport:{n:"內排國際機場",lat:21.2187,lng:105.8042,k:"base",q:"Noi Bai International Airport Hanoi"},
+ pickup24:{n:"08:10 集合｜24 Trần Nhật Duật",lat:21.0392,lng:105.8520,k:"base",q:"24 Tran Nhat Duat Hoan Kiem Hanoi"},
+ halongport:{n:"下龍國際郵輪港口",lat:20.95328,lng:107.05571,k:"place",q:"Ha Long International Cruise Port Bai Chay"},
+ surprise:{n:"Surprise Cave／驚訝洞",lat:20.84441,lng:107.09144,k:"place",q:"Sung Sot Cave Ha Long Bay"},
+ titop:{n:"英雄島／Ti Top Island",lat:20.8901,lng:107.0422,k:"place",q:"Ti Top Island Ha Long Bay"},
+ luon:{n:"Luon Cave／神祕洞",lat:20.8667,lng:107.0924,k:"place",q:"Luon Cave Ha Long Bay"},
  westlake:{n:"住宿｜C18 Xuân La",lat:21.0684536,lng:105.8108986,k:"base",q:"21.0684536,105.8108986"},
  xuanlafood:{n:"C18／Xuân La 周邊早餐搜尋",lat:21.0684536,lng:105.8108986,k:"food",q:"pho banh mi breakfast near 21.0684536,105.8108986"},
  xuanlalunch:{n:"C18／Xuân La 周邊午餐搜尋",lat:21.0684536,lng:105.8108986,k:"food",q:"Vietnamese lunch near 21.0684536,105.8108986"},
@@ -166,17 +171,15 @@ const days=[
  {p:"airport",t:"20:35 內排機場",d:"VJ947 抵達。入境、領行李後直接往西湖住宿。",tags:["交通"]},
  {p:"westlake",t:"西湖住宿區",d:"只進房、附近吃熱食、睡覺；不加景點。",tags:["住宿"]}
 ]},
-{id:"d6",lab:"10/6 3人",title:"10/6｜三人先行・順路走完，晚餐四人",route:["westlake","tranquoc","quanthanh","trucbach","phocuon","cuabac","melbie","westlake","ocditu"],items:[
- {p:"westlake",t:"08:15｜C18／655 Lạc Long Quân",d:"住宿針：21.0684536, 105.8108986（使用者指定）。早餐後用 Grab 前往西湖南側，不再把住宿誤當成湖中心。",tags:["住宿","已確認"]},
- {p:"tranquoc",t:"09:30｜鎮國寺",d:"看寺院、佛塔、湖面與堤道空間。",tags:["我私心推","建築"]},
- {p:"quanthanh",t:"10:20｜Quan Thanh Temple／鎮武觀",d:"和鎮國寺自然串成一條歷史建築線。",tags:["我私心推","建築"]},
- {p:"trucbach",t:"11:05｜竹帛湖／Ngũ Xã",d:"小湖與住宅街慢走，直接接午餐。",tags:["符合豪哥","在地生活"]},
- {p:"phocuon",t:"11:45｜Phở Cuốn Chinh Thắng 午餐",d:"7 Mạc Đĩnh Chi。河粉捲＋炸河粉共享，不和後續主餐重複。",tags:["我私心推","在地名物"]},
- {p:"cuabac",t:"13:10｜Cửa Bắc Church＋Phan Đình Phùng",d:"取代民族學博物館；同區看建築、樹蔭街道與城市尺度，不再往西繞。",tags:["符合豪哥","建築"]},
- {p:"melbie",t:"14:30–16:30｜下午茶／休息",d:"在 Thanh Niên／竹帛湖一帶坐下來。洪同學 16:50 抵達 HAN，所以不再塞遠點。",tags:["下午茶","休息"]},
- {p:"westlake",t:"約 17:00｜回 C18 等洪同學",d:"預留洪同學入境、行李與進城時間；四人會合後再出門吃晚餐。",tags:["四人會合"]},
- {p:"ocditu",t:"四人會合後｜Ốc Dì Tú 晚餐",d:"144C Quán Thánh。約 19:30 後依洪同學到 C18 的時間調整；螺／海鮮共享。備案 1946 Cửa Bắc。",tags:["四人晚餐","MICHELIN","在地名物"]},
- {p:"cua1946",t:"備案｜1946 Cửa Bắc",d:"3 Ngõ Yên Thành, 61 Cửa Bắc。越南家常共享菜；作為 Ốc Dì Tú 的同區備案。",tags:["備案","MICHELIN"]}
+{id:"d6",lab:"10/6 下龍灣",title:"10/6｜三人・下龍灣一日巡遊",route:["pickup24","halongport","surprise","titop","luon","halongport"],items:[
+ {p:"pickup24",t:"08:10｜24 Trần Nhật Duật 集合",d:"Klook 集合點，畫面標示 BRG Mart／Haprofood。請提早到並依導遊、車牌確認上車。",tags:["已確認","交通"]},
+ {p:"halongport",t:"約 12:15｜下龍國際郵輪港口",d:"登船後享用迎賓飲品，聽行程與安全須知。",tags:["郵輪","已確認"]},
+ {p:"halongport",t:"中午｜船上午餐",d:"提供自助午餐；若當團人數少於 30 人，可能改為套餐。",tags:["午餐"]},
+ {p:"surprise",t:"下午｜Surprise Cave／驚訝洞",d:"導覽參觀 Sung Sot Cave，主要看大型洞室、鐘乳石與石筍。",tags:["下龍灣","洞穴"]},
+ {p:"titop",t:"下午｜英雄島／Ti Top Island",d:"上島自由活動；可依體力登高看海灣，現場時間有限不要硬趕。",tags:["下龍灣","景觀"]},
+ {p:"luon",t:"下午｜Luon Cave／神祕洞",d:"依現場安排划皮艇或乘竹筏進潟湖；穿救生衣並聽從船方安排。",tags:["下龍灣","活動"]},
+ {p:"halongport",t:"回程前｜下午茶",d:"郵輪甲板下午茶／日落活動，之後返港。",tags:["下午茶","休息"]},
+ {p:"pickup24",t:"約 20:30｜回河內",d:"實際時間依天候、交通與團體進度調整。洪同學 16:50 已抵達 HAN，三人回程後再會合；不再沿用 17:00 回 C18 等人的舊安排。",tags:["回程","四人會合"]}
 ]},
 {id:"d7",lab:"10/7 正式1",title:"10/7｜四人・還劍湖＋老城",route:["hoankiem","oldquarter","dongxuan"],items:[
  {p:"hoankiem",t:"還劍湖",d:"四人一起認河內中心方向；短停後進入老城。",tags:["公共空間"]},
