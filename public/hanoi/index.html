@@ -94,6 +94,9 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 const P={
+ hoaluActual:{n:"華閭古都",lat:20.28285,lng:105.90175,k:"place",q:"Hoa Lu Ancient Capital Ninh Binh"},
+ tamcocActual:{n:"三谷／Tam Cốc",lat:20.21873,lng:105.9202,k:"place",q:"Tam Coc Ninh Binh"},
+ muaActual:{n:"舞洞／Hang Múa",lat:20.23091,lng:105.93757,k:"place",q:"Hang Mua Ninh Binh"},
  airport:{n:"內排國際機場",lat:21.2187,lng:105.8042,k:"base",q:"Noi Bai International Airport Hanoi"},
  pickup24:{n:"08:10 集合｜24 Trần Nhật Duật",lat:21.0392,lng:105.8520,k:"base",q:"24 Tran Nhat Duat Hoan Kiem Hanoi"},
  halongport:{n:"下龍國際郵輪港口",lat:20.95328,lng:107.05571,k:"place",q:"Ha Long International Cruise Port Bai Chay"},
@@ -227,7 +230,7 @@ const actualDays=[
 {id:"a5",lab:"10/5 抵達",title:"10/5｜抵達河內・住進西湖",route:["airport","westlake"],stops:[["抵達河內","從高雄搭越捷航空飛抵內排機場，與太太、郭同學一起前往西湖公寓。"],["Tùng Lộc 晚餐","在住宿附近吃雞肉香菇河粉，三人簡單用餐。"],["C18 西湖住宿","安頓行李，準備隔天前往下龍灣。"]]},
 {id:"a6",lab:"10/6 下龍灣",title:"10/6｜神秘洞 → 驚訝洞 → 英雄島",route:["westlake","pickup24","halongport","luon","surprise","titop","halongport","westlake"],stops:[["一早集合出發","三人從C18搭Grab到24 Trần Nhật Duật集合，搭車前往下龍灣。"],["神秘洞・搭船","先乘船探索神秘洞周邊水域。"],["驚訝洞・健行","進入驚訝洞參觀鐘乳石與大型洞室。"],["英雄島・放空","在島上休息、發呆，不再勉強塞活動。"],["Sunset Party・急著回去","遊船特別停下來開派對，但洪同學夫妻正等著我們帶鑰匙回公寓，大家只想趕快返程。"],["晚上約十點回住宿","終於與洪同學夫妻會合；回公寓後叫越式蒸米卷與蟹肉春捲等外送。"]]},
 {id:"a7",lab:"10/7 市區",title:"10/7｜咖啡、火車街、按摩與越南菜",route:["westlake","oldquarter"],stops:[["Voila Cafe 早餐","我與太太在西湖附近用餐、喝咖啡。"],["Huyền Hương 午餐","五人吃雞肉河粉與白切雞拼盤。"],["火車街咖啡","五人喝咖啡，並體驗當地精釀啤酒。"],["SPA 放鬆","同行五人安排按摩。"],["Quán Ăn Ngon 晚餐","一桌越南煎餅、烤魚、烤雞、牛肉與多道越南料理。"]]},
-{id:"a8",lab:"10/8 寧平",title:"10/8｜華閭古都、三谷、舞洞",route:["westlake","trangan","westlake"],stops:[["出發去寧平","我與太太兩人參加一日遊。"],["華閭古都・騎腳踏車","走訪丁朝與前黎朝古蹟，沿途騎腳踏車。"],["三谷・腳搖船","搭船欣賞石灰岩山水，觀察船夫用雙腳划槳。"],["舞洞・登山","步行爬山，看寧平的地形景觀。"],["回河內吃飯、按摩","晚上在Cơm đảo Loan Mai用餐，接著安排兩人按摩。"]]},
+{id:"a8",lab:"10/8 寧平",title:"10/8｜華閭古都、三谷、舞洞",route:["westlake","hoaluActual","tamcocActual","muaActual","westlake"],stops:[["出發去寧平","我與太太兩人參加一日遊。"],["華閭古都・騎腳踏車","走訪丁朝與前黎朝古蹟，沿途騎腳踏車。"],["三谷・腳搖船","搭船欣賞石灰岩山水，觀察船夫用雙腳划槳。"],["舞洞・登山","步行爬山，看寧平的地形景觀。"],["回河內吃飯、按摩","晚上在Cơm đảo Loan Mai用餐，接著安排兩人按摩。"]]},
 {id:"a9",lab:"10/9 老城",title:"10/9｜法國麵包、Pizza 4P’s、購物與聚餐",route:["westlake","oldquarter","french","westlake"],stops:[["早餐與咖啡","吃越南牛肉法國麵包，喝Highlands Coffee。"],["Pizza 4P’s 午餐","五人一起吃披薩、起司與義大利料理。"],["老城區購物","太太在KANA、鞋店和街邊店鋪選購服飾。"],["SPA","午後安排按摩放鬆。"],["Hanoi Garden 晚餐","五人共享越式海鮮、春捲、炸軟殼蟹與烤鴨咖哩，晚上還有紅酒。"]]},
 {id:"a10",lab:"10/10 回程",title:"10/10｜Lotte Mall 採買・前往機場",route:["westlake","airport"],stops:[["退房後前往Lotte Mall West Lake","三人搭Grab到商場，吃早餐與午餐。"],["Lotte Mart 採購","買腰果、芒果乾、巧克力與各種伴手禮。"],["Grab 前往內排機場","中午前後前往國際線T2。"],["機場最後一杯咖啡","買麵包、喝Starbucks冰美式，搭機返回高雄。"]]}
 ];
