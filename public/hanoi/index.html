@@ -241,20 +241,6 @@ function renderActual(day){
  if(latlng.length)actualMap.fitBounds(L.latLngBounds(latlng).pad(.2));
  setTimeout(()=>actualMap.invalidateSize(),120);
 }
-const actualTabs=document.getElementById("actualTabs");
-let currentActual=actualDays[0];
-actualDays.forEach(d=>{const b=document.createElement("button");b.type="button";b.textContent=d.lab;b.dataset.id=d.id;b.addEventListener("click",()=>{currentActual=d;[...actualTabs.children].forEach(t=>t.classList.toggle("active",t.dataset.id===d.id));renderActual(d)});actualTabs.appendChild(b)});
-const actualMap=L.map("actualMap",{zoomControl:true});
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"&copy; OpenStreetMap"}).addTo(actualMap);
-const actualLayer=L.layerGroup().addTo(actualMap);
-actualTabs.firstElementChild.classList.add("active");
-renderActual(currentActual);
-document.querySelectorAll(".primary-tab").forEach(tab=>tab.addEventListener("click",()=>{
- document.querySelectorAll(".primary-tab").forEach(t=>{const active=t===tab;t.classList.toggle("active",active);t.setAttribute("aria-selected",active?"true":"false")});
- document.querySelectorAll(".main-section").forEach(sec=>sec.hidden=sec.id!==tab.dataset.panel);
- if(tab.dataset.panel==="actual-itinerary"){setTimeout(()=>actualMap.invalidateSize(),80);renderActual(currentActual)}
- if(tab.dataset.panel==="history"){setTimeout(()=>map.invalidateSize(),80);render(current)}
-}));
 function gmap(p){return "https://www.google.com/maps/dir/?api=1&destination="+encodeURIComponent(p.q||p.n)+"&travelmode=driving&dir_action=navigate"}
 function tagClass(x){if(x.includes("網紅"))return"web";if(x.includes("名物")||x.includes("必吃")||x.includes("在地"))return"food";if(x.includes("可選"))return"opt";return"mine"}
 const map=L.map("map",{zoomControl:true});
@@ -286,6 +272,21 @@ function render(id){
 days.forEach(d=>{const b=document.createElement("button");b.type="button";b.textContent=d.lab;b.dataset.id=d.id;b.addEventListener("click",()=>render(d.id));tabs.appendChild(b)});
 content.addEventListener("click",e=>{const b=e.target.closest("[data-focus]");if(!b)return;draw(days.find(x=>x.id===current),b.dataset.focus);document.getElementById("map").scrollIntoView({behavior:"smooth",block:"center"})});
 render(current);
+
+const actualTabs=document.getElementById("actualTabs");
+let currentActual=actualDays[0];
+actualDays.forEach(d=>{const b=document.createElement("button");b.type="button";b.textContent=d.lab;b.dataset.id=d.id;b.addEventListener("click",()=>{currentActual=d;[...actualTabs.children].forEach(t=>t.classList.toggle("active",t.dataset.id===d.id));renderActual(d)});actualTabs.appendChild(b)});
+const actualMap=L.map("actualMap",{zoomControl:true});
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"&copy; OpenStreetMap"}).addTo(actualMap);
+const actualLayer=L.layerGroup().addTo(actualMap);
+actualTabs.firstElementChild.classList.add("active");
+renderActual(currentActual);
+document.querySelectorAll(".primary-tab").forEach(tab=>tab.addEventListener("click",()=>{
+ document.querySelectorAll(".primary-tab").forEach(t=>{const active=t===tab;t.classList.toggle("active",active);t.setAttribute("aria-selected",active?"true":"false")});
+ document.querySelectorAll(".main-section").forEach(sec=>sec.hidden=sec.id!==tab.dataset.panel);
+ if(tab.dataset.panel==="actual-itinerary"){setTimeout(()=>actualMap.invalidateSize(),80);renderActual(currentActual)}
+ if(tab.dataset.panel==="history"){setTimeout(()=>map.invalidateSize(),80);render(current)}
+}));
 
 const INTAKE_API="https://script.google.com/macros/s/AKfycbyMUavj63BTyS_GDU78mVUufakMhlyzegE0d1vde9DaTLVMad0Z37X9LtQDxyhzIqYi/exec";
 const TRIP_ID="2026-10-hanoi";
