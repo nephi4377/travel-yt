@@ -11,7 +11,7 @@
 下列依**旅程起始日由新到舊**排列（與首頁卡片相同；詳見 [AGENTS.md](AGENTS.md) 命名規則）。
 
 - [2026/12 土耳其跟團](企劃/2026-12-土耳其-跟團/README.md)：旅行社 10 日正式團行程已存入 `團行程.md`。（手機頁尚未建立）
-- [2026/11 上海・江南跟團](企劃/2026-11-上海-跟團/README.md)：旅行社 7 日正式團行程已存入 `團行程.md`；手機頁 [public/shanghai-2026-11](public/shanghai-2026-11/index.html)（[shanghai/](public/shanghai/index.html) 為轉址）。
+- [2026/11 上海・江南跟團](企劃/2026-11-上海-跟團/README.md)（**11/23–11/29，11/23 出發**）：旅行社 7 日正式團行程已存入 `團行程.md`；手機頁 [public/shanghai-2026-11](public/shanghai-2026-11/index.html)（[shanghai/](public/shanghai/index.html) 為轉址）。
 - [2026/10 河內自由行](企劃/2026-10-河內/行程.md)：先讀 [迭代紀錄](企劃/2026-10-河內/迭代紀錄.md) 與 [圖資索引](企劃/2026-10-河內/圖資索引.md)；手機頁 [public/hanoi-2026-10](public/hanoi-2026-10/index.html)（[hanoi/](public/hanoi/index.html) 為轉址）。同行、住宿、餐飲與費用另見該企劃文件及 Google Sheet「旅遊想法與費用管理」。
 - [2026/09 釜山](企劃/2026-09-釜山/README.md)：手機頁 [public/busan-2026-09](public/busan-2026-09/index.html)（[busan/](public/busan/index.html) 為轉址）。
 
