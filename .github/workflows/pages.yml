@@ -31,6 +31,7 @@ jobs:
         run: |
           mkdir -p _site
           cp -R public/. _site/
+          # Custom domain: public/CNAME → travel.tanxin.space (site root is public/, not /travel-yt/)
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

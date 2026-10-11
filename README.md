@@ -4,7 +4,7 @@
 
 開始修改前先讀 [AGENTS.md](AGENTS.md)，並拉取 `main` 最新版本；本機副本可能落後。
 
-手機站（GitHub Pages）：[豪哥旅遊手冊](https://nephi4377.github.io/travel-yt/)
+手機站：[豪哥旅遊手冊](https://travel.tanxin.space/)（GitHub Pages 自訂網域；舊 `nephi4377.github.io/travel-yt/` 會自動轉址）
 
 ## 進行中
 
