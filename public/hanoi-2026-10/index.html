@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>河內 2026.10｜豪哥旅遊手冊</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+:root{--bg:#f7f5f0;--card:#fff;--ink:#191919;--muted:#6b6b6b;--line:#e7e2d8;--red:#9f2d20;--green:#315c43;--blue:#1f4f7a;--amber:#8a6320}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif}
+.wrap{max-width:820px;margin:auto;padding:16px 14px 54px}.back{display:inline-block;text-decoration:none;color:#444;margin:2px 0 12px}
+.hero{padding:6px 0 12px}.hero h1{margin:2px 0 8px;font-size:1.8rem}.sub,.card p{color:var(--muted);line-height:1.6}.daymeta{font-size:.8rem;color:#777;font-weight:700}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:8px 0 12px;position:sticky;top:0;background:rgba(247,245,240,.96);z-index:900}
+.tabs button{white-space:nowrap;border:1px solid var(--line);background:#fff;border-radius:999px;padding:11px 14px;font-weight:700;min-height:44px}.tabs button.active{background:#1f2937;color:#fff}
+.notice{padding:12px 14px;border-radius:14px;background:#fff8e8;color:#765f23;line-height:1.55;margin:0 0 12px}
+#map{height:360px;border:1px solid var(--line);border-radius:18px;background:#e8e6df;margin-bottom:12px}
+.maphelp{font-size:.82rem;color:var(--muted);line-height:1.5;margin:0 2px 14px}
+.daypanel{display:none}.daypanel.active{display:block}
+.route{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px}.route span{white-space:nowrap;background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 10px;font-size:.82rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:15px;margin-bottom:10px}
+.row{display:flex;gap:10px;align-items:flex-start}.num{width:29px;height:29px;border-radius:50%;background:#1f2937;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;flex:0 0 29px}.grow{min-width:0;flex:1}
+.card h3{margin:1px 0 5px;font-size:1.05rem}.why{font-size:.9rem;color:var(--muted);line-height:1.55}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.tag{font-size:.74rem;padding:5px 8px;border-radius:999px;background:#f1f1ef}.mine{background:#e7efe9;color:var(--green)}.web{background:#f8e9e5;color:var(--red)}.food{background:#fff0db;color:#7a4b10}.opt{background:#e9f0f7;color:var(--blue)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}.actions button,.actions a{border:1px solid var(--line);background:#f7f7f6;color:#252525;text-decoration:none;border-radius:11px;padding:9px 11px;font-weight:700;font-size:.85rem;min-height:42px}
+.actions button{cursor:pointer}.actions .focus{background:#eef3f8;color:#193b59}
+.sectiontitle{font-size:1.08rem;margin:16px 2px 8px}
+.legend{display:flex;flex-wrap:wrap;gap:8px;font-size:.8rem;color:var(--muted);margin:8px 0 12px}.dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:4px}.d-place{background:#2563eb}.d-food{background:#c2410c}.d-base{background:#166534}
+.small{font-size:.82rem;color:var(--muted)}
+.detailbox{margin-top:10px;border-top:1px dashed var(--line);padding-top:9px}
+.detailbox summary{cursor:pointer;font-weight:800;font-size:.86rem;color:#333;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.detailbox summary::-webkit-details-marker{display:none}.detailbox summary:after{content:"＋";font-size:1rem;color:#777}.detailbox[open] summary:after{content:"−"}
+.detailbody{padding-top:9px;font-size:.87rem;line-height:1.62;color:#555}
+.detailbody strong{color:#292929}.detailbody ul{margin:6px 0 0;padding-left:18px}.detailbody li{margin:4px 0}
+.detailgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.detailmini{background:#f8f7f3;border-radius:11px;padding:9px}.detailmini b{display:block;font-size:.78rem;margin-bottom:3px;color:#444}
+@media(max-width:520px){.detailgrid{grid-template-columns:1fr}}
+@media(max-width:480px){#map{height:320px}.wrap{padding-left:12px;padding-right:12px}}
+
+.idea-fab{position:sticky;bottom:14px;margin-left:auto;display:flex;width:max-content;align-items:center;gap:8px;border:0;border-radius:999px;background:#1f2937;color:#fff;padding:12px 16px;font-weight:800;box-shadow:0 8px 22px rgba(0,0,0,.18);z-index:950;cursor:pointer}
+.idea-modal[hidden]{display:none}.idea-modal{position:fixed;inset:0;background:rgba(0,0,0,.42);z-index:1200;padding:18px;overflow:auto}
+.idea-box{max-width:620px;margin:4vh auto;background:#fff;border-radius:20px;padding:16px;border:1px solid var(--line)}
+.idea-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}.idea-head h2{margin:0;font-size:1.2rem}
+.closex{border:0;background:#eee;border-radius:50%;width:40px;height:40px;font-size:1.3rem;cursor:pointer}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}.field.full{grid-column:1/-1}
+.field label{font-size:.83rem;font-weight:800;color:#444}.field input,.field select,.field textarea{width:100%;font:inherit;border:1px solid #d7d4cd;border-radius:12px;padding:11px;background:#fff;color:#222}.field textarea{min-height:110px;resize:vertical}
+.submitidea{width:100%;border:0;border-radius:12px;background:#1f2937;color:#fff;padding:13px 15px;font-weight:800;font-size:1rem;cursor:pointer}
+.submitidea:disabled{opacity:.5}.sendmsg{margin-top:10px;font-size:.88rem;line-height:1.5}.sendmsg.ok{color:#24613e}.sendmsg.err{color:#9f2d20}
+.filehint{font-size:.76rem;color:var(--muted)}@media(max-width:540px){.formgrid{grid-template-columns:1fr}.idea-box{margin:0 auto}.idea-fab{bottom:10px}}
+
+/* 返國後實際旅程區，原行前規劃仍保留在下方 */
+.actual-intro{background:linear-gradient(140deg,#f7efe0,#fff);border:1px solid var(--line);border-radius:18px;padding:18px;margin:12px 0}.actual-intro h2{margin:0 0 8px;font-size:1.35rem}.actual-intro p{line-height:1.75;margin:8px 0;color:#48443f}.actual-stats{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.actual-stats span{background:#fff;border:1px solid #e6dbca;border-radius:999px;padding:7px 11px;font-size:.84rem}.actual-day{background:#fff;border:1px solid var(--line);border-radius:15px;margin-bottom:10px;overflow:hidden}.actual-day summary{cursor:pointer;display:flex;gap:12px;align-items:center;padding:15px;list-style:none;line-height:1.5}.actual-day summary::-webkit-details-marker{display:none}.actual-day summary strong{flex:1;font-size:.95rem}.actual-date{color:var(--green);font-size:.79rem;min-width:76px;font-weight:750}.actual-arrow{color:#777}.actual-day[open] .actual-arrow{transform:rotate(45deg)}.actual-story{padding:0 16px 17px;white-space:normal;line-height:1.9;color:#434343;font-size:.92rem}.actual-outro{padding:16px;background:#fff;border:1px solid var(--line);border-radius:16px;line-height:1.85;color:#434343;margin-bottom:18px}.plan-archive{border-top:2px dashed #d5cbbb;margin-top:24px;padding-top:8px}.plan-archive h2{font-size:1.14rem;margin:10px 0}.actual-source{font-size:.79rem;color:#777}
+
+.primary-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:10px 0 18px;position:sticky;top:0;z-index:960;background:var(--bg);padding:9px 0}.primary-tab{padding:13px 7px;border:1px solid var(--line);border-radius:14px;background:white;font-size:.95rem;font-weight:800;color:var(--ink);cursor:pointer}.primary-tab.active{background:#233f36;color:white;border-color:#233f36}.main-section[hidden]{display:none!important}.actual-map{height:350px;border:1px solid var(--line);border-radius:18px;background:#e8e6df;margin-bottom:10px}.actual-stops{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}.actual-stops span{background:#eef4ef;color:#315c43;border-radius:10px;padding:7px 9px;font-size:.82rem}.actual-brief{color:#555;line-height:1.8}.actual-timeline{list-style:none;padding:0;margin:12px 0}.actual-timeline li{padding:10px 12px;border-left:3px solid #9bb3a4;background:white;border-radius:0 10px 10px 0;margin-bottom:7px}.actual-timeline b{display:block;color:#263f36;margin-bottom:4px}.actual-timeline p{margin:0;line-height:1.6;color:#525252;font-size:.91rem}
+</style>
+</head>
+<body><main class="wrap">
+<a class="back" href="../">← 所有旅程</a>
+<section class="hero"><div class="daymeta">2026/10/05–10/10 · 已完成的旅程</div><h1>🇻🇳 河內</h1><p class="sub">西湖生活、下龍灣與寧平；5 位同行者依參與日期分段會合。下方優先呈現實際行程，出發前規劃保留供比較。</p></section>
+
+<nav class="primary-tabs" aria-label="河內旅程內容"><button type="button" class="primary-tab active" data-panel="actual-itinerary" aria-selected="true">實際行程</button><button type="button" class="primary-tab" data-panel="journal" aria-selected="false">遊記</button><button type="button" class="primary-tab" data-panel="history" aria-selected="false">歷史記錄</button></nav>
+<section id="actual-itinerary" class="main-section">
+<div class="actual-intro"><h2>實際行程｜2026 年河內六日</h2><p>依旅行結束後確認的景點、交通與餐飲重整；原本行前規劃則完整保存於「歷史記錄」。</p></div>
+<nav class="tabs" id="actualTabs"></nav><div id="actualMap" class="actual-map"></div><p class="maphelp">依已確認地點顯示概略位置及順序，路線僅供回憶，不代表當日導航軌跡。</p><div id="actualContent"></div>
+</section>
+<section id="journal" class="main-section" hidden><section class="actual-intro" id="actual-trip"><h2>✅ 已完成｜2026 河內六日旅記</h2><p>10/5–10/10，住在西湖的日常、下龍灣的長途船遊、寧平的腳搖船與登山，還有五個人相聚的吃喝時光。以下是旅行結束後依當日紀錄與本人補充整理的<strong>實際經歷</strong>，並非尚待執行的行程表。</p><div class="actual-stats"><span>6 天 5 夜</span><span>下龍灣：神秘洞搭船 → 驚訝洞健行 → 英雄島休息</span><span>寧平：華閭騎車 → 三谷腳搖船 → 舞洞登山</span><span>兩人含購物總花費約 NT$4.4 萬（估算）</span></div><p class="actual-source">行程文字依 Google Sheet「2026-10 河內」旅行遊記整理；精確帳目及同學間分攤以工作表為準，避免在公開網頁顯示個人付款細節。</p></section><section id="actual-days"><h2 class="sectiontitle">六天實際行程與遊記</h2><details class="actual-day" open><summary><span class="actual-date">2026/10/05</span><strong>Day 1｜從機場到西湖，先成為河內的臨時住客</strong><span class="actual-arrow">＋</span></summary><div class="actual-story">這趟越南旅行，我和太太與幾位老同學約好在河內相聚。不同於上次釜山五人的家庭旅遊，這回多了朋友同行的隨興，也多了些各自安排行程、再一起會合的自由。<br>從高雄搭機抵達河內，最先迎接我們的不是哪個知名景點，而是機場外的車流與一路向市區延伸的街景。第一天是我、太太和郭同學三人先走。住宿選在西湖一帶的C18公寓，沒有刻意住在老城區最熱鬧的地方。每天出門靠Grab，到晚上再回到同一個落腳處，這種安排比較像短暫搬來河內過生活。<br>安頓好後，在住宿附近的Tùng Lộc吃了雞肉香菇河粉。第一碗河粉沒有什麼儀式感，熱湯、雞肉、米粉，卻很適合用來替這趟旅程開場。人在陌生城市，先有地方住、有熱食吃，剩下的精彩留到明天。<br>這一天不趕行程。真正的河內旅行，就從西湖附近的普通街道開始。</div></details>
+<details class="actual-day" ><summary><span class="actual-date">2026/10/06</span><strong>Day 2｜下龍灣的山海很美，體力卻先投降</strong><span class="actual-arrow">＋</span></summary><div class="actual-story">一大早，我們三個人從公寓搭Grab進城，集合後坐車前往下龍灣。這是一次典型的長途一日遊：光是往返就得花不少時間，到了目的地，海上的行程又一站接一站。遠遠看去，石灰岩山峰從水面升起，彼此錯落，和熟悉的海岸線完全不同。即使已經看過不少下龍灣照片，真正身在船上，才感覺得到山與海的尺度。<br><br>今天的順序我記得很清楚。第一站是「神秘洞」，我們坐船探索；接著到「驚訝洞」，換成用雙腳走進洞裡健行。洞穴裡的岩石景觀值得看，但從搭車、搭船再到走路，一整天的體力也持續消耗著。<br><br>到了英雄島，我反而不想再趕著完成什麼活動了。坐著發呆，看看眼前的海和人來人往，這時候比多拍幾張照片更實際。旅行有時候就是這樣：出發前想把每個景點都看完，到了現場才發現，停下來也是一種體驗。<br><br>最後，船竟然還特地停下來辦Sunset Party。對其他遊客來說，這或許是迎著夕陽放鬆的好時光；但我們已經玩了一整天，心裡只想趕快回河內。更麻煩的是，洪同學夫妻當天抵達，還在等我們帶鑰匙回住宿。明明急著趕路，船卻停在那裡開派對，真讓人哭笑不得：夕陽很美沒錯，但我們更想回去啊！<br><br>然而，這天真正有點不好意思的插曲，還在回程。洪同學夫妻當天抵達河內，正在等我們把住宿鑰匙帶回去。照他們抵達的時間來看，這一等可真不短；偏偏我們參加的是下龍灣長途一日遊，直到晚上十點左右才回到公寓。原本是大家要在河內會合的日子，結果先變成了一場漫長的「等鑰匙」任務，想想還真有點對不起他們，卻又忍不住覺得好笑。XD<br><br>回到公寓後，才終於有時間坐下來，叫了越式蒸米卷、蟹肉春捲等外送補充體力。這一天從海上的岩洞、英雄島的發呆、讓人著急的Sunset Party，一路到晚上十點的鑰匙會合，沒有安排得完美，倒是留下了一段很真實的旅行故事。</div></details>
+<details class="actual-day" ><summary><span class="actual-date">2026/10/07</span><strong>Day 3｜河內的味道，不只是一碗河粉</strong><span class="actual-arrow">＋</span></summary><div class="actual-story">旅行第三天，行程重心回到河內。早上先在西湖附近的咖啡店吃早餐，之後進入市區。河內有一種很強烈的生活感：車流密集，巷弄裡卻又藏著小店、咖啡館與各種熟食，走在街上總有東西能看。<br>中午五個人一起到Huyền Hương吃雞肉河粉，除了各自的餐點，還點了白切雞拼盤。用同一種雞肉做出湯粉、切盤與不同搭配，看似簡單，細節卻不少。下午又去了火車街喝咖啡，也喝了精釀啤酒。相比一個人到景點打卡，幾個老朋友坐在一起吃喝，時間過得特別快。<br>我們還安排了SPA。按摩原本就是出國放鬆的一部分，這趟卻也多出一點小插曲：有人先付錢，有人又補付，回頭得重新核對。旅行中的帳目有時比行程還複雜，卻也因為如此，留下了不少需要整理的細節。<br>晚上在Quán Ăn Ngon坐下來吃一桌越南菜。越南煎餅、烤牛肉、烤雞、烤魚、蟹肉春捲、海鮮沙拉與炒空心菜，從香料、酸味到炭烤的氣息，每一道都有不同個性。這頓飯讓我更確定：河內值得吃的，絕不只有河粉。<br>這天未必有單一最震撼的景點，但朋友一起吃飯、喝咖啡、按摩，再回西湖休息，正是這趟旅行最舒服的節奏之一。</div></details>
+<details class="actual-day" ><summary><span class="actual-date">2026/10/08</span><strong>Day 4｜寧平：騎車訪古都、腳搖船看山水、再爬上舞洞</strong><span class="actual-arrow">＋</span></summary><div class="actual-story">這一天我和太太離開河內，往寧平走。前一天才在城市裡吃吃喝喝，隔天又把視線轉向古都與石灰岩山水，這也是越南旅行很有趣的反差。<br>到了華閭古都，我們不是只站在古蹟前拍照，還騎了腳踏車。踩著車前進，再聽導遊介紹丁朝與前黎朝、皇帝和王朝更替，歷史忽然不像課本上的年代那樣遙遠。導遊也提到廟宇祭祀的習俗，以及不同君王相關的故事；這些說法值得日後再查證細節，但當下確實讓參觀多了許多話題。<br>接著來到三谷搭船。這趟最有辨識度的畫面，是船夫用雙腳划槳。明明是坐船，看到的卻不是一般習慣的手划船，而是雙腳靈活地控制船槳，載著遊客穿行在山水之間。兩側石灰岩山峰靠近水面，景色隨著船慢慢往前而展開。這種體驗不是單憑照片就能完全理解。<br>最後到了舞洞，我們真的上山了。爬山和坐船完全是兩回事，前者得靠自己一步一步走上去；也因為付出了體力，回望寧平地形時，更能感受這片山水的層次。<br>華閭是歷史，三谷是水上的節奏，舞洞則是靠雙腳換來的視野。三個地方雖然都在寧平，帶回來的記憶卻完全不同。<br>回到河內，晚上吃了當地飯食，又安排兩個人各一小時的按摩。走過古都、搭過船、爬過山之後，這個夜晚的休息格外合理。</div></details>
+<details class="actual-day" ><summary><span class="actual-date">2026/10/09</span><strong>Day 5｜老城區的一天，從披薩吃到整桌越南菜</strong><span class="actual-arrow">＋</span></summary><div class="actual-story">到了旅程後段，我們把時間留給河內市區。早上先吃牛肉法國麵包，再喝咖啡。越南受法國文化影響的痕跡，在街景與飲食裡都很容易發現：一邊是法國麵包、咖啡和老建築，另一邊是熱鬧的機車流與街頭攤販，兩種氣質就這樣自然地混在一起。<br>中午吃了Pizza 4P’s。來越南吃義大利料理，乍聽有點跳脫，但這也是旅行的樂趣。起司、披薩、義大利麵和其他餐點一道道上桌，和前幾天的越式小吃很不一樣。當天還有不少海鮮料理，讓大家換了口味。<br>下午變成逛街時間。太太在KANA挑了衣服，又買了鞋，街邊小店也有其他戰利品。越南購物最有趣的不全是「便宜」兩個字：有些店的定價其實不低，有些小店卻能找到很實惠的東西。價格落差本身就是一種城市觀察。<br>白天還安排SPA，讓連日走路、搭車累積的疲勞有機會緩一緩。晚上五個人到了Hanoi Garden，這一桌可說是本次最豐盛的越南料理之一：蟹肉、春捲、牛肉、冬粉、青菜、海鮮湯、炸軟殼蟹、烤鴨咖哩，各式口味擺滿桌面。相比只在熱門餐廳吃一兩道招牌菜，幾個人一起點一桌，反而更能嚐到料理的變化。<br>這一晚還有紅酒。酒和朋友的談話，讓行程從吃晚餐自然地延續到夜裡。旅程到了尾聲，值得記住的往往不是今天看了多少景點，而是這些有空坐下來相聚的時刻。</div></details>
+<details class="actual-day" ><summary><span class="actual-date">2026/10/10</span><strong>Day 6｜最後的超市採買，然後帶著河內回家</strong><span class="actual-arrow">＋</span></summary><div class="actual-story">最後一天，不再安排需要長途移動的景點。我們從西湖公寓搭Grab到Lotte Mall West Lake，把回國前的時間留給吃點東西、買伴手禮，再前往機場。<br>超市向來是觀察當地生活的有趣地方。貨架上的腰果、芒果乾、巧克力、椰子零食，和景點紀念品不同，都是很具體、能帶回家分給人的旅行記憶。我們也在商場吃了東西，之後直接搭車去內排機場。<br>機場最後還買了麵包和Starbucks冰美式。從市區平價的河粉、咖啡，一路吃到機場的國際線餐飲，價差相當明顯。越南並不是什麼都便宜；同一座城市，吃飯的價格可以從在地日常跨到接近國際機場的水準。<br>搭上飛機時，六天五晚就這樣告一段落。這趟既有下龍灣的海、寧平的山，也有河內街頭的咖啡、餐廳、購物與按摩。若只看行程表，它們是幾個地點與活動；但真正留在記憶裡的，是到了英雄島只想發呆、在三谷看船夫用腳划船、舞洞一步步上山，以及老朋友圍桌吃飯的那些細節。</div></details><div class="actual-outro"><strong>旅程小記｜帶走的不只是伴手禮</strong><p>這次河內旅行，和釜山很不一樣。釜山留下的是一家人一起逛街、看海、泡SPA的回憶；河內則多了老同學相聚的節奏，也讓我看見越南不只有河粉與便宜物價。下龍灣的長途一日遊教會我，行程再精彩，也不能忽略體力；寧平的騎車、腳搖船與登山，則把風景變成身體真正參與過的經驗。住在西湖的公寓，每天搭Grab、找吃的、逛不同街道，比住在觀光區更有一點生活感。</p><p></p><p>這趟我和太太兩人的旅行支出約新台幣四萬多元，機票、住宿、郊遊、飲食、按摩、購物都包含在裡面。金額留在帳本詳細計算即可；回頭讀遊記，我更想記住的是走過的地方、一起吃飯的人，以及那些疲累、發呆、放鬆和意外有趣的瞬間。</p><p></p><p>日後若有照片、錄音或更多親身感受，還可以再補進去。現在先把確實發生過的故事留下來。</p></div></section></section>
+<section id="history" class="main-section" hidden><div class="actual-intro"><h2>歷史記錄｜出發前的規劃</h2><p>保留當初的每日路線、候選景點、備案與計畫說明。這裡是規劃版本，並不代表實際到訪。</p></div>
+<nav class="tabs" id="tabs"></nav><div id="map"></div><p class="maphelp">原本的規劃路線與候選地點。部分內容當時尚未預訂，僅供回顧。</p><section id="content"></section></section>
+<p class="notice" id="intakeClosedNotice" hidden>10/10 後已關閉上傳，只能查看</p>
+<button class="idea-fab" id="ideaFab" type="button">＋ 新增想法</button>
+<div class="idea-modal" id="ideaModal" hidden>
+  <div class="idea-box" role="dialog" aria-modal="true" aria-labelledby="ideaTitle">
+    <div class="idea-head"><h2 id="ideaTitle">新增河內行程想法</h2><button class="closex" id="ideaClose" type="button" aria-label="關閉">×</button></div>
+    <p class="small" id="ideaIntro">先記錄、預設採納；每小時排程會整理、查證，並把採納結果寫回 GitHub travel-yt 主稿與迭代紀錄。重大衝突才會再找你確認。</p>
+    <form id="ideaForm">
+      <div class="formgrid">
+        <div class="field"><label for="submitter">提交者</label><select id="submitter" name="submitter"><option>豪哥</option><option>太太</option><option>郭同學</option><option>洪同學</option><option>其他</option></select></div>
+        <div class="field"><label for="targetDate">適用日期</label><select id="targetDate" name="target_date"><option>不指定</option><option>10/6</option><option>10/7</option><option>10/8</option><option>10/9</option></select></div>
+        <div class="field"><label for="ideaType">類型</label><select id="ideaType" name="type"><option>行程</option><option>景點</option><option>餐飲</option><option>交通</option><option>住宿</option><option>購物</option><option>費用</option><option>其他</option></select></div>
+        <div class="field"><label for="sourceUrl">網址</label><input id="sourceUrl" name="url" type="url" inputmode="url" placeholder="YouTube / Maps / Threads / 網站"></div>
+        <div class="field full"><label for="ideaText">想法</label><textarea id="ideaText" name="idea" placeholder="例如：10/9 龍邊橋附近有一段街道值得走嗎？"></textarea></div>
+        <div class="field full"><label for="ideaFile">照片／截圖／PDF</label><input id="ideaFile" type="file" accept="image/*,.pdf,application/pdf"><div class="filehint">附件目前建議 2.5 MB 以內；先進 Intake，正式採用的圖資須另存到 GitHub 並登記版本。</div></div>
+      </div>
+      <button class="submitidea" id="ideaSubmit" type="submit">送出並先採納</button>
+      <div id="sendMsg" class="sendmsg" aria-live="polite"></div>
+    </form>
+  </div>
+</div>
+</main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const P={
+ hoaluActual:{n:"華閭古都",lat:20.28285,lng:105.90175,k:"place",q:"Hoa Lu Ancient Capital Ninh Binh"},
+ tamcocActual:{n:"三谷／Tam Cốc",lat:20.21873,lng:105.9202,k:"place",q:"Tam Coc Ninh Binh"},
+ muaActual:{n:"舞洞／Hang Múa",lat:20.23091,lng:105.93757,k:"place",q:"Hang Mua Ninh Binh"},
+ airport:{n:"內排國際機場",lat:21.2187,lng:105.8042,k:"base",q:"Noi Bai International Airport Hanoi"},
+ pickup24:{n:"08:10 集合｜24 Trần Nhật Duật",lat:21.0392,lng:105.8520,k:"base",q:"24 Tran Nhat Duat Hoan Kiem Hanoi"},
+ halongport:{n:"下龍國際郵輪港口",lat:20.95328,lng:107.05571,k:"place",q:"Ha Long International Cruise Port Bai Chay"},
+ surprise:{n:"Surprise Cave／驚訝洞",lat:20.84441,lng:107.09144,k:"place",q:"Sung Sot Cave Ha Long Bay"},
+ titop:{n:"英雄島／Ti Top Island",lat:20.8901,lng:107.0422,k:"place",q:"Ti Top Island Ha Long Bay"},
+ luon:{n:"Luon Cave／神祕洞",lat:20.8667,lng:107.0924,k:"place",q:"Luon Cave Ha Long Bay"},
+ westlake:{n:"住宿｜C18 Xuân La",lat:21.0684536,lng:105.8108986,k:"base",q:"21.0684536,105.8108986"},
+ xuanlafood:{n:"C18／Xuân La 周邊早餐搜尋",lat:21.0684536,lng:105.8108986,k:"food",q:"pho banh mi breakfast near 21.0684536,105.8108986"},
+ xuanlalunch:{n:"C18／Xuân La 周邊午餐搜尋",lat:21.0684536,lng:105.8108986,k:"food",q:"Vietnamese lunch near 21.0684536,105.8108986"},
+ tranquoc:{n:"鎮國寺",lat:21.0479,lng:105.8368,k:"place",q:"Tran Quoc Pagoda Hanoi"},
+ quanthanh:{n:"Quan Thanh Temple／鎮武觀",lat:21.0436,lng:105.8360,k:"place",q:"Quan Thanh Temple Hanoi"},
+ trucbach:{n:"竹帛湖／Ngũ Xã",lat:21.0449,lng:105.8420,k:"place",q:"Truc Bach Lake Hanoi"},
+ phocuon:{n:"Phở Cuốn Chinh Thắng",lat:21.0450,lng:105.8441,k:"food",q:"Pho Cuon Chinh Thang 7 Mac Dinh Chi Hanoi"},
+ cuabac:{n:"Cửa Bắc Church／Phan Đình Phùng",lat:21.04145,lng:105.84051,k:"place",q:"Cua Bac Church Hanoi"},
+ melbie:{n:"Melbie Cafe & Bakery",lat:21.0458,lng:105.8381,k:"food",q:"Melbie Cafe Bakery 9 Thanh Nien Hanoi"},
+ ocditu:{n:"Ốc Dì Tú",lat:21.0432,lng:105.8395,k:"food",q:"Ốc Dì Tú 144C Quan Thanh Hanoi"},
+ cua1946:{n:"1946 Cửa Bắc",lat:21.04285,lng:105.84296,k:"food",q:"1946 Cua Bac 3 Yen Thanh Alley 61 Cua Bac Hanoi"},
+ citadel:{n:"昇龍皇城",lat:21.0394,lng:105.8372,k:"place",q:"Imperial Citadel of Thang Long 19C Hoang Dieu Hanoi"},
+ trangan:{n:"Tràng An 乘船碼頭｜陸龍灣",lat:20.2534,lng:105.9188,k:"place",q:"Trang An Boat Pier Ninh Binh"},
+ tranganfood:{n:"Tràng An 碼頭周邊熟食",lat:20.2534,lng:105.9188,k:"food",q:"Vietnamese food near Trang An Boat Pier Ninh Binh"},
+ templefood:{n:"文廟周邊熟食",lat:21.0277,lng:105.8355,k:"food",q:"pho bun cha near Temple of Literature Hanoi"},
+ longbienfood:{n:"龍邊周邊熟食",lat:21.0438,lng:105.8585,k:"food",q:"Vietnamese food near Long Bien Bridge Hanoi"},
+ hoankiem:{n:"還劍湖",lat:21.0285,lng:105.8521,k:"place",q:"Hoan Kiem Lake Hanoi"},
+ cathedral:{n:"聖若瑟主教座堂",lat:21.0288,lng:105.8488,k:"place",q:"St Joseph Cathedral Hanoi"},
+ oldquarter:{n:"河內老城／36古街",lat:21.0340,lng:105.8500,k:"place",q:"Hanoi Old Quarter"},
+ dongxuan:{n:"同春市場",lat:21.0383,lng:105.8490,k:"place",q:"Dong Xuan Market Hanoi"},
+ longbien:{n:"龍邊橋",lat:21.0438,lng:105.8585,k:"place",q:"Long Bien Bridge Hanoi"},
+ temple:{n:"文廟－國子監",lat:21.0277,lng:105.8355,k:"place",q:"Temple of Literature Hanoi"},
+ french:{n:"法國區／河內歌劇院一帶",lat:21.0243,lng:105.8575,k:"place",q:"Hanoi Opera House"},
+ train:{n:"火車街",lat:21.0298,lng:105.8412,k:"place",q:"Hanoi Train Street"},
+ giang:{n:"Café Giảng",lat:21.0320,lng:105.8546,k:"food",q:"Cafe Giang 39 Nguyen Huu Huan Hanoi"},
+ xoiyen:{n:"Xôi Yến",lat:21.0328,lng:105.8545,k:"food",q:"Xoi Yen 35B Nguyen Huu Huan Hanoi"},
+ huonglien:{n:"Bún Chả Hương Liên",lat:21.0180,lng:105.8564,k:"food",q:"Bun Cha Huong Lien 24 Le Van Huu Hanoi"},
+ chacathanglong:{n:"Chả Cá Thăng Long",lat:21.0330,lng:105.8454,k:"food",q:"Cha Ca Thang Long 6B Duong Thanh Hanoi"},
+ pho:{n:"河粉（當區找）",lat:21.0325,lng:105.8498,k:"food",q:"pho Hanoi Old Quarter"},
+ banhmi:{n:"Bánh mì（當區找）",lat:21.0307,lng:105.8500,k:"food",q:"banh mi Hanoi Old Quarter"}
+};
+
+const DETAILS={
+ westlake:{intro:"住宿已確認在 C18 Building／ngõ 655 Lạc Long Quân，位於西湖北偏西側。地圖針依使用者指定的「20261005-10住宿地」更新（21.0684536, 105.8108986；Plus Code 3R96+99J）。",look:["建築名稱：C18 Xuân La","導航：655 Lạc Long Quân, Tây Hồ, Hà Nội","座標：21.0684536, 105.8108986"],stay:"住宿／集合點",tip:"給司機：toà nhà chung cư C18, ngõ 655 Lạc Long Quân, quận Tây Hồ. 使用者地圖 https://maps.app.goo.gl/2wuHk1bGdVRXua8a9 。公開頁不顯示房號與房東電話。"},
+ xuanlafood:{intro:"10/10 早上在 C18／Xuân La 周邊找現做熱早餐，吃完短走再回住宿取行李。",recommend:["Phở 河粉","Bánh mì 越南法國麵包"],order:"看當日營業與距離，不為名店搭車跨區",meal:"10/10 約 08:00–10:00",tip:"地圖點是 C18 附近的搜尋起點，不是已選定店家；較早班機者按機票及路況抓離開時間。"},
+ xuanlalunch:{intro:"10/10 洪同學較晚班機可在 C18／Xuân La 周邊吃午餐，前提是先處理退房與行李。",recommend:["當區現做熟食","尚未吃到的河內家常菜"],order:"看當日營業與出發時間，避免排隊過久",meal:"10/10 午餐",tip:"地圖點是住宿周邊搜尋起點；若不能寄放行李，可直接帶行李去機場用餐。"},
+ tranquoc:{intro:"鎮國寺位在西湖小島上，是河內非常早期的佛寺之一；紅色多層塔與湖面關係比單獨拍塔更值得看。",look:["堤道進入寺院的空間轉換","紅色佛塔與湖面比例","寺院內仍是實際宗教空間"],stay:"30–45 分鐘",tip:"穿著遮肩膝、尊重禮佛者；不用為空景久等。"},
+ quanthanh:{intro:"Quan Thanh Temple 位在西湖與竹帛湖交界，是河內重要道教古廟，跟鎮國寺可自然串成一條短線。",look:["入口、前院、主殿的尺度","大型銅像與木構細節","兩湖交界的城市位置"],stay:"25–40 分鐘",tip:"如果寺廟類已看夠，可縮成外觀＋短停留。"},
+ trucbach:{intro:"竹帛湖比西湖小很多，Ngũ Xã 一帶更適合看日常街區與吃 Phở cuốn。",look:["小湖尺度與住宅街","Ngũ Xã 巷弄與在地餐館"],stay:"45–60 分鐘含散步",tip:"這裡的重點是午餐＋街區，不用環湖一圈。"},
+ phocuon:{intro:"Phở cuốn 是竹帛湖／Ngũ Xã 很代表性的河內吃法，米皮包牛肉與香草，口感比湯河粉清爽。",recommend:["Phở cuốn 牛肉河粉捲","Phở chiên phồng 炸河粉可三人共享"],order:"三人先點一份河粉捲＋一份炸河粉共享，再看份量追加",meal:"10/6 午餐",tip:"Chinh Thắng 目前 MICHELIN Guide 列 10:00–21:00；若現場排太久，Ngũ Xã 同類店很多可直接換。"},
+ cuabac:{intro:"Cửa Bắc Church 與 Phan Đình Phùng 就在 Quán Thánh／竹帛湖南側延伸線上，比特地往西去民族學博物館順很多。",look:["Cửa Bắc Church 不對稱的殖民時期教堂量體","Phan Đình Phùng 樹蔭大道與法式街屋","北門與街廓關係"],stay:"60–75 分鐘",tip:"以街區與建築外觀為主；教堂若遇禮拜或未開放，不硬闖。"},
+ ocditu:{intro:"10/6 四人晚餐第一順位。MICHELIN Guide 收錄的螺／海鮮店，位置在 Quán Thánh，適合四人共享。",recommend:["烤 melo melo 螺","香茅辣椒蒸蛤","蝦／下龍灣魷魚"],order:"四人以 3–4 道海鮮共享，再依食量追加",meal:"10/6 四人會合後，約 19:30 起彈性",tip:"144C Quán Thánh；目前公開資訊 10:30–22:00，cash only。"},
+ cua1946:{intro:"10/6 晚餐備案。MICHELIN Guide 收錄的越南家常菜，若不想吃螺／海鮮可直接換這家。",recommend:["青香蕉牛肉沙拉","蟹肉粥火鍋"],order:"四人共享，主菜不要一次點太多",meal:"10/6 晚餐備案",tip:"3 Ngõ Yên Thành, 61 Cửa Bắc；與當天下午路線同區。"},
+ melbie:{intro:"位在 Thanh Niên 路、靠近鎮國寺與 Quan Thanh 一帶，適合下午回到湖邊坐下來等晚上的四人會合。",recommend:["Bạc xỉu 越式奶咖啡","蛋咖啡或甜點／麵包"],order:"下午茶不要吃太飽，晚上等洪同學一起正式用餐",meal:"14:30–16:30 下午茶",tip:"以休息、看湖景為主；若現場不合適，就沿 Thanh Niên 路找湖景咖啡替代。"},
+ cathedral:{intro:"河內代表性的哥德復興式教堂之一，周邊巷弄與咖啡店比單看正面更有意思。",look:["立面比例、尖拱、雙塔","教堂與狹窄街廓如何接在一起"],stay:"20–40 分鐘",tip:"外觀為主，不需要為了拍正面空景久等。"},
+ hoankiem:{intro:"河內中心最容易建立方位感的公共空間。湖本身不大，價值是把老城、法國區與主要街道串起來。",look:["龜塔、湖岸步行空間","北側往老城的轉換"],stay:"40–70 分鐘",tip:"把它當認路基準，不必重複安排多個時段。"},
+ oldquarter:{intro:"真正值得看的不是『36條街打卡』，而是狹長街屋、店面、物流與機車如何共同使用街道。",look:["tube house 狹長街屋","搬貨、騎樓、店面與住家混用","不同街段的行業差異"],stay:"2–3 小時含吃飯",tip:"挑仍在做生意的巷子走；不要只走紀念品最密的街。"},
+ dongxuan:{intro:"大型傳統市場與周邊批發街區，可以看到河內商品流動、採買與在地商業節奏。",look:["市場外圍卸貨與批發","乾貨、雜貨與街邊攤販"],stay:"60–90 分鐘",tip:"若有人不喜歡味道或擁擠，外圍就很夠；不用硬走生鮮最裡面。"},
+ citadel:{intro:"10/8 Tràng An 未開航或天候不宜時的河內備案之一。",look:["都城遺址、城門與庭園","Hoàng Diệu 街道及周邊尺度"],stay:"約 60–90 分鐘",tip:"與文廟擇一作主要入內參觀；出發前核對開放。"},
+ trangan:{intro:"10/8 四人陸龍灣主線。Tràng An 以石灰岩山、水道、洞穴和寺廟形成與河內街道不同的景觀。",look:["船上看山水與洞穴","沿線寺廟和自然景觀"],stay:"選當日開放的約 2–3 小時船線",tip:"2026/9/17 寧平官方因大雨公告停航至另行通知；出發前確認復航、當日路線與天氣。穿救生衣，帶水與防曬。"},
+ tranganfood:{intro:"10/8 乘船後在 Tràng An／Hoa Lư 當區吃熟食，不為單店繞遠。",recommend:["寧平羊肉料理（依四人口味）","鍋巴飯或一般越南熟食"],order:"看當日營業與排隊情況，久候就換同區店",meal:"10/8 乘船後午餐",tip:"地圖點是碼頭周邊搜尋起點，並非已選定餐廳；Google 導航以搜尋結果為準。"},
+ longbien:{intro:"10/9 主區域。老橋、鐵道、機車與紅河同時出現在一條線上，適合觀察城市結構與河岸生活。",look:["鋼構橋體與軌道","紅河兩岸城市邊緣","機車流與行人動線"],stay:"45–75 分鐘",tip:"不追求走完整座橋；依當日管制、天氣與水位，只到安全可達處。"},
+ temple:{intro:"10/8 Tràng An 未開航或天候不宜時的河內備案之一；院落、門、屋頂與庭園層次完整。",look:["入口到主殿的軸線","院落比例與屋頂形式","碑亭與庭園關係"],stay:"60–90 分鐘",tip:"與昇龍皇城擇一作主要入內參觀；出發前核對開放。"},
+ french:{intro:"以河內歌劇院周邊為核心，看寬街、行道樹與殖民時期建築如何形成和老城不同的街廓。",look:["河內歌劇院外觀（1 Tràng Tiền）","Tràng Tiền／Ngô Quyền 寬街與樹蔭尺度","轉角建築與公共界面"],stay:"10/9 下午約 2–3 小時含咖啡",tip:"歌劇院以外觀與街廓為主，入內依當日演出／開放安排，不把入內參觀當固定行程。午餐後從龍邊一次轉車到這一區；若龍邊不宜前往，法國區可作整日主線。"},
+ train:{intro:"火車貼近住宅與咖啡店穿行的場景很特殊，但觀光化與管制都高。",look:["軌道與住宅的距離","巷弄尺度"],stay:"30–60 分鐘",tip:"只在順路且現場允許進入時去；不要為等一班火車犧牲半天。"},
+ giang:{intro:"河內蛋咖啡代表店之一；本次導航固定原店 39 Nguyễn Hữu Huân，避免跑到其他分店。",recommend:["蛋咖啡 Cà phê trứng","若怕甜可先點一杯分著喝"],order:"2–4 人先點 1–2 杯共享，再決定要不要加",meal:"官方網站目前列每日 07:00–22:00；適合下午休息／飯後",tip:"不需要排成咖啡巡禮；若候位久就換附近同類。"},
+ chacathanglong:{intro:"河內代表性的 Chả Cá 魚料理；本次導航固定 MICHELIN Guide 收錄的 6B Đường Thành。",recommend:["Chả Cá 主餐","搭米線、花生、香草一起吃"],order:"四人可先按店家建議份量點，不要額外點太多配菜",meal:"午餐或晚餐",tip:"MICHELIN Guide 目前標示只收現金；若有人不喜歡大量香草或蒔蘿，先少量試。"},
+ huonglien:{intro:"Bún Chả 是河內代表性的日常料理：炭烤豬肉、米線、香草與魚露醬。10/9 這家只作法國區晚餐候選。",recommend:["Bún chả","可加炸春捲一起分食"],order:"每人一份主餐通常足夠；春捲另外合點",meal:"10/9 晚餐候選",tip:"24 Lê Văn Hưu；MICHELIN Guide 目前列 08:00–20:00、只收現金。觀光名氣高，若排太久就在同區換另一家 bún chả。"},
+ xoiyen:{intro:"Xôi 是越南很生活化的糯米飯，適合當早餐、加餐或走累時快速補充。",recommend:["鹹味糯米飯","肉鬆／肉類配料版本"],order:"先一份分食看看口味與份量",meal:"早餐／點心",tip:"偏飽，不建議剛吃完正餐又硬塞。"},
+ pho:{intro:"河粉是這趟一定要吃到的基本款，但不用追第一名名店。",recommend:["Phở bò 牛肉河粉","不吃牛可改 Phở gà 雞肉河粉"],order:"早餐各自一碗最簡單；湯熱、肉別煮老就好",meal:"早餐最佳",tip:"附近在地人多、翻桌快、菜單短就可以進。"},
+ banhmi:{intro:"越南法國麵包適合當輕正餐或移動中的點心，重點是外殼脆、餡料有肉與醃菜。",recommend:["豬肉／烤肉 Bánh mì","綜合口味可先看店家招牌款"],order:"一人一個或兩人分一個當點心",meal:"早午餐／下午加餐",tip:"現做現吃，不要帶太久讓麵包受潮。"},
+ airport:{intro:"內排機場是抵達與回程節點；國際線使用 T2。",look:["抵達後先完成入境、行李與叫車","回程以起飛前約 3 小時抵達 T2 作保守基準"],stay:"依航班",tip:"10/10 上午可在 C18 附近活動；目前較早班機約 10:30–10:45 離開 C18、洪同學約 13:45–14:00 離開作估算，仍以機票、航空公司通知與即時車況調整。"}
+};
+function detailHtml(key){
+  const x=DETAILS[key]; if(!x)return "";
+  const bullets=(x.look||x.recommend||[]).map(v=>"<li>"+v+"</li>").join("");
+  const label=x.recommend?"推薦餐點":"看什麼";
+  return '<details class="detailbox"><summary>看細節'+(x.recommend?"／餐點推薦":"")+'</summary><div class="detailbody"><div>'+x.intro+'</div>'+
+    (bullets?'<strong>'+label+'</strong><ul>'+bullets+'</ul>':"")+
+    '<div class="detailgrid">'+
+      (x.stay?'<div class="detailmini"><b>建議停留</b>'+x.stay+'</div>':"")+
+      (x.order?'<div class="detailmini"><b>怎麼點</b>'+x.order+'</div>':"")+
+      (x.meal?'<div class="detailmini"><b>適合時段</b>'+x.meal+'</div>':"")+
+      (x.tip?'<div class="detailmini"><b>現場提醒</b>'+x.tip+'</div>':"")+
+    '</div></div></details>';
+}
+
+const days=[
+{id:"d5",lab:"10/5 飛機",title:"10/5｜搭機與入住",route:["airport","westlake"],items:[
+ {p:"airport",t:"20:35 內排機場",d:"VJ947 抵達。入境、領行李後直接往西湖住宿。",tags:["交通"]},
+ {p:"westlake",t:"西湖住宿區",d:"只進房、附近吃熱食、睡覺；不加景點。",tags:["住宿"]}
+]},
+{id:"d6",lab:"10/6 下龍灣",title:"10/6｜三人・下龍灣一日巡遊",route:["pickup24","halongport","surprise","titop","luon","halongport"],items:[
+ {p:"pickup24",t:"08:10｜24 Trần Nhật Duật 集合",d:"Klook 集合點，畫面標示 BRG Mart／Haprofood。請提早到並依導遊、車牌確認上車。",tags:["已確認","交通"]},
+ {p:"halongport",t:"約 12:15｜下龍國際郵輪港口",d:"登船後享用迎賓飲品，聽行程與安全須知。",tags:["郵輪","已確認"]},
+ {p:"halongport",t:"中午｜船上午餐",d:"提供自助午餐；若當團人數少於 30 人，可能改為套餐。",tags:["午餐"]},
+ {p:"surprise",t:"下午｜Surprise Cave／驚訝洞",d:"導覽參觀 Sung Sot Cave，主要看大型洞室、鐘乳石與石筍。",tags:["下龍灣","洞穴"]},
+ {p:"titop",t:"下午｜英雄島／Ti Top Island",d:"上島自由活動；可依體力登高看海灣，現場時間有限不要硬趕。",tags:["下龍灣","景觀"]},
+ {p:"luon",t:"下午｜Luon Cave／神祕洞",d:"依現場安排划皮艇或乘竹筏進潟湖；穿救生衣並聽從船方安排。",tags:["下龍灣","活動"]},
+ {p:"halongport",t:"回程前｜下午茶",d:"郵輪甲板下午茶／日落活動，之後返港。",tags:["下午茶","休息"]},
+ {p:"pickup24",t:"約 20:30｜回河內",d:"實際時間依天候、交通與團體進度調整。洪同學 16:50 已抵達 HAN，三人回程後再會合；不再沿用 17:00 回 C18 等人的舊安排。",tags:["回程","四人會合"]}
+]},
+{id:"d7",lab:"10/7 正式1",title:"10/7｜四人・還劍湖＋老城",route:["hoankiem","oldquarter","dongxuan"],items:[
+ {p:"hoankiem",t:"還劍湖",d:"四人一起認河內中心方向；短停後進入老城。",tags:["公共空間"]},
+ {p:"oldquarter",t:"36 古街／老城慢走",d:"看狹長街屋、店住混用、進貨與街道生活。",tags:["建築","在地生活"]},
+ {p:"dongxuan",t:"同春市場外圍",d:"看批發與物流；外圍已足夠，不必深入擁擠區。",tags:["在地生活"]},
+ {p:"chacathanglong",t:"同區餐飲候選｜Chả Cá Thăng Long",d:"熟製魚料理；現場若久候，就在老城改吃同區熟食。",tags:["餐飲","可選"]},
+ {p:"giang",t:"順路才停｜Café Giảng",d:"蛋咖啡體驗一次即可；不為排隊折返。",tags:["可選"]}
+]},
+{id:"d8",lab:"10/8 陸龍灣",title:"10/8｜四人・寧平陸龍灣／Tràng An 一日",route:["westlake","trangan","westlake"],items:[
+  {p:"westlake",t:"約 07:00–07:30｜C18 出發",d:"四人同車往寧平；接送與票務尚未預訂。單程約 2–2.5 小時是規劃估算，依路況調整。",tags:["交通","規劃中"]},
+  {p:"trangan",t:"上午｜Tràng An 乘船",d:"先確認官方已恢復開航，再選當日開放的約 2–3 小時路線。山水、洞穴和寺廟是今天主角。",tags:["陸龍灣","四人主線"]},
+  {p:"tranganfood",t:"船後｜寧平當區午餐",d:"在碼頭／Hoa Lư 周邊找熟食；可試羊肉或鍋巴飯，排隊太久就換同區店。",tags:["餐飲","在地名物"]},
+  {p:"westlake",t:"傍晚｜回 C18",d:"午後只留一個短停或直接回河內，不加第二趟船及多個遠點。",tags:["休息"]},
+  {p:"citadel",t:"停航備案｜皇城或文廟擇一",d:"9/17 寧平官方因大雨公告 Tràng An 停航至另行通知；行前若未確認復航或天候不宜，留在河內選皇城或文廟一處入內。",tags:["備案","須查開航"]},
+  {p:"temple",t:"備案選項｜文廟－國子監",d:"若偏好傳統建築院落，選文廟作當日主要參觀點；與皇城二選一。",tags:["備案","建築"]}
+]},
+{id:"d9",lab:"10/9 全天",title:"10/9｜四人・龍邊＋紅河岸 → 法國區，玩整天",route:["westlake","longbien","french","westlake"],items:[
+  {p:"westlake",t:"08:30｜C18 早餐後出發",d:"今天四人玩到晚餐；從 C18 搭車到龍邊橋一帶。",tags:["四人全天"]},
+  {p:"longbien",t:"09:30–11:45｜龍邊橋與紅河岸",d:"看橋、鐵道與河岸生活；只走當日允許且安全可達的街段，不以走完整橋或下到河心農地為目標。",tags:["城市空間","在地生活"]},
+  {p:"longbienfood",t:"11:45｜龍邊周邊午餐",d:"在當區找熟食；排隊太久就換同類，不為老城店折返。",tags:["餐飲"]},
+  {p:"french",t:"13:30–17:00｜法國區／Tràng Tiền",d:"午餐後搭一次車來到歌劇院與 Ngô Quyền 街廓，看寬街、樹蔭和建築，中間坐咖啡店。",tags:["建築","下午茶"]},
+  {p:"huonglien",t:"17:30 前後｜當區晚餐",d:"Bún Chả Hương Liên（24 Lê Văn Hưu）只作順路候選；若久候或不想去名店，就在法國區／Hai Bà Trưng 找其他熟食。",tags:["餐飲","可選"]},
+  {p:"westlake",t:"晚餐後｜回 C18",d:"回住宿休息；行李只需按隔天不同航班整理。",tags:["回程準備"]},
+  {p:"french",t:"天候備案｜法國區整日",d:"若龍邊因雨勢、水位或管制不宜前往，直接到法國區，將街道、咖啡與餐飲走成一整天。",tags:["備案"]}
+]},
+{id:"d10",lab:"10/10 上午",title:"10/10｜C18 周邊早餐短走・依航班分流",route:["westlake","airport"],items:[
+  {p:"xuanlafood",t:"08:00–10:00｜附近早餐與短走",d:"四人在 C18／Xuân La 周邊吃 phở 或 bánh mì、散步喝咖啡；再回住宿拿行李。地圖點是搜尋起點。",tags:["早餐","上午可玩"]},
+  {p:"airport",t:"較早班機｜約 10:30–10:45 離開 C18",d:"只適用於實際搭 14:35 班機者；以機票、當日路況和國際線報到時間調整。",tags:["交通"]},
+  {p:"xuanlalunch",t:"洪同學｜可加附近午餐",d:"CI0794 17:50 起飛，約 13:45–14:00 出發作估算。午餐與行李安排先看退房／寄放條件。",tags:["午餐","分流"]},
+  {p:"airport",t:"內排國際機場",d:"不同航班分開計算車程；國際線仍預留報到與安檢時間。",tags:["回程"]}
+ ]}
+];
+const actualDays=[
+{id:"a5",lab:"10/5 抵達",title:"10/5｜抵達河內・住進西湖",route:["airport","westlake"],stops:[["抵達河內","從高雄搭越捷航空飛抵內排機場，與太太、郭同學一起前往西湖公寓。"],["Tùng Lộc 晚餐","在住宿附近吃雞肉香菇河粉，三人簡單用餐。"],["C18 西湖住宿","安頓行李，準備隔天前往下龍灣。"]]},
+{id:"a6",lab:"10/6 下龍灣",title:"10/6｜神秘洞 → 驚訝洞 → 英雄島",route:["westlake","pickup24","halongport","luon","surprise","titop","halongport","westlake"],stops:[["一早集合出發","三人從C18搭Grab到24 Trần Nhật Duật集合，搭車前往下龍灣。"],["神秘洞・搭船","先乘船探索神秘洞周邊水域。"],["驚訝洞・健行","進入驚訝洞參觀鐘乳石與大型洞室。"],["英雄島・放空","在島上休息、發呆，不再勉強塞活動。"],["Sunset Party・急著回去","遊船特別停下來開派對，但洪同學夫妻正等著我們帶鑰匙回公寓，大家只想趕快返程。"],["晚上約十點回住宿","終於與洪同學夫妻會合；回公寓後叫越式蒸米卷與蟹肉春捲等外送。"]]},
+{id:"a7",lab:"10/7 市區",title:"10/7｜咖啡、火車街、按摩與越南菜",route:["westlake","oldquarter"],stops:[["Voila Cafe 早餐","我與太太在西湖附近用餐、喝咖啡。"],["Huyền Hương 午餐","五人吃雞肉河粉與白切雞拼盤。"],["火車街咖啡","五人喝咖啡，並體驗當地精釀啤酒。"],["SPA 放鬆","同行五人安排按摩。"],["Quán Ăn Ngon 晚餐","一桌越南煎餅、烤魚、烤雞、牛肉與多道越南料理。"]]},
+{id:"a8",lab:"10/8 寧平",title:"10/8｜華閭古都、三谷、舞洞",route:["westlake","hoaluActual","tamcocActual","muaActual","westlake"],stops:[["出發去寧平","我與太太兩人參加一日遊。"],["華閭古都・騎腳踏車","走訪丁朝與前黎朝古蹟，沿途騎腳踏車。"],["三谷・腳搖船","搭船欣賞石灰岩山水，觀察船夫用雙腳划槳。"],["舞洞・登山","步行爬山，看寧平的地形景觀。"],["回河內吃飯、按摩","晚上在Cơm đảo Loan Mai用餐，接著安排兩人按摩。"]]},
+{id:"a9",lab:"10/9 老城",title:"10/9｜法國麵包、Pizza 4P’s、購物與聚餐",route:["westlake","oldquarter","french","westlake"],stops:[["早餐與咖啡","吃越南牛肉法國麵包，喝Highlands Coffee。"],["Pizza 4P’s 午餐","五人一起吃披薩、起司與義大利料理。"],["老城區購物","太太在KANA、鞋店和街邊店鋪選購服飾。"],["SPA","午後安排按摩放鬆。"],["Hanoi Garden 晚餐","五人共享越式海鮮、春捲、炸軟殼蟹與烤鴨咖哩，晚上還有紅酒。"]]},
+{id:"a10",lab:"10/10 回程",title:"10/10｜Lotte Mall 採買・前往機場",route:["westlake","airport"],stops:[["退房後前往Lotte Mall West Lake","三人搭Grab到商場，吃早餐與午餐。"],["Lotte Mart 採購","買腰果、芒果乾、巧克力與各種伴手禮。"],["Grab 前往內排機場","中午前後前往國際線T2。"],["機場最後一杯咖啡","買麵包、喝Starbucks冰美式，搭機返回高雄。"]]}
+];
+function renderActual(day){
+ const node=document.getElementById("actualContent");
+ node.innerHTML='<h2 class="sectiontitle">'+day.title+'</h2><ol class="actual-timeline">'+day.stops.map(s=>'<li><b>'+s[0]+'</b><p>'+s[1]+'</p></li>').join("")+'</ol>';
+ const latlng=day.route.map(k=>P[k]).filter(Boolean).map(p=>[p.lat,p.lng]);
+ actualLayer.clearLayers();
+ day.route.forEach((k,i)=>{const p=P[k];if(p)L.marker([p.lat,p.lng],{icon:icons[p.k]}).addTo(actualLayer).bindPopup((i+1)+". "+p.n)});
+ if(latlng.length>1)L.polyline(latlng,{color:"#315c43",weight:4,opacity:.7,dashArray:"7 6"}).addTo(actualLayer);
+ if(latlng.length)actualMap.fitBounds(L.latLngBounds(latlng).pad(.2));
+ setTimeout(()=>actualMap.invalidateSize(),120);
+}
+function gmap(p){return "https://www.google.com/maps/dir/?api=1&destination="+encodeURIComponent(p.q||p.n)+"&travelmode=driving&dir_action=navigate"}
+function tagClass(x){if(x.includes("網紅"))return"web";if(x.includes("名物")||x.includes("必吃")||x.includes("在地"))return"food";if(x.includes("可選"))return"opt";return"mine"}
+const map=L.map("map",{zoomControl:true});
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"&copy; OpenStreetMap"}).addTo(map);
+let layer=L.layerGroup().addTo(map);
+const icons={
+ place:L.divIcon({className:"",html:'<div style="width:18px;height:18px;border-radius:50%;background:#2563eb;border:3px solid #fff;box-shadow:0 1px 5px #555"></div>',iconSize:[18,18],iconAnchor:[9,9]}),
+ food:L.divIcon({className:"",html:'<div style="width:18px;height:18px;border-radius:50%;background:#c2410c;border:3px solid #fff;box-shadow:0 1px 5px #555"></div>',iconSize:[18,18],iconAnchor:[9,9]}),
+ base:L.divIcon({className:"",html:'<div style="width:18px;height:18px;border-radius:50%;background:#166534;border:3px solid #fff;box-shadow:0 1px 5px #555"></div>',iconSize:[18,18],iconAnchor:[9,9]})
+};
+const tabs=document.getElementById("tabs"),content=document.getElementById("content");
+let current="d6";
+function draw(day,focus){
+ layer.clearLayers(); const pts=[];
+ day.route.forEach((key,i)=>{const p=P[key]; if(!p)return; pts.push([p.lat,p.lng]); const m=L.marker([p.lat,p.lng],{icon:icons[p.k]}).addTo(layer);m.bindPopup("<b>"+(i+1)+". "+p.n+"</b>")});
+ day.items.filter(it=>!day.route.includes(it.p)).forEach(it=>{const p=P[it.p];if(!p)return;L.marker([p.lat,p.lng],{icon:icons[p.k]}).addTo(layer).bindPopup("<b>"+p.n+"</b><br>當日可選／備案")});
+ if(pts.length>1)L.polyline(pts,{color:"#475569",weight:4,opacity:.65,dashArray:"8 7"}).addTo(layer);
+ if(focus&&P[focus]) map.setView([P[focus].lat,P[focus].lng],15);
+ else if(pts.length) map.fitBounds(L.latLngBounds(pts).pad(.22));
+ setTimeout(()=>map.invalidateSize(),80);
+}
+function render(id){
+ current=id; const d=days.find(x=>x.id===id);
+ [...tabs.children].forEach(b=>b.classList.toggle("active",b.dataset.id===id));
+ content.innerHTML='<h2 class="sectiontitle">'+d.title+'</h2><div class="route">'+d.route.map((k,i)=>'<span>'+(i+1)+'. '+P[k].n+'</span>').join("")+'</div>'+
+ d.items.map((it,i)=>{const p=P[it.p];return '<article class="card"><div class="row"><div class="num">'+(i+1)+'</div><div class="grow"><h3>'+it.t+'</h3><div class="why">'+it.d+'</div><div class="tags">'+it.tags.map(t=>'<span class="tag '+tagClass(t)+'">'+t+'</span>').join("")+'</div><div class="actions"><button type="button" class="focus" data-focus="'+it.p+'">地圖聚焦</button><a href="'+gmap(p)+'" target="_blank" rel="noopener">Google 導航</a></div>'+detailHtml(it.p)+'</div></div></article>'}).join("");
+ draw(d);
+}
+days.forEach(d=>{const b=document.createElement("button");b.type="button";b.textContent=d.lab;b.dataset.id=d.id;b.addEventListener("click",()=>render(d.id));tabs.appendChild(b)});
+content.addEventListener("click",e=>{const b=e.target.closest("[data-focus]");if(!b)return;draw(days.find(x=>x.id===current),b.dataset.focus);document.getElementById("map").scrollIntoView({behavior:"smooth",block:"center"})});
+render(current);
+
+const actualTabs=document.getElementById("actualTabs");
+let currentActual=actualDays[0];
+actualDays.forEach(d=>{const b=document.createElement("button");b.type="button";b.textContent=d.lab;b.dataset.id=d.id;b.addEventListener("click",()=>{currentActual=d;[...actualTabs.children].forEach(t=>t.classList.toggle("active",t.dataset.id===d.id));renderActual(d)});actualTabs.appendChild(b)});
+const actualMap=L.map("actualMap",{zoomControl:true});
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"&copy; OpenStreetMap"}).addTo(actualMap);
+const actualLayer=L.layerGroup().addTo(actualMap);
+actualTabs.firstElementChild.classList.add("active");
+renderActual(currentActual);
+document.querySelectorAll(".primary-tab").forEach(tab=>tab.addEventListener("click",()=>{
+ document.querySelectorAll(".primary-tab").forEach(t=>{const active=t===tab;t.classList.toggle("active",active);t.setAttribute("aria-selected",active?"true":"false")});
+ document.querySelectorAll(".main-section").forEach(sec=>sec.hidden=sec.id!==tab.dataset.panel);
+ if(tab.dataset.panel==="actual-itinerary"){setTimeout(()=>actualMap.invalidateSize(),80);renderActual(currentActual)}
+ if(tab.dataset.panel==="history"){setTimeout(()=>map.invalidateSize(),80);render(current)}
+}));
+
+const INTAKE_API="https://script.google.com/macros/s/AKfycbyMUavj63BTyS_GDU78mVUufakMhlyzegE0d1vde9DaTLVMad0Z37X9LtQDxyhzIqYi/exec";
+const TRIP_ID="2026-10-hanoi";
+const TRIP_SHEET="2026-10 河內";
+// 與 GAS 一致：Asia/Taipei；10/10 當日可上傳，10/11 00:00 起關閉
+const INTAKE_LAST_ALLOWED="2026-10-10";
+const INTAKE_TZ="Asia/Taipei";
+const ideaFab=document.getElementById("ideaFab"), ideaModal=document.getElementById("ideaModal"), ideaClose=document.getElementById("ideaClose"), ideaForm=document.getElementById("ideaForm"), ideaSubmit=document.getElementById("ideaSubmit"), sendMsg=document.getElementById("sendMsg");
+function taipeiYmd(d){
+  return new Intl.DateTimeFormat("en-CA",{timeZone:INTAKE_TZ,year:"numeric",month:"2-digit",day:"2-digit"}).format(d||new Date());
+}
+function isIntakeClosed(){ return taipeiYmd() > INTAKE_LAST_ALLOWED; }
+function applyIntakeCutoffUi(){
+  if(!isIntakeClosed()) return;
+  const notice=document.getElementById("intakeClosedNotice");
+  if(notice) notice.hidden=false;
+  ideaFab.hidden=true;
+  ideaFab.disabled=true;
+  ideaForm.querySelectorAll("input,select,textarea,button").forEach(el=>{el.disabled=true});
+  const file=document.getElementById("ideaFile");
+  if(file){ file.disabled=true; file.value=""; }
+  ideaSubmit.disabled=true;
+  ideaSubmit.textContent="已關閉上傳";
+  const intro=document.getElementById("ideaIntro");
+  if(intro) intro.textContent="10/10 後已關閉上傳，只能查看";
+  sendMsg.className="sendmsg err";
+  sendMsg.textContent="10/10 後已關閉上傳，只能查看";
+}
+function openIdea(){
+  if(isIntakeClosed()){ applyIntakeCutoffUi(); return; }
+  ideaModal.hidden=false;document.body.style.overflow="hidden";document.getElementById("ideaText").focus();
+}
+function closeIdea(){ideaModal.hidden=true;document.body.style.overflow=""}
+ideaFab.addEventListener("click",openIdea); ideaClose.addEventListener("click",closeIdea);
+ideaModal.addEventListener("click",e=>{if(e.target===ideaModal)closeIdea()});
+applyIntakeCutoffUi();
+async function fileToBase64(file){
+  return await new Promise((resolve,reject)=>{
+    const fr=new FileReader();
+    fr.onload=()=>resolve(String(fr.result||"").split(",")[1]||"");
+    fr.onerror=reject;fr.readAsDataURL(file);
+  });
+}
+ideaForm.addEventListener("submit",async e=>{
+  e.preventDefault(); sendMsg.className="sendmsg"; sendMsg.textContent="";
+  if(isIntakeClosed()){
+    applyIntakeCutoffUi();
+    sendMsg.className="sendmsg err";sendMsg.textContent="10/10 後已關閉上傳，只能查看";
+    return;
+  }
+  const idea=document.getElementById("ideaText").value.trim();
+  const url=document.getElementById("sourceUrl").value.trim();
+  const file=document.getElementById("ideaFile").files[0];
+  if(!idea&&!url&&!file){sendMsg.className="sendmsg err";sendMsg.textContent="至少填想法、網址或附件其中一項。";return}
+  if(file&&file.size>2.5*1024*1024){sendMsg.className="sendmsg err";sendMsg.textContent="附件先控制在 2.5 MB 內，避免手機上傳失敗。";return}
+  ideaSubmit.disabled=true; ideaSubmit.textContent="送出中…";
+  try{
+    const payload=new URLSearchParams();
+    payload.set("trip_id",TRIP_ID); payload.set("trip_sheet",TRIP_SHEET);
+    payload.set("submitter",document.getElementById("submitter").value);
+    payload.set("target_date",document.getElementById("targetDate").value);
+    payload.set("type",document.getElementById("ideaType").value);
+    payload.set("idea",idea); payload.set("url",url);
+    if(file){
+      payload.set("attachment_name",file.name);
+      payload.set("attachment_mime",file.type||"application/octet-stream");
+      payload.set("attachment_base64",await fileToBase64(file));
+    }
+    await fetch(INTAKE_API,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8"},body:payload.toString()});
+    sendMsg.className="sendmsg ok";sendMsg.textContent="✓ 已送出並記錄為 accepted。排程會自動整理進河內行程。";
+    ideaForm.reset(); document.getElementById("submitter").value="豪哥"; document.getElementById("targetDate").value="不指定"; document.getElementById("ideaType").value="行程";
+  }catch(err){
+    sendMsg.className="sendmsg err";sendMsg.textContent="送出失敗，請稍後再試。";
+  }finally{
+    if(isIntakeClosed()){ applyIntakeCutoffUi(); }
+    else { ideaSubmit.disabled=false;ideaSubmit.textContent="送出並先採納"; }
+  }
+});
+
+</script>
+</body></html>
