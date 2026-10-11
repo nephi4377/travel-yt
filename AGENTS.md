@@ -2,6 +2,8 @@
 
 本 repo 是旅遊企劃、手機頁、已採用圖資及迭代決策的主稿。開始工作前先拉取 GitHub `main` 最新版本；本機副本可能落後，不可直接覆蓋線上新內容。
 
+**公開手機站：** https://travel.tanxin.space/（根路徑部署；`public/CNAME` 為 `travel.tanxin.space`。站內連結用相對路徑，勿寫 `/travel-yt/` 或 `github.io` 前綴。）
+
 ## 旅程命名與手機頁（以河內為範本）
 
 - **品牌字：** 網站與各趟 `<title>` 一律用「豪哥旅遊手冊」（與 `public/index.html` 首頁一致）。
