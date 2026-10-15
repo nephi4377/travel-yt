@@ -12,7 +12,7 @@
 | Club D Oasis／MUSEUM 1 | `Centum與溫泉備忘.md` |
 | 五人叫車／機場 | `五人叫車與機場接送.md` |
 | 熟海鮮 | `熟海鮮現場卡.md` |
-| 手機直接使用 | `地圖指南.html` |
+| 手機直接使用 | [公開地圖指南](../../public/busan-2026-09/map-guide/index.html)（企劃副本 `map-guide.html`） |
 | 每日故事／口白 | `每日口白.md` |
 | 最小素材鏈 | `拍攝清單.md` |
 | 標題／縮圖方向 | `標題與描述.md` |
@@ -66,7 +66,7 @@ Water Park 需要泳裝＋完整遮髮帽類＋aqua shoes。**五人裝備全齊
 
 ## 手機指南規則
 
-`地圖指南.html` 是現場主入口，功能必須直接存在於 source，不只靠部署時注入：
+`public/busan-2026-09/map-guide/index.html`（企劃同步副本 `map-guide.html`）是現場主入口，功能必須直接存在於 source，不只靠部署時注入：
 
 - 日期主分頁。
 - 每日第二層可收合細項。
