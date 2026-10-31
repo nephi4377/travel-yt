@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>2027 過年前家庭旅遊比較｜豪哥旅遊手冊</title>
+<meta name="description" content="2027/1/24–2/4 過年前家庭旅，華航高雄出發目的地票價與行程比較。">
+<style>
+:root{
+  --bg:#f5f4ef;--card:#fff;--ink:#18181b;--muted:#71717a;--line:#e4e4e7;
+  --accent:#1f2937;--ok:#315c43;--warn:#8a6320;--bad:#9f2d20;--soft:#eef3f8;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif}
+.wrap{max-width:820px;margin:auto;padding:16px 14px 64px}
+.back{display:inline-block;text-decoration:none;color:#444;margin:2px 0 12px}
+.hero{padding:4px 0 8px}
+.daymeta{font-size:.8rem;color:#777;font-weight:700}
+.hero h1{margin:4px 0 8px;font-size:1.7rem;line-height:1.2}
+.sub{color:var(--muted);line-height:1.65;margin:0 0 14px}
+.notice{padding:12px 14px;border-radius:14px;background:#fff8e8;color:#765f23;line-height:1.55;margin:0 0 14px;font-size:.9rem}
+.notice strong{color:#5c4818}
+.filters{
+  position:sticky;top:0;z-index:40;background:rgba(245,244,239,.96);
+  backdrop-filter:blur(8px);padding:10px 0 12px;border-bottom:1px solid var(--line);margin:0 -2px 14px;
+}
+.filters h2{margin:0 0 8px;font-size:.92rem}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+label.chip{
+  display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;
+  border-radius:999px;padding:8px 11px;font-size:.82rem;font-weight:700;cursor:pointer;min-height:40px;
+}
+label.chip input{accent-color:var(--accent)}
+select,button.ghost{
+  border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;font:inherit;font-weight:700;font-size:.85rem;min-height:42px;
+}
+button.ghost{cursor:pointer}
+.meta-line{font-size:.8rem;color:var(--muted);margin:4px 0 0}
+.cards{display:grid;gap:12px}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:18px;padding:15px;
+  box-shadow:0 4px 16px rgba(0,0,0,.035);
+}
+.card.hidden{display:none}
+.card.picked{outline:2px solid #1f4f7a;outline-offset:1px}
+.card-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.card h3{margin:0;font-size:1.2rem}
+.fare{text-align:right}
+.fare b{display:block;font-size:1.15rem}
+.fare span{font-size:.78rem;color:var(--muted)}
+.badge-row{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 8px}
+.badge{font-size:.74rem;padding:5px 8px;border-radius:999px;background:#f4f4f5;color:#52525b;font-weight:700}
+.badge.ok{background:#e7efe9;color:var(--ok)}
+.badge.warn{background:#fff0db;color:var(--warn)}
+.badge.bad{background:#f8e9e5;color:var(--bad)}
+.badge.soft{background:var(--soft);color:#1f4f7a}
+.why{margin:0;color:var(--muted);font-size:.9rem;line-height:1.55}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+@media(max-width:560px){.grid2{grid-template-columns:1fr}}
+.mini{background:#f8f7f3;border-radius:12px;padding:10px}
+.mini b{display:block;font-size:.76rem;color:#555;margin-bottom:4px}
+.mini p{margin:0;font-size:.86rem;line-height:1.5}
+details.more{margin-top:10px;border-top:1px dashed var(--line);padding-top:8px}
+details.more summary{cursor:pointer;font-weight:800;font-size:.86rem;list-style:none;display:flex;justify-content:space-between}
+details.more summary::-webkit-details-marker{display:none}
+details.more summary:after{content:"＋";color:#777}
+details.more[open] summary:after{content:"−"}
+.morebody{padding-top:8px;font-size:.86rem;line-height:1.6;color:#555}
+.morebody ul{margin:6px 0 0;padding-left:18px}
+.morebody li{margin:4px 0}
+.compare-bar{
+  position:fixed;left:0;right:0;bottom:0;z-index:50;background:#1f2937;color:#fff;
+  padding:12px 14px;display:none;box-shadow:0 -8px 24px rgba(0,0,0,.18);
+}
+.compare-bar.show{display:block}
+.compare-inner{max-width:820px;margin:auto;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.compare-inner button{
+  border:0;border-radius:12px;background:#fff;color:#111;padding:10px 14px;font-weight:800;cursor:pointer;min-height:42px;
+}
+.compare-panel{display:none;margin:14px 0;overflow:auto}
+.compare-panel.show{display:block}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden;font-size:.82rem;min-width:560px}
+th,td{border-bottom:1px solid var(--line);padding:10px 8px;text-align:left;vertical-align:top}
+th{background:#f4f4f5;font-size:.76rem}
+.foot{margin-top:22px;color:var(--muted);font-size:.82rem;line-height:1.6}
+.src{font-size:.78rem;color:var(--muted);margin-top:8px}
+.check{display:flex;align-items:center;gap:7px;margin-top:10px;font-size:.84rem;font-weight:700}
+.rec{border:1px solid #cfe0d4;background:linear-gradient(140deg,#f3faf5,#fff);border-radius:16px;padding:14px;margin:0 0 14px}
+.rec h2{margin:0 0 6px;font-size:1.05rem}
+.rec ol{margin:8px 0 0;padding-left:20px;line-height:1.55;color:#444}
+.rec li{margin:4px 0}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <a class="back" href="../">← 所有旅程</a>
+  <section class="hero">
+    <div class="daymeta">構想比較 · 約 2027/1/24–2/4 · 除夕前返台</div>
+    <h1>2027 過年前家庭旅遊比較</h1>
+    <p class="sub">五位大人（夫婦、兩位大學生、岳母；人數可能再增）· 華航（含華信實際執飛的 CI 班號）· 優先高雄（KHH）· 經濟艙含稅來回目標 ≤ NT$10,000／人 · 6–7 天 · 須在 2027/2/5 除夕前返抵台灣。</p>
+  </section>
+
+  <div class="notice">
+    <strong>查價日 2026-10-31。</strong> 下列「月地板價」來自華航官網目的地頁近 48 小時採樣；<strong>1/24–2/4 特定組合尚未逐日鎖價</strong>，標「待確認」。不捏造票價。曼谷已知參考：KHH–BKK 1/18–1/24 Basic 約 NT$15,455／人（超預算）；1/15–19 去程較便宜；1/24 後上漲。
+  </div>
+
+  <section class="rec">
+    <h2>目前初判（可篩選後再比）</h2>
+    <ol>
+      <li><strong>香港</strong>：唯一明確常落在萬元內的短程線，班次密、對長輩負擔小，市區步程與捷運友善。</li>
+      <li><strong>馬尼拉</strong>：1 月地板價亦在預算內、冬季暖；但週班較疏、市區交通與空氣對長輩需多評估。</li>
+    </ol>
+  </section>
+
+  <section class="filters" aria-label="篩選與排序">
+    <h2>篩選／排序</h2>
+    <div class="row">
+      <label class="chip"><input type="radio" name="budget" value="all" checked> 全部票價</label>
+      <label class="chip"><input type="radio" name="budget" value="10"> ≤ 1 萬</label>
+      <label class="chip"><input type="radio" name="budget" value="12"> ≤ 1.2 萬</label>
+      <label class="chip"><input type="radio" name="budget" value="over"> 超預算也看</label>
+    </div>
+    <div class="row">
+      <label class="chip"><input type="checkbox" name="days" value="6" checked> 6 天</label>
+      <label class="chip"><input type="checkbox" name="days" value="7" checked> 7 天</label>
+      <label class="chip"><input type="checkbox" name="weather" value="warm" checked> 偏暖</label>
+      <label class="chip"><input type="checkbox" name="weather" value="cool" checked> 偏冷</label>
+      <label class="chip"><input type="checkbox" name="ftime" value="short" checked> 飛 ≤2.5h</label>
+      <label class="chip"><input type="checkbox" name="ftime" value="mid" checked> 飛 2.5–4h</label>
+    </div>
+    <div class="row">
+      <label for="sort">排序</label>
+      <select id="sort">
+        <option value="fare">票價低→高</option>
+        <option value="flight">飛行時間短→長</option>
+        <option value="elder">長輩友善</option>
+        <option value="student">大學生好玩</option>
+      </select>
+      <button type="button" class="ghost" id="clearCompare">清除比較</button>
+    </div>
+    <p class="meta-line" id="resultCount"></p>
+  </section>
+
+  <div class="compare-panel" id="comparePanel" aria-live="polite"></div>
+  <section class="cards" id="cards"></section>
+
+  <p class="foot">
+    未列入：峴港／宿霧——華航無高雄直飛。東京成田、福岡、熊本 1 月地板約 NT$13.4k–15.5k，過年窗更可能更高，暫不展開。桃園出發僅在明顯更便宜時才列；本次萬元內候選以高雄即可涵蓋。公開頁不含房號、訂位代號或付款資訊。
+  </p>
+</main>
+
+<div class="compare-bar" id="compareBar">
+  <div class="compare-inner">
+    <div id="compareLabel">已選 0 個目的地</div>
+    <button type="button" id="doCompare">並排比較</button>
+  </div>
+</div>
+
+<script>
+const QUERY_DATE = "2026-10-31";
+const DEST = [
+  {
+    id:"hkg",
+    name:"香港",
+    flag:"🇭🇰",
+    airport:"HKG",
+    fare:7750,
+    fareLabel:"約 NT$7,750 起",
+    budget:"in",
+    days:[6,7],
+    weather:"cool",
+    climate:"1 月底偏涼潮濕，約 14–20°C，偶有細雨",
+    flightMin:95,
+    ftime:"short",
+    elder:95,
+    student:78,
+    metal:"CI 自營 A321neo（NW26 班表）",
+    flights:{
+      out:"CI933 07:50→09:30（約週二／三／五／日）；CI935 18:00→19:45（除週四外）",
+      back:"CI934 10:30→12:00（約週二／三／五／日）；CI936 20:45→22:15（除週四外）"
+    },
+    combos:[
+      "6 天例：1/26–1/31、1/27–2/1、1/28–2/2、1/29–2/3（避開除夕 2/5）",
+      "7 天例：1/25–1/31、1/26–2/1、1/27–2/2、1/28–2/3、1/29–2/4",
+      "週一／四／六早班較疏，搭配晚班較彈性"
+    ],
+    bag:"亞洲線經濟艙 Discount／Basic：1 件 23kg；Standard／Flex：2 件 23kg（依艙等）",
+    elderNote:"短飛、捷運密、茶樓與海傍平路多；長輩負擔相對最低",
+    studentNote:"旺角／尖沙咀逛街、山頂夜景、港島咖啡與二手書店",
+    rough:"機票約 0.8 萬 + 住宿／餐／交通概估 1.8–2.8 萬 ≈ 每人約 2.6–3.6 萬（6–7 天）",
+    source:"華航官網 KHH→HKG：2027/1 月地板 TWD7,750*；2 月地板 TWD8,648*（近 48h 採樣）",
+    confirmed:false,
+    note:"過年窗特定日價待確認；2 月地板已略升但仍可能 ≤1 萬"
+  },
+  {
+    id:"mnl",
+    name:"馬尼拉",
+    flag:"🇵🇭",
+    airport:"MNL",
+    fare:8171,
+    fareLabel:"約 NT$8,171 起",
+    budget:"in",
+    days:[6,7],
+    weather:"warm",
+    climate:"乾季暖熱，約 24–32°C，戶外需防曬與補水",
+    flightMin:110,
+    ftime:"short",
+    elder:62,
+    student:80,
+    metal:"CI 班號；部分日期華信塗裝執飛（官方 Travel Advisory）——標為 CI，非他航代碼共享",
+    flights:{
+      out:"CI711 約 07:30→09:20（週二／三／五／日）",
+      back:"CI712 約 10:20→12:10（同週班）"
+    },
+    combos:[
+      "須對齊週二／三／五／日：例 1/26(二)–2/1(一) 需確認當日有無回程班",
+      "較穩：1/27(三)–2/2(二)、1/29(五)–2/3(三)、1/31(日)–2/4(四) — 回程班次待查表確認",
+      "週班疏，五人同訂要早鎖"
+    ],
+    bag:"亞洲線經濟艙 Discount／Basic 1×23kg；Standard／Flex 2×23kg",
+    elderNote:"天氣暖；但車程／空氣／人潮對長輩較累，宜選靠捷運或飯店接駁區",
+    studentNote:"Intramuros、Makati 咖啡、夜市與近郊一日（Tagaytay 等）",
+    rough:"機票約 0.8 萬 + 現地概估 1.4–2.2 萬 ≈ 每人約 2.2–3.0 萬",
+    source:"華航官網 KHH→MNL：2027/1 月地板 TWD8,171*；2 月 TWD8,731*",
+    confirmed:false,
+    note:"過年窗逐日價與機位待確認；適合預算優先、可接受東南亞都市節奏"
+  },
+  {
+    id:"oka",
+    name:"沖繩（那霸）",
+    flag:"🇯🇵",
+    airport:"OKA",
+    fare:11367,
+    fareLabel:"約 NT$11,367 起",
+    budget:"near",
+    days:[6,7],
+    weather:"cool",
+    climate:"約 16–21°C，偶有冬雨；比本州暖",
+    flightMin:100,
+    ftime:"short",
+    elder:88,
+    student:84,
+    metal:"CI 自營（A321neo／既有 737 過渡）；CI132／CI133",
+    flights:{
+      out:"CI132 約 15:50→18:30（每日，當地時間）",
+      back:"CI133 約 19:45→20:30"
+    },
+    combos:[
+      "每日班，日期彈性高：1/25–1/31、1/26–2/1、1/27–2/2、1/28–2/3、1/29–2/4",
+      "小花 GO 曾見未稅 TWD9,400 起（CI132／133，出發限 2027/1/19 前、售至 2026/10/31）——已過本趟窗口，僅作參考",
+      "本趟窗口地板仍見約 1.14 萬，超預算約 1.4k"
+    ],
+    bag:"亞洲線經濟艙依艙等 1 或 2 件 ×23kg",
+    elderNote:"平路、公車／單軌、海鮮與溫和行程；美ら海水族館一日可排鬆",
+    studentNote:"北谷夕陽、國際通、潛水／SUP（冬季視浪況）",
+    rough:"機票約 1.1–1.3 萬 + 現地概估 1.6–2.6 萬 ≈ 每人約 2.7–3.9 萬",
+    source:"華航官網 KHH→OKA：2027/1 月地板 TWD11,367*；2 月 TWD11,756*；示例日期 1/18–1/22 亦見同地板",
+    confirmed:false,
+    note:"家庭首選之一，但含稅來回月地板已逾 1 萬；過年窗實際價待確認"
+  },
+  {
+    id:"sel",
+    name:"首爾（金浦／仁川）",
+    flag:"🇰🇷",
+    airport:"GMP/ICN",
+    fare:11398,
+    fareLabel:"約 NT$11,398 起",
+    budget:"near",
+    days:[6,7],
+    weather:"cool",
+    climate:"嚴冬，約 −6–4°C，需厚外套；干冷為主",
+    flightMin:170,
+    ftime:"mid",
+    elder:70,
+    student:90,
+    metal:"CI 自營 32Q；金浦 CI184／185（二四五六）、仁川 CI164／165（一三五日）",
+    flights:{
+      out:"CI184／CI164 約 07:05→11:00（金浦或仁川，視星期）",
+      back:"CI185／CI165 約 12:05→14:05（華航官網班表；請再核訂位頁）"
+    },
+    combos:[
+      "每日有班（金浦／仁川互補）：6 天 1/26–1/31、1/28–2/2；7 天 1/25–1/31、1/28–2/3、1/29–2/4",
+      "金浦較近市區，長輩較省事；仁川則班次補洞",
+      "寒假＋過年前韓團旺季，票價易上衝"
+    ],
+    bag:"亞洲線經濟艙依艙等 1 或 2 件 ×23kg",
+    elderNote:"景福宮平路、明洞／弘大可搭地鐵；天氣冷是最大負擔",
+    studentNote:"弘大、聖水、滑雪一日（需另計交通）、美妝與咖啡",
+    rough:"機票約 1.1–1.5 萬 + 現地概估 1.8–2.8 萬 ≈ 每人約 2.9–4.3 萬",
+    source:"華航官網 KHH→Seoul：2027/1–2 月地板 TWD11,398*；早先示例 1/8–1/13 約 TWD11,411*",
+    confirmed:false,
+    note:"月地板略超 1 萬；過年窗實際價待確認，可能更高"
+  },
+  {
+    id:"bkk",
+    name:"曼谷",
+    flag:"🇹🇭",
+    airport:"BKK",
+    fare:13427,
+    fareLabel:"約 NT$13,427 起（已知組合更高）",
+    budget:"over",
+    days:[6,7],
+    weather:"warm",
+    climate:"熱季前暖熱，約 25–34°C，潮濕",
+    flightMin:230,
+    ftime:"mid",
+    elder:68,
+    student:86,
+    metal:"CI839／CI840；部分日期華信塗裝執飛（CI 班號）——非他航共用",
+    flights:{
+      out:"CI839 約 14:45→17:35（每日）",
+      back:"CI840 約 18:35→22:55（每日）"
+    },
+    combos:[
+      "每日班：1/25–1/31、1/26–2/1、1/27–2/2、1/28–2/3、1/29–2/4",
+      "已知：1/18–1/24 Basic 約 NT$15,455／人（超預算）",
+      "1/15–19 去程相對便宜；1/24 後上漲 —— 本趟窗口不利"
+    ],
+    bag:"亞洲線經濟艙依艙等 1 或 2 件 ×23kg（Basic 常見 1 件）",
+    elderNote:"廟宇與百貨冷氣足；戶外中午熱，宜早出晚歸",
+    studentNote:"市集、夜市、近郊安帕瓦／美功可選；美食密度高",
+    rough:"機票約 1.3–1.6 萬 + 現地概估 1.2–2.0 萬 ≈ 每人約 2.5–3.6 萬",
+    source:"華航官網：2027/1–2 月地板 TWD13,427*；家庭參考 1/18–1/24 ≈15,455（Basic）",
+    confirmed:false,
+    note:"明確超預算；暖冬美食強，但不符合 ≤1 萬門檻"
+  },
+  {
+    id:"kix",
+    name:"大阪（關西）",
+    flag:"🇯🇵",
+    airport:"KIX",
+    fare:14259,
+    fareLabel:"約 NT$14,259 起",
+    budget:"over",
+    days:[6,7],
+    weather:"cool",
+    climate:"約 3–10°C，干冷或偶雪；長輩需保暖",
+    flightMin:165,
+    ftime:"mid",
+    elder:72,
+    student:92,
+    metal:"CI 自營 A321neo；CI166／167（一三五）、另有 CI176／177 班次",
+    flights:{
+      out:"CI166 07:00→10:45（週一／三／五）；下午 CI176 約 15:35 班（班期待核）",
+      back:"CI167 約 11:45→14:25（週一／三／五）"
+    },
+    combos:[
+      "對齊一三五：例去 1/25(一) 回 1/29(五)、去 1/27(三) 回 2/1(一)、去 1/29(五) 回 2/3(三)",
+      "7 天：1/25–1/31、1/27–2/2（回程班次需對到有飛日）",
+      "若只有一三五，六日需靠其他 CI 班或改日期"
+    ],
+    bag:"亞洲線經濟艙依艙等 1 或 2 件 ×23kg",
+    elderNote:"心齋橋平路多、溫泉／水族館可排鬆；寒冷是主要風險",
+    studentNote:"美食、環球影城、京都／奈良一日（另計交通）",
+    rough:"機票約 1.4–1.8 萬 + 現地概估 2.0–3.2 萬 ≈ 每人約 3.4–5.0 萬",
+    source:"華航官網 KHH→KIX：2027/1 月地板 TWD14,259–14,285*；2 月約 TWD14,595*",
+    confirmed:false,
+    note:"明顯超預算；好玩但不符合本次票價硬門檻"
+  }
+];
+
+const picked = new Set();
+
+function budgetOk(d, mode){
+  if(mode==="all") return true;
+  if(mode==="10") return d.fare <= 10000;
+  if(mode==="12") return d.fare <= 12000;
+  if(mode==="over") return true;
+  return true;
+}
+
+function activeValues(name){
+  return [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(i=>i.value);
+}
+
+function render(){
+  const budget = document.querySelector('input[name="budget"]:checked').value;
+  const days = activeValues("days");
+  const weather = activeValues("weather");
+  const ftime = activeValues("ftime");
+  const sort = document.getElementById("sort").value;
+
+  let list = DEST.filter(d =>
+    budgetOk(d, budget) &&
+    d.days.some(x => days.includes(String(x))) &&
+    weather.includes(d.weather) &&
+    ftime.includes(d.ftime)
+  );
+
+  list.sort((a,b)=>{
+    if(sort==="fare") return a.fare - b.fare;
+    if(sort==="flight") return a.flightMin - b.flightMin;
+    if(sort==="elder") return b.elder - a.elder;
+    if(sort==="student") return b.student - a.student;
+    return 0;
+  });
+
+  document.getElementById("resultCount").textContent =
+    `顯示 ${list.length}／${DEST.length} 個目的地 · 查價 ${QUERY_DATE}`;
+
+  const root = document.getElementById("cards");
+  root.innerHTML = list.map(d => {
+    const status = d.fare <= 10000
+      ? `<span class="badge ok">預算內（月地板）</span>`
+      : d.fare <= 12000
+        ? `<span class="badge warn">略超 · 約 +${(d.fare-10000).toLocaleString("en-US")}</span>`
+        : `<span class="badge bad">超預算</span>`;
+    return `<article class="card ${picked.has(d.id)?"picked":""}" data-id="${d.id}">
+      <div class="card-top">
+        <div>
+          <h3>${d.flag} ${d.name}</h3>
+          <div class="src">KHH ↔ ${d.airport} · CI</div>
+        </div>
+        <div class="fare"><b>${d.fareLabel}</b><span>含稅經濟艙 · 月地板</span></div>
+      </div>
+      <div class="badge-row">
+        ${status}
+        <span class="badge soft">${d.ftime==="short"?"短程 ≤2.5h":"中程 2.5–4h"}</span>
+        <span class="badge">${d.weather==="warm"?"偏暖":"偏冷"}</span>
+        <span class="badge warn">特定日價 待確認</span>
+      </div>
+      <p class="why">${d.note}</p>
+      <div class="grid2">
+        <div class="mini"><b>可行日期組合</b><p>${d.combos[0]}</p></div>
+        <div class="mini"><b>氣候</b><p>${d.climate}</p></div>
+        <div class="mini"><b>去程</b><p>${d.flights.out}</p></div>
+        <div class="mini"><b>回程</b><p>${d.flights.back}</p></div>
+      </div>
+      <details class="more">
+        <summary>航班、行李、亮點與總額</summary>
+        <div class="morebody">
+          <p><strong>執飛：</strong>${d.metal}</p>
+          <p><strong>其他組合：</strong></p>
+          <ul>${d.combos.slice(1).map(x=>`<li>${x}</li>`).join("")}</ul>
+          <p><strong>託運：</strong>${d.bag}</p>
+          <p><strong>長輩：</strong>${d.elderNote}</p>
+          <p><strong>大學生：</strong>${d.studentNote}</p>
+          <p><strong>粗估總額／人：</strong>${d.rough}</p>
+          <p><strong>來源：</strong>${d.source} · 查詢日 ${QUERY_DATE}</p>
+        </div>
+      </details>
+      <label class="check"><input type="checkbox" data-pick="${d.id}" ${picked.has(d.id)?"checked":""}> 加入比較</label>
+    </article>`;
+  }).join("");
+
+  root.querySelectorAll("input[data-pick]").forEach(inp=>{
+    inp.addEventListener("change", ()=>{
+      const id = inp.getAttribute("data-pick");
+      if(inp.checked){
+        if(picked.size >= 3){
+          inp.checked = false;
+          alert("最多比較 3 個目的地");
+          return;
+        }
+        picked.add(id);
+      } else {
+        picked.delete(id);
+      }
+      syncCompareBar();
+      render();
+    });
+  });
+}
+
+function syncCompareBar(){
+  const bar = document.getElementById("compareBar");
+  document.getElementById("compareLabel").textContent = `已選 ${picked.size} 個目的地（最多 3）`;
+  bar.classList.toggle("show", picked.size > 0);
+  if(picked.size < 2) document.getElementById("comparePanel").classList.remove("show");
+}
+
+function buildCompare(){
+  const ids = [...picked];
+  if(ids.length < 2){
+    alert("請至少選 2 個");
+    return;
+  }
+  const rows = [
+    ["目的地", d => `${d.flag} ${d.name}`],
+    ["月地板票價", d => d.fareLabel],
+    ["預算", d => d.fare<=10000?"符合 ≤1 萬":"超出"],
+    ["飛行", d => `約 ${d.flightMin} 分`],
+    ["氣候", d => d.climate],
+    ["去程", d => d.flights.out],
+    ["回程", d => d.flights.back],
+    ["長輩", d => d.elderNote],
+    ["學生", d => d.studentNote],
+    ["粗估總額／人", d => d.rough],
+    ["待確認", d => "過年窗逐日價／機位"]
+  ];
+  const cols = ids.map(id => DEST.find(d=>d.id===id));
+  const html = `<div style="overflow:auto"><table><thead><tr><th>項目</th>${
+    cols.map(c=>`<th>${c.name}</th>`).join("")
+  }</tr></thead><tbody>${
+    rows.map(([label, fn]) => `<tr><th>${label}</th>${cols.map(c=>`<td>${fn(c)}</td>`).join("")}</tr>`).join("")
+  }</tbody></table></div>`;
+  const panel = document.getElementById("comparePanel");
+  panel.innerHTML = html;
+  panel.classList.add("show");
+  panel.scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+document.querySelectorAll(".filters input, #sort").forEach(el=>{
+  el.addEventListener("change", render);
+});
+document.getElementById("doCompare").addEventListener("click", buildCompare);
+document.getElementById("clearCompare").addEventListener("click", ()=>{
+  picked.clear();
+  syncCompareBar();
+  document.getElementById("comparePanel").classList.remove("show");
+  render();
+});
+
+render();
+syncCompareBar();
+</script>
+</body>
+</html>
