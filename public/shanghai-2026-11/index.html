@@ -39,8 +39,14 @@
 .field{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}.field label{font-size:.83rem;font-weight:800;color:#444}
 .field input,.field select,.field textarea{width:100%;font:inherit;border:1px solid #d7d4cd;border-radius:12px;padding:11px;background:#fff}
 .field textarea{min-height:90px;resize:vertical}
-.btn{border:0;border-radius:12px;background:var(--accent);color:#fff;padding:12px 16px;font-weight:800;cursor:pointer;font:inherit}.btn.alt{background:#e8eee9;color:#263c30}
-.item{border-bottom:1px solid var(--line);padding:10px 0}.links{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:12px;background:var(--accent);color:#fff;padding:12px 16px;font-weight:800;cursor:pointer;font:inherit;min-height:44px}.btn.alt{background:#e8eee9;color:#263c30}.btn:disabled{opacity:.55;cursor:not-allowed}
+.btnrow{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 12px}
+.charcount{font-size:.76rem;color:var(--muted);text-align:right}.charcount.warn{color:var(--red)}
+.sendmsg{margin:8px 0 0;font-size:.88rem;line-height:1.5}.sendmsg.ok{color:#24613e}.sendmsg.err{color:var(--red)}
+.ideastatus{display:inline-block;font-size:.72rem;font-weight:800;padding:3px 8px;border-radius:999px;margin-left:6px;vertical-align:middle}
+.ideastatus.sent{background:#e7efe9;color:var(--green)}.ideastatus.pending,.ideastatus.queued{background:#fff0db;color:#7a4b10}.ideastatus.failed{background:#f8e9e5;color:var(--red)}.ideastatus.local{background:#f1f1ef;color:#555}
+.item{border-bottom:1px solid var(--line);padding:10px 0}.item .btn{margin-top:8px}.links{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.trip-day-nav__btn.is-ideas{background:#e9f0f7;color:var(--blue);border-color:#c9d9e8}
 .links a{display:inline-block;padding:10px 12px;background:#fff;border:1px solid var(--line);border-radius:10px;text-decoration:none;color:#244a62;font-weight:700;font-size:.88rem}
 .pending{color:var(--amber);font-weight:700}
 table.compact{width:100%;border-collapse:collapse;font-size:.86rem}table.compact th,table.compact td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}table.compact th{color:#555;font-size:.78rem}
@@ -193,13 +199,33 @@ body.has-trip-day-nav{padding-bottom:72px}
 <section class="panel" id="ideas" hidden>
   <h2 class="sectiontitle">隨時記錄旅行想法</h2>
   <div class="card">
-    <p class="small">暫存於此裝置瀏覽器；未接 Sheet，勿當雲端同步。</p>
-    <div class="field"><label for="ideaTitle">想法標題</label><input id="ideaTitle" placeholder="例如：南潯百間樓晨走"></div>
-    <div class="field"><label for="ideaLink">網址（可留空）</label><input id="ideaLink" type="url" placeholder="https://..."></div>
-    <div class="field"><label for="ideaStatus">狀態</label><select id="ideaStatus"><option>新想法</option><option>待查證</option><option>待決定</option><option>已確認</option><option>取消</option></select></div>
-    <div class="field"><label for="ideaNote">備註</label><textarea id="ideaNote" placeholder="為什麼想去、排在哪天自由時段"></textarea></div>
-    <button class="btn" id="saveIdea" type="button">儲存想法</button>
-    <button class="btn alt" id="exportIdeas" type="button">匯出 JSON</button>
+    <p class="small">送出後寫入旅遊 Sheet。此頁只顯示本裝置送出／暫存的紀錄，不會從 Sheet 讀回。</p>
+    <div class="field"><label for="ideaDay">日子</label>
+      <select id="ideaDay">
+        <option value="D1">D1</option><option value="D2">D2</option><option value="D3">D3</option><option value="D4">D4</option>
+        <option value="D5">D5</option><option value="D6">D6</option><option value="D7">D7</option>
+      </select>
+    </div>
+    <div class="field"><label for="ideaAuthor">誰寫的</label>
+      <select id="ideaAuthor"><option value="豪哥">豪哥</option><option value="雯姐">雯姐</option><option value="其他">其他</option></select>
+    </div>
+    <div class="field"><label for="ideaText">想法 <span class="small" style="font-weight:600">（必填，最多 1000 字）</span></label>
+      <textarea id="ideaText" maxlength="1000" placeholder="例如：南潯百間樓晨走光線很好"></textarea>
+      <div class="charcount" id="ideaCharCount">0 / 1000</div>
+    </div>
+    <div class="field"><label for="ideaPhoto">照片網址（可留空，僅 https）</label>
+      <input id="ideaPhoto" type="url" inputmode="url" placeholder="https://..." autocomplete="off">
+    </div>
+    <div class="field"><label for="ideaCode">通關碼</label>
+      <input id="ideaCode" type="password" autocomplete="off" placeholder="送出用通關碼">
+    </div>
+    <div class="btnrow">
+      <button class="btn" id="sendIdea" type="button">送出到 Sheet</button>
+      <button class="btn alt" id="changePasscode" type="button">更換通關碼</button>
+      <button class="btn alt" id="exportIdeas" type="button">匯出 JSON</button>
+    </div>
+    <div class="sendmsg" id="ideaSendMsg" role="status" aria-live="polite"></div>
+    <h3 class="sectiontitle" style="margin-top:18px">本裝置紀錄</h3>
     <div id="ideaList"></div>
   </div>
 </section>
@@ -217,6 +243,7 @@ body.has-trip-day-nav{padding-bottom:72px}
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="../js/trip-day-nav.js"></script>
+<script src="./notes-config.js"></script>
 <script>
 const P={
   pvg:{n:"浦東國際機場",lat:31.1443,lng:121.8083,k:"base",q:"Shanghai Pudong International Airport"},
@@ -470,6 +497,17 @@ document.querySelectorAll("#mainTabs [data-tab]").forEach(b=>b.addEventListener(
 
 renderDays();renderSights();
 
+function showIdeasPanel(){
+  document.querySelectorAll("#mainTabs [data-tab]").forEach(x=>x.classList.toggle("active",x.dataset.tab==="ideas"));
+  document.querySelectorAll(".panel").forEach(p=>p.hidden=p.id!=="ideas");
+  const panel=document.getElementById("ideas");
+  if(panel){
+    try{panel.scrollIntoView({behavior:"smooth",block:"start"})}catch(e){panel.scrollIntoView(true)}
+  }
+  const t=document.getElementById("ideaText");
+  if(t)setTimeout(()=>{try{t.focus()}catch(e){}},80);
+}
+
 (function wireTripDayNav(){
   const nav=document.getElementById("tripDayNav");
   if(!nav||!window.TripDayNav)return;
@@ -493,34 +531,348 @@ renderDays();renderSights();
       paintTodayMarks();
     }
   });
+  const ideasBtn=document.createElement("button");
+  ideasBtn.type="button";
+  ideasBtn.className="trip-day-nav__btn is-ideas";
+  ideasBtn.textContent="記錄";
+  ideasBtn.addEventListener("click",showIdeasPanel);
+  nav.appendChild(ideasBtn);
 })();
 
-const key="shanghai-2026-ideas-v1";
-function load(){try{return JSON.parse(localStorage.getItem(key)||"[]")}catch(e){return[]}}
-function renderIdeas(){
-  const a=load(),box=document.getElementById("ideaList");box.replaceChildren();
-  a.forEach((x,i)=>{
-    const d=el("div","item");
-    const h=document.createElement("strong");h.textContent=x.title;d.append(h);
-    const s=el("div","small");s.textContent=x.status+(x.note?" · "+x.note:"");d.append(s);
-    if(x.link&&/^https?:\/\//i.test(x.link)){const l=document.createElement("a");l.href=x.link;l.target="_blank";l.rel="noopener";l.textContent="開啟連結 ↗";d.append(l)}
-    const b=document.createElement("button");b.className="btn alt";b.style.margin="8px 0 0";b.textContent="刪除";
-    b.onclick=()=>{if(confirm("確定刪除此想法？")){const y=load();y.splice(i,1);localStorage.setItem(key,JSON.stringify(y));renderIdeas()}};
-    d.append(b);box.append(d);
-  });
-  if(!a.length)box.textContent="目前還沒有旅行想法。";
+const IDEAS_API=(window.ShanghaiNotesConfig&&ShanghaiNotesConfig.endpoint)||"";
+const IDEAS_KEY="shanghai-2026-ideas-v1";
+const CODE_KEY="shanghai-2026-11-ideas-code";
+const ERROR_ZH={
+  bad_code:"通關碼不對",
+  text_too_long:"文字太長（最多 1000 字）",
+  rate_limited:"送出太頻繁，請稍後再試",
+  missing_text:"請填寫想法內容",
+  empty_text:"請填寫想法內容",
+  invalid_day:"日子格式不對",
+  invalid_author:"作者不在允許名單",
+  invalid_photo:"照片網址須為 https",
+  invalid_url:"照片網址須為 https",
+  bad_photo:"照片網址須為 https",
+  unauthorized:"通關碼不對",
+  forbidden:"通關碼不對",
+  server_error:"服務暫時無法連線，已暫存，可重新送出",
+  endpoint_missing:"送出網址尚未設定，內容已暫存，可重新送出",
+  access_denied:"服務暫時無法連線（權限或部署），內容已保留，可重新送出",
+  bad_response:"服務回應異常，內容已暫存，可重新送出",
+  network:"目前離線或連線失敗，內容已保留，可重新送出",
+  offline:"目前離線或連線失敗，內容已保留，可重新送出"
+};
+
+function loadIdeas(){
+  try{return JSON.parse(localStorage.getItem(IDEAS_KEY)||"[]")}catch(e){return[]}
 }
-document.getElementById("saveIdea").onclick=()=>{
-  const title=document.getElementById("ideaTitle").value.trim();
-  if(!title){alert("請先輸入標題");return}
-  const a=load();a.push({title,link:document.getElementById("ideaLink").value.trim(),status:document.getElementById("ideaStatus").value,note:document.getElementById("ideaNote").value.trim(),createdAt:new Date().toISOString()});
-  try{localStorage.setItem(key,JSON.stringify(a));document.getElementById("ideaTitle").value="";document.getElementById("ideaNote").value="";document.getElementById("ideaLink").value="";renderIdeas()}catch(e){alert("儲存失敗，請改用匯出備份")}
-};
-document.getElementById("exportIdeas").onclick=()=>{
-  const blob=new Blob([JSON.stringify(load(),null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");
-  a.href=url;a.download="2026-11-上海旅行想法.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
-};
-renderIdeas();
+function saveIdeas(list){
+  localStorage.setItem(IDEAS_KEY,JSON.stringify(list));
+}
+function uid(){
+  try{if(crypto&&crypto.randomUUID)return crypto.randomUUID()}catch(e){}
+  return "id-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,9);
+}
+function normalizeIdea(raw){
+  if(!raw||typeof raw!=="object")return null;
+  if(raw.text!=null||raw.day||raw.author){
+    return {
+      id:raw.id||uid(),
+      day:raw.day||"D1",
+      author:raw.author||"其他",
+      text:String(raw.text||"").trim(),
+      photoUrl:String(raw.photoUrl||"").trim(),
+      createdAt:raw.createdAt||new Date().toISOString(),
+      sendStatus:raw.sendStatus||(raw.sent?"sent":"queued"),
+      lastError:raw.lastError||"",
+      legacy:!!raw.legacy
+    };
+  }
+  // Previously device-local drafts (title/note/link)
+  const title=String(raw.title||"").trim();
+  const note=String(raw.note||"").trim();
+  const text=[title,note].filter(Boolean).join(note&&title?" — ":"");
+  const link=String(raw.link||"").trim();
+  const photoUrl=/^https:\/\//i.test(link)?link:"";
+  return {
+    id:raw.id||uid(),
+    day:"D1",
+    author:"其他",
+    text:text||"（舊草稿無文字）",
+    photoUrl:photoUrl,
+    createdAt:raw.createdAt||new Date().toISOString(),
+    sendStatus:"local",
+    lastError:"",
+    legacy:true,
+    legacyMeta:{status:raw.status||"",link:link}
+  };
+}
+function getIdeas(){return loadIdeas().map(normalizeIdea).filter(Boolean)}
+function persistIdeas(list){saveIdeas(list)}
+
+function defaultDayLabel(){
+  const today=(window.TripDayNav&&TripDayNav.calendarDateInTz)
+    ?TripDayNav.calendarDateInTz("Asia/Taipei")
+    :(function(){
+      try{
+        const parts=new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Taipei",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date());
+        const o={};parts.forEach(p=>{if(p.type!=="literal")o[p.type]=p.value});
+        return o.year+"-"+o.month+"-"+o.day;
+      }catch(e){return ""}
+    })();
+  const hit=days.find(d=>d.date===today);
+  if(hit)return (hit.shortLabel||hit.id||"D1").toUpperCase().replace(/^d/,"D");
+  if(today&&days[0]&&today<days[0].date)return "D1";
+  if(today&&days.length&&today>days[days.length-1].date)return "D"+days.length;
+  return "D1";
+}
+
+function loadStoredCode(){
+  try{return localStorage.getItem(CODE_KEY)||""}catch(e){return ""}
+}
+function storeCode(code){
+  try{localStorage.setItem(CODE_KEY,code)}catch(e){}
+}
+function clearStoredCode(){
+  try{localStorage.removeItem(CODE_KEY)}catch(e){}
+}
+
+function setSendMsg(text,ok){
+  const m=document.getElementById("ideaSendMsg");
+  if(!m)return;
+  m.textContent=text||"";
+  m.className="sendmsg"+(text?(ok?" ok":" err"):"");
+}
+function updateCharCount(){
+  const t=document.getElementById("ideaText");
+  const c=document.getElementById("ideaCharCount");
+  if(!t||!c)return;
+  const n=t.value.length;
+  c.textContent=n+" / 1000";
+  c.classList.toggle("warn",n>=1000);
+}
+
+function mapError(code,fallback){
+  if(!code)return fallback||"送出失敗，已暫存，可重新送出";
+  const k=String(code).toLowerCase().trim();
+  if(ERROR_ZH[k])return ERROR_ZH[k];
+  if(/access.?denied|permission|forbidden|unauthorized/i.test(String(code)))return "服務暫時無法連線（權限），已暫存，可重新送出";
+  return fallback||("送出失敗："+code+"（已暫存，可重新送出）");
+}
+
+function isHttpsUrl(u){
+  if(!u)return true;
+  try{const x=new URL(u);return x.protocol==="https:"}catch(e){return false}
+}
+
+function payloadFromIdea(idea,code){
+  return {day:idea.day,author:idea.author,text:idea.text,photoUrl:idea.photoUrl||"",code:code};
+}
+
+async function postIdea(idea,code){
+  if(!IDEAS_API){
+    const err=new Error("endpoint_missing");err.code="endpoint_missing";throw err;
+  }
+  if(!navigator.onLine){
+    const err=new Error("offline");err.code="offline";throw err;
+  }
+  let res;
+  try{
+    res=await fetch(IDEAS_API,{
+      method:"POST",
+      headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body:JSON.stringify(payloadFromIdea(idea,code))
+    });
+  }catch(e){
+    const err=new Error("network");err.code="network";throw err;
+  }
+  const raw=await res.text();
+  let data=null;
+  try{data=JSON.parse(raw)}catch(e){
+    if(/access denied|<!doctype html/i.test(raw)||res.status===403||res.status===401){
+      const err=new Error("access_denied");err.code="access_denied";throw err;
+    }
+    const err=new Error("bad_response");err.code="bad_response";err.raw=raw.slice(0,120);throw err;
+  }
+  if(data&&data.ok===true)return data;
+  const codeErr=(data&&(data.error||data.code||data.message))||"unknown";
+  const err=new Error(String(codeErr));err.code=String(codeErr);err.data=data;throw err;
+}
+
+function statusLabel(s){
+  if(s==="sent")return "已送出";
+  if(s==="failed")return "待重送";
+  if(s==="queued"||s==="pending")return "佇列中";
+  if(s==="local")return "本機草稿";
+  return s||"";
+}
+
+function renderIdeas(){
+  const list=getIdeas();
+  const box=document.getElementById("ideaList");
+  if(!box)return;
+  box.replaceChildren();
+  if(!list.length){box.textContent="目前還沒有旅行想法。";return}
+  // newest first
+  const ordered=list.slice().sort((a,b)=>(b.createdAt||"").localeCompare(a.createdAt||""));
+  ordered.forEach(item=>{
+    const d=el("div","item");
+    const head=document.createElement("div");
+    const strong=document.createElement("strong");
+    strong.textContent=(item.day||"")+" · "+(item.author||"");
+    head.append(strong);
+    const badge=document.createElement("span");
+    badge.className="ideastatus "+(item.sendStatus||"queued");
+    badge.textContent=statusLabel(item.sendStatus);
+    head.append(badge);
+    d.append(head);
+    const body=el("div","small");
+    body.textContent=item.text;
+    d.append(body);
+    if(item.photoUrl){
+      const l=document.createElement("a");
+      l.href=item.photoUrl;l.target="_blank";l.rel="noopener";l.textContent="照片連結 ↗";
+      d.append(l);
+    }else if(item.legacy&&item.legacyMeta&&item.legacyMeta.link&&/^https?:\/\//i.test(item.legacyMeta.link)){
+      const l=document.createElement("a");
+      l.href=item.legacyMeta.link;l.target="_blank";l.rel="noopener";l.textContent="開啟連結 ↗";
+      d.append(l);
+    }
+    if(item.lastError){
+      const er=el("div","small");er.style.color="var(--red)";er.textContent=item.lastError;d.append(er);
+    }
+    const meta=el("div","small");
+    try{meta.textContent=new Date(item.createdAt).toLocaleString("zh-TW",{timeZone:"Asia/Taipei"})}catch(e){meta.textContent=item.createdAt||""}
+    d.append(meta);
+    if(item.sendStatus!=="sent"){
+      const retry=document.createElement("button");
+      retry.className="btn";
+      retry.type="button";
+      retry.textContent=item.sendStatus==="local"?"一鍵送出":"重新送出";
+      retry.onclick=()=>resendIdea(item.id);
+      d.append(retry);
+    }
+    const del=document.createElement("button");
+    del.className="btn alt";del.type="button";del.textContent="刪除";
+    del.onclick=()=>{
+      if(!confirm("確定刪除此想法？"))return;
+      persistIdeas(getIdeas().filter(x=>x.id!==item.id));
+      renderIdeas();
+    };
+    d.append(del);
+    box.append(d);
+  });
+}
+
+async function resendIdea(id){
+  const code=(document.getElementById("ideaCode").value||"").trim()||loadStoredCode();
+  if(!code){setSendMsg("請先輸入通關碼",false);document.getElementById("ideaCode").focus();return}
+  storeCode(code);document.getElementById("ideaCode").value=code;
+  const list=getIdeas();
+  const idx=list.findIndex(x=>x.id===id);
+  if(idx<0)return;
+  const idea=list[idx];
+  if(!idea.text||idea.text==="（舊草稿無文字）"){setSendMsg("這筆草稿沒有可送出的文字",false);return}
+  if(idea.text.length>1000){setSendMsg(ERROR_ZH.text_too_long,false);return}
+  if(idea.photoUrl&&!isHttpsUrl(idea.photoUrl)){setSendMsg(ERROR_ZH.invalid_photo,false);return}
+  setSendMsg("送出中…",true);
+  try{
+    await postIdea(idea,code);
+    list[idx].sendStatus="sent";
+    list[idx].lastError="";
+    list[idx].legacy=false;
+    persistIdeas(list);
+    setSendMsg("已寫入旅遊 Sheet",true);
+    renderIdeas();
+  }catch(e){
+    const msg=e.code==="offline"||e.code==="network"
+      ?"目前離線或連線失敗，內容已保留，可重新送出"
+      :(e.code==="access_denied"
+        ?"服務暫時無法連線（權限或部署），內容已保留，可重新送出"
+        :mapError(e.code,e.message));
+    list[idx].sendStatus="failed";
+    list[idx].lastError=msg;
+    persistIdeas(list);
+    setSendMsg(msg,false);
+    renderIdeas();
+  }
+}
+
+async function sendNewIdea(){
+  const day=document.getElementById("ideaDay").value;
+  const author=document.getElementById("ideaAuthor").value;
+  const text=document.getElementById("ideaText").value.trim();
+  const photoUrl=document.getElementById("ideaPhoto").value.trim();
+  const code=(document.getElementById("ideaCode").value||"").trim();
+  if(!text){setSendMsg("請填寫想法內容",false);document.getElementById("ideaText").focus();return}
+  if(text.length>1000){setSendMsg(ERROR_ZH.text_too_long,false);return}
+  if(photoUrl&&!isHttpsUrl(photoUrl)){setSendMsg(ERROR_ZH.invalid_photo,false);document.getElementById("ideaPhoto").focus();return}
+  if(!code){setSendMsg("請輸入通關碼",false);document.getElementById("ideaCode").focus();return}
+
+  const idea={id:uid(),day,author,text,photoUrl,createdAt:new Date().toISOString(),sendStatus:"queued",lastError:""};
+  const list=getIdeas();
+  list.push(idea);
+  try{persistIdeas(list)}catch(e){setSendMsg("本機儲存失敗，請改用匯出備份",false);return}
+  renderIdeas();
+  storeCode(code);
+
+  const btn=document.getElementById("sendIdea");
+  btn.disabled=true;btn.textContent="送出中…";
+  setSendMsg("送出中…",true);
+  try{
+    await postIdea(idea,code);
+    const next=getIdeas();
+    const i=next.findIndex(x=>x.id===idea.id);
+    if(i>=0){next[i].sendStatus="sent";next[i].lastError="";persistIdeas(next)}
+    document.getElementById("ideaText").value="";
+    document.getElementById("ideaPhoto").value="";
+    updateCharCount();
+    setSendMsg("已寫入旅遊 Sheet",true);
+    renderIdeas();
+  }catch(e){
+    const msg=e.code==="offline"||e.code==="network"
+      ?"目前離線或連線失敗，內容已保留，可重新送出"
+      :(e.code==="access_denied"
+        ?"服務暫時無法連線（權限或部署），內容已保留，可重新送出"
+        :mapError(e.code,e.message));
+    const next=getIdeas();
+    const i=next.findIndex(x=>x.id===idea.id);
+    if(i>=0){next[i].sendStatus="failed";next[i].lastError=msg;persistIdeas(next)}
+    setSendMsg(msg,false);
+    renderIdeas();
+  }finally{
+    btn.disabled=false;btn.textContent="送出到 Sheet";
+  }
+}
+
+(function wireIdeas(){
+  document.getElementById("ideaDay").value=defaultDayLabel();
+  const stored=loadStoredCode();
+  if(stored)document.getElementById("ideaCode").value=stored;
+  document.getElementById("ideaText").addEventListener("input",updateCharCount);
+  updateCharCount();
+  document.getElementById("sendIdea").addEventListener("click",sendNewIdea);
+  document.getElementById("changePasscode").addEventListener("click",()=>{
+    clearStoredCode();
+    const inp=document.getElementById("ideaCode");
+    inp.value="";
+    inp.focus();
+    setSendMsg("已清除通關碼，請輸入新的通關碼",true);
+  });
+  document.getElementById("exportIdeas").addEventListener("click",()=>{
+    const blob=new Blob([JSON.stringify(getIdeas(),null,2)],{type:"application/json"});
+    const url=URL.createObjectURL(blob),a=document.createElement("a");
+    a.href=url;a.download="2026-11-上海旅行想法.json";a.click();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+  });
+  // Migrate raw storage once so legacy drafts keep one-tap send
+  try{persistIdeas(getIdeas())}catch(e){}
+  renderIdeas();
+  window.addEventListener("online",()=>{
+    const pending=getIdeas().filter(x=>x.sendStatus==="failed"||x.sendStatus==="queued");
+    if(pending.length)setSendMsg("已恢復連線，佇列中有 "+pending.length+" 筆可重新送出",true);
+  });
+})();
 </script>
 </body>
 </html>
