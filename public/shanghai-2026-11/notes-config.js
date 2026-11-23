@@ -7,7 +7,7 @@
   "use strict";
   // TODO: replace with the new /exec URL when issued (old AKfycbzISu… is retired).
   var NOTES_ENDPOINT =
-    "https://script.google.com/macros/s/AKfycbzISu20C4SV_LGGFE48BB8n9wDaZxToZDheY1l6lGp2rJPs7YLAaxq6LX0LHdom_JTrlA/exec";
+    "https://script.google.com/macros/s/AKfycbwoQysQAkHAZ0rwUV76Wj5FV4n4Kxq4ZPU07Mkp6r2gMtwDfjgI3yKNmC1JC4DM5QbDjQ/exec";
 
   global.ShanghaiNotesConfig = {
     endpoint: NOTES_ENDPOINT,
