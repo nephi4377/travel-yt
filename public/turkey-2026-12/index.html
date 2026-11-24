@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>土耳其 2026.12｜豪哥旅遊手冊</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+:root{--bg:#f7f5f0;--card:#fff;--ink:#191919;--muted:#6b6b6b;--line:#e7e2d8;--red:#9f2d20;--green:#315c43;--blue:#1f4f7a;--amber:#8a6320;--accent:#233f36}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif}
+.wrap{max-width:820px;margin:auto;padding:16px 14px 54px}.back{display:inline-block;text-decoration:none;color:#444;margin:2px 0 12px}
+.hero{padding:6px 0 12px}.hero h1{margin:2px 0 8px;font-size:1.8rem}.sub,.card p{color:var(--muted);line-height:1.6}.daymeta{font-size:.8rem;color:#777;font-weight:700}
+.pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#e6eee9;color:#28503d;font-weight:700;font-size:.78rem}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:8px 0 12px;position:sticky;top:0;background:rgba(247,245,240,.96);z-index:900}
+.tabs button{white-space:nowrap;border:1px solid var(--line);background:#fff;border-radius:999px;padding:11px 14px;font-weight:700;min-height:44px;cursor:pointer;font:inherit}.tabs button.active{background:#1f2937;color:#fff}
+.notice{padding:12px 14px;border-radius:14px;background:#fff8e8;color:#765f23;line-height:1.55;margin:0 0 12px}
+#map{height:360px;border:1px solid var(--line);border-radius:18px;background:#e8e6df;margin-bottom:12px}
+.maphelp{font-size:.82rem;color:var(--muted);line-height:1.5;margin:0 2px 14px}
+.panel[hidden]{display:none!important}
+.daypanel{display:none}.daypanel.active{display:block}
+.route{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px}.route span{white-space:nowrap;background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 10px;font-size:.82rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:15px;margin-bottom:10px}
+.row{display:flex;gap:10px;align-items:flex-start}.num{width:29px;height:29px;border-radius:50%;background:#1f2937;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;flex:0 0 29px}.grow{min-width:0;flex:1}
+.card h3{margin:1px 0 5px;font-size:1.05rem}.why{font-size:.9rem;color:var(--muted);line-height:1.55}
+.meta{font-size:.82rem;color:#555;line-height:1.55;margin:6px 0 0}.meta b{color:#333}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.tag{font-size:.74rem;padding:5px 8px;border-radius:999px;background:#f1f1ef}.mine{background:#e7efe9;color:var(--green)}.food{background:#fff0db;color:#7a4b10}.opt{background:#e9f0f7;color:var(--blue)}.warn{background:#f8e9e5;color:var(--red)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}.actions a{border:1px solid var(--line);background:#f7f7f6;color:#252525;text-decoration:none;border-radius:11px;padding:9px 11px;font-weight:700;font-size:.85rem;min-height:42px;display:inline-flex;align-items:center}
+.sectiontitle{font-size:1.08rem;margin:16px 2px 8px}
+.legend{display:flex;flex-wrap:wrap;gap:8px;font-size:.8rem;color:var(--muted);margin:8px 0 12px}.dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:4px}.d-place{background:#2563eb}.d-food{background:#c2410c}.d-base{background:#166534}
+.small{font-size:.82rem;color:var(--muted)}
+.detailbox{margin-top:10px;border-top:1px dashed var(--line);padding-top:9px}
+.detailbox summary{cursor:pointer;font-weight:800;font-size:.86rem;color:#333;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.detailbox summary::-webkit-details-marker{display:none}.detailbox summary:after{content:"＋";font-size:1rem;color:#777}.detailbox[open] summary:after{content:"−"}
+.detailbody{padding-top:9px;font-size:.87rem;line-height:1.62;color:#555}
+.detailbody strong{color:#292929}.detailbody ul{margin:6px 0 0;padding-left:18px}.detailbody li{margin:4px 0}
+.detailgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.detailmini{background:#f8f7f3;border-radius:11px;padding:9px}.detailmini b{display:block;font-size:.78rem;margin-bottom:3px;color:#444}
+@media(max-width:520px){.detailgrid{grid-template-columns:1fr}}
+@media(max-width:480px){#map{height:320px}.wrap{padding-left:12px;padding-right:12px}}
+.pending{color:var(--amber);font-weight:700}
+table.compact{width:100%;border-collapse:collapse;font-size:.86rem}table.compact th,table.compact td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}table.compact th{color:#555;font-size:.78rem}
+.links{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.links a{display:inline-block;padding:10px 12px;background:#fff;border:1px solid var(--line);border-radius:10px;text-decoration:none;color:#244a62;font-weight:700;font-size:.88rem}
+.trip-day-nav{
+  position:fixed;left:0;right:0;bottom:0;z-index:980;
+  display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));
+  background:rgba(247,245,240,.97);border-top:1px solid var(--line);
+  box-shadow:0 -6px 18px rgba(0,0,0,.06);
+}
+.trip-day-nav__btn{
+  flex:0 0 auto;white-space:nowrap;border:1px solid var(--line);background:#fff;
+  border-radius:999px;padding:10px 12px;font:inherit;font-weight:800;font-size:.82rem;
+  min-height:42px;color:var(--ink);text-decoration:none;display:inline-flex;align-items:center;cursor:pointer;
+}
+.trip-day-nav__btn.is-today-ctrl,.trip-day-nav__btn.is-today-day{background:#1f2937;color:#fff;border-color:#1f2937}
+.trip-day-nav__btn.is-muted{opacity:.55}
+.trip-day-nav__btn.is-overview{background:#e8eee9;color:#263c30;border-color:#d5e0d8}
+#dayTabs button .today-mark{margin-left:4px;font-size:.72rem;font-weight:800;color:#c45c26}
+#dayTabs button.active .today-mark{color:#ffd7a8}
+.daypanel{scroll-margin-top:72px}
+body.has-trip-day-nav{padding-bottom:72px}
+@media(min-width:821px){
+  .trip-day-nav{left:50%;right:auto;transform:translateX(-50%);max-width:820px;width:100%;border-radius:16px 16px 0 0}
+}
+</style>
+</head>
+<body><main class="wrap">
+<a class="back" href="../">← 所有旅程</a>
+<section class="hero" id="overview">
+  <div class="daymeta">2026/12/12–12/21 · 瘋玩客・瘋玩土耳其十日 · 公開不含私人聯絡</div>
+  <h1>🇹🇷 土耳其</h1>
+  <p class="sub">跟團十日：伊斯坦堡 → 番紅花城 → 卡帕多奇亞連泊 → 孔亞 → 棉堡 → 艾菲索斯／庫薩達西 → 伊茲密爾 → 布爾薩 → 博斯普魯斯返台。順序以現場與說明會為準。</p>
+  <div class="pills">
+    <span class="pill">10 天團體旅行</span>
+    <span class="pill">12/12 08:00 桃園 T2</span>
+    <span class="pill">小費 USD 120</span>
+  </div>
+</section>
+<nav class="trip-day-nav" id="tripDayNav" aria-label="行程快速導覽" hidden></nav>
+
+<div class="notice"><strong>集合已寫入正式行程。</strong>12/12 08:00 桃園第二航廈，土耳其航空（華航代理）4 號後方櫃台 → TK125。每日景點／餐宿依瘋玩客正式 PDF；公開頁不含領隊姓名、私人電話、團號、房號或訂單代號。</div>
+
+<nav class="tabs" aria-label="土耳其旅行內容" id="mainTabs">
+  <button type="button" class="active" data-tab="plan">規劃行程</button>
+  <button type="button" data-tab="sights">景點速覽</button>
+  <button type="button" data-tab="practical">實用資訊</button>
+  <button type="button" data-tab="info">航班・住宿</button>
+  <button type="button" data-tab="extras">自費選項</button>
+  <button type="button" data-tab="history">歷史記錄</button>
+</nav>
+
+<section class="panel" id="plan">
+  <nav class="tabs" id="dayTabs" aria-label="每日行程" style="position:static;background:transparent;padding-top:0"></nav>
+  <div id="map"></div>
+  <p class="maphelp">示意針：住宿與當日主要景點。跨城長途為順序示意，不代表團車導航軌跡。</p>
+  <div class="legend"><span><i class="dot d-base"></i>住宿／機場</span><span><i class="dot d-place"></i>景點</span></div>
+  <div id="dayContent"></div>
+  <h2 class="sectiontitle">跨城示意</h2>
+  <div class="card">
+    <div class="links">
+      <a href="https://www.google.com/maps/dir/Istanbul/Safranbolu/Cappadocia/Konya/Pamukkale/Ephesus/Kusadasi/Izmir/Bursa/Istanbul/" target="_blank" rel="noopener">土耳其跨城路線 ↗</a>
+    </div>
+    <p class="small" style="margin-top:10px">長途拉車多（如 D2 約 426 km）；實際停留與用餐以現場為準。</p>
+  </div>
+</section>
+
+<section class="panel" id="sights" hidden>
+  <h2 class="sectiontitle">景點速覽｜看什麼・怎麼拍</h2>
+  <p class="small">跟團不重排順序。展開看簡介；細節以正式 PDF／說明會為準。</p>
+  <div id="sightsList"></div>
+</section>
+
+<section class="panel" id="practical" hidden>
+  <h2 class="sectiontitle">時差・天氣・穿衣</h2>
+  <div class="card">
+    <p>時差：土耳其比台灣<strong>慢 5 小時</strong>。伊斯坦堡參考約 <strong>7–12°C</strong>。請備<strong>外套、雨傘、球鞋</strong>與個人藥品。</p>
+    <p class="meta"><span class="pending">待確認：</span>出發前 3–5 天各地實際預報。</p>
+  </div>
+  <h2 class="sectiontitle">行李精簡</h2>
+  <div class="card">
+    <ul class="why" style="margin:0;padding-left:18px;color:#555">
+      <li>護照效期須自<strong>返國日起尚有六個月以上</strong></li>
+      <li>小費預算 <strong>USD 120／人</strong>（全程）；床頭小費約每房 USD 1、行李每件約 USD 1</li>
+      <li>託運參考：直飛約 <strong>30 kg</strong>、手提約 <strong>8 kg</strong>（以航空公司公告為準）</li>
+      <li>飯店<strong>無</strong>牙膏／牙刷／拖鞋／熱水壺；有洗髮精／沐浴乳／吹風機 → 請自備</li>
+      <li>電壓 <strong>220–240V</strong>、兩圓腳插座；團含每人一個歐規轉接頭</li>
+      <li>番紅花城民宿：石板古街、可能需<strong>過夜小包</strong>轉運；無空調；房型抽籤或民宿安排</li>
+      <li>清真寺：勿穿短褲／短裙／露肩；女性需準備頭巾類遮蓋；易穿脫的鞋</li>
+      <li>棉堡石灰棚須<strong>脫鞋</strong>步行，地面較滑</li>
+      <li>出發前有線上說明會（日期／連結由旅行社通知，此處不臆造）</li>
+    </ul>
+  </div>
+  <h2 class="sectiontitle">證件・支付・電源</h2>
+  <div class="card">
+    <div class="detailgrid">
+      <div class="detailmini"><b>護照</b>返國日起效期 ≥ 6 個月。團體座位由航空公司安排，通常無法事先選位。</div>
+      <div class="detailmini"><b>支付</b>單位新里拉（TRY）。可先備美元／歐元到當地再換；觀光區部分可用卡。匯率變動大，以銀行牌告為準。</div>
+      <div class="detailmini"><b>網路</b>建議 eSIM／漫遊。公開頁不列私人通訊方式。</div>
+      <div class="detailmini"><b>電源</b>220–240V／兩圓腳。美髮器等大功率電器常不適用；勿帶純 110V 電棒。</div>
+    </div>
+  </div>
+  <h2 class="sectiontitle">緊急聯絡（占位｜不填私人號碼）</h2>
+  <div class="card">
+    <table class="compact">
+      <tr><th>項目</th><th>狀態</th></tr>
+      <tr><td>旅行社緊急專線</td><td class="pending">待確認（私人來源）</td></tr>
+      <tr><td>領隊／導遊</td><td class="pending">待確認（出發群組；公開不寫姓名電話）</td></tr>
+      <tr><td>台灣緊急聯絡人</td><td class="pending">待確認（私人備註）</td></tr>
+      <tr><td>旅外國人急難救助</td><td>800-0885-0885（外交部公開專線）</td></tr>
+    </table>
+    <p class="small" style="margin-top:10px">公開 repo 禁止貼私人電話、領隊姓名、團號、房號、訂單碼。</p>
+  </div>
+</section>
+
+<section class="panel" id="info" hidden>
+  <h2 class="sectiontitle">集合、航班與費用</h2>
+  <div class="card">
+    <p><strong>集合：</strong>2026/12/12（六）<strong>08:00</strong>　桃園國際機場第二航廈（T2）　土耳其航空（華航代理）<strong>4 號後方櫃台</strong></p>
+    <p><strong>去程：</strong>土耳其航空 TK125　桃園 11:00 → 伊斯坦堡 19:10</p>
+    <p><strong>回程：</strong>土耳其航空 TK124　伊斯坦堡 12/20 17:15 → 桃園 12/21 08:45</p>
+    <p class="small">起飛前請預留約三小時抵達櫃台緩衝。以旅行社／航空公司出發前通知為準；團體機票通常無法累計里程、無法事先選位。</p>
+  </div>
+  <div class="card">
+    <p><strong>小費：</strong>領隊／導遊／司機建議每日 USD 12 × 10 日＝<strong>USD 120／人</strong>（團費不含）。</p>
+    <p><strong>產品：</strong>瘋玩客「瘋玩土耳其十日」。</p>
+    <p class="meta"><span class="pending">待確認：</span>同行成員、報名付款、出票狀態（不公開訂單細節）。</p>
+  </div>
+  <div class="card">
+    <p><strong>住宿（店名＋城市｜公開不含電話／房號）：</strong></p>
+    <ul class="why" style="margin:8px 0 0;padding-left:18px;color:#555">
+      <li>12/12 Pullman Istanbul Hotel（伊斯坦堡）</li>
+      <li>12/13 Hidirlik Konaklari（番紅花城 B&amp;B；古蹟區、無空調）</li>
+      <li>12/14–15 Perissia Hotel（卡帕多奇亞）</li>
+      <li>12/16 Bayir Diamond Hotel（孔亞）</li>
+      <li>12/17 Pam Thermal Hotel（棉堡／巴慕卡麗）</li>
+      <li>12/18 Grand Belish Resort &amp; Spa（庫薩達西；旺季客滿可能改住伊茲密爾區域）</li>
+      <li>12/19 Hotel Baia Bursa（布爾薩）</li>
+      <li>12/20 夜宿機上</li>
+    </ul>
+    <p class="small" style="margin-top:10px">飯店不提供牙膏／牙刷／拖鞋／熱水壺。公開頁不列房號與飯店電話。</p>
+  </div>
+</section>
+
+<section class="panel" id="extras" hidden>
+  <h2 class="sectiontitle">卡帕多奇亞自費（到當地跟領隊報名）</h2>
+  <div class="notice">價錢以現場公告為準；以下為正式 PDF 參考價。</div>
+  <div class="card">
+    <h3>熱氣球</h3>
+    <p class="why">約 <strong>USD 300</strong>／人。預訂以卡帕多奇亞清晨為主（約凌晨 4 點起床，依現場公佈）。天候不佳可能取消或候補；體重 &gt;100 kg、身高 &lt;120 cm 等條件通常無法搭乘（詳見 PDF）。</p>
+    <div class="tags"><span class="tag warn">天候限制</span><span class="tag opt">現地報名</span></div>
+  </div>
+  <div class="card">
+    <h3>四輪傳動吉普車</h3>
+    <p class="why">約 <strong>USD 100</strong>／人。進入私房地形拍照點；身高需 120 cm 以上；約 1.5 小時；4 人以上成行。</p>
+    <div class="tags"><span class="tag opt">現地報名</span></div>
+  </div>
+  <div class="card">
+    <h3>土耳其之夜</h3>
+    <p class="why">約 <strong>USD 70</strong>／人。洞穴秀場民俗表演；含點心／水果／軟性與酒精飲料暢飲；約 2.5 小時；10 人以上成行。</p>
+    <div class="tags"><span class="tag opt">現地報名</span></div>
+  </div>
+</section>
+
+<section class="panel" id="history" hidden>
+  <h2 class="sectiontitle">歷史記錄</h2>
+  <div class="card">
+    <p><strong>2026/11</strong>：依瘋玩客正式 PDF 建立企劃筆記與每日行程草稿。</p>
+    <p><strong>2026/11/24</strong>：建立手機 canonical 頁 <code>public/turkey-2026-12/</code>；對齊集合鐘點、班機、九晚飯店店名、自費選項；公開檔省略私人聯絡與團號。</p>
+  </div>
+</section>
+</main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="../js/trip-day-nav.js"></script>
+<script>
+const P={
+  tpe:{n:"桃園國際機場 T2",lat:25.0797,lng:121.2342,k:"base",q:"Taoyuan Airport Terminal 2"},
+  pullman:{n:"住宿｜Pullman Istanbul Hotel",lat:41.0016,lng:28.8138,k:"base",q:"Pullman Istanbul Hotel"},
+  hagia:{n:"聖索菲亞（下車拍照）",lat:41.0086,lng:28.9802,k:"place",q:"Hagia Sophia Istanbul"},
+  blue:{n:"藍色清真寺",lat:41.0054,lng:28.9768,k:"place",q:"Blue Mosque Istanbul"},
+  hidirlikHotel:{n:"住宿｜Hidirlik Konaklari",lat:41.2458,lng:32.6831,k:"base",q:"Hidirlik Konaklari Safranbolu"},
+  hidirlik:{n:"希德爾立克山丘",lat:41.2495,lng:32.6945,k:"place",q:"Hidirlik Hill Safranbolu"},
+  anitkabir:{n:"凱莫爾陵寢紀念館",lat:39.9250,lng:32.8369,k:"place",q:"Anitkabir Ankara"},
+  tuz:{n:"鹽湖",lat:38.75,lng:33.35,k:"place",q:"Lake Tuz Turkey"},
+  perissia:{n:"住宿｜Perissia Hotel",lat:38.631,lng:34.912,k:"base",q:"Perissia Hotel Cappadocia"},
+  fairy:{n:"奇岩怪石／妖精煙囪",lat:38.643,lng:34.828,k:"place",q:"Goreme Cappadocia"},
+  uchisar:{n:"卡亞瑟希爾岩城",lat:38.6314,lng:34.8074,k:"place",q:"Uchisar Castle Cappadocia"},
+  sisters:{n:"三姊妹岩",lat:38.6435,lng:34.835,k:"place",q:"Three Sisters Fairy Chimneys Cappadocia"},
+  sultanhani:{n:"古驛站",lat:38.247,lng:33.546,k:"place",q:"Sultanhani Caravanserai"},
+  sille:{n:"錫萊村",lat:37.933,lng:32.432,k:"place",q:"Sille Konya"},
+  mevlana:{n:"梅夫拉納博物館",lat:37.8707,lng:32.5045,k:"place",q:"Mevlana Museum Konya"},
+  bayir:{n:"住宿｜Bayir Diamond Hotel",lat:37.874,lng:32.492,k:"base",q:"Bayir Diamond Hotel Konya"},
+  pamukkale:{n:"棉堡",lat:37.9137,lng:29.1187,k:"place",q:"Pamukkale Turkey"},
+  hierapolis:{n:"希拉波里斯",lat:37.926,lng:29.126,k:"place",q:"Hierapolis Pamukkale"},
+  pamThermal:{n:"住宿｜Pam Thermal Hotel",lat:37.920,lng:29.125,k:"base",q:"Pam Thermal Hotel Pamukkale"},
+  ephesus:{n:"艾菲索斯古城",lat:37.9397,lng:27.3417,k:"place",q:"Ephesus Turkey"},
+  belish:{n:"住宿｜Grand Belish Resort & Spa",lat:37.837,lng:27.256,k:"base",q:"Grand Belish Resort Kusadasi"},
+  izmirClock:{n:"伊茲密爾鐘樓",lat:38.4192,lng:27.1287,k:"place",q:"Izmir Clock Tower"},
+  asansor:{n:"阿珊索爾塔",lat:38.4089,lng:27.1365,k:"place",q:"Asansor Izmir"},
+  ulu:{n:"布爾薩大清真寺",lat:40.1838,lng:29.0616,k:"place",q:"Ulu Camii Bursa"},
+  baia:{n:"住宿｜Hotel Baia Bursa",lat:40.195,lng:29.065,k:"base",q:"Hotel Baia Bursa"},
+  bosphorus:{n:"博斯普魯斯遊船",lat:41.035,lng:29.005,k:"place",q:"Bosphorus Cruise Istanbul"},
+  spice:{n:"香料市集（下車拍照）",lat:41.0165,lng:28.9706,k:"place",q:"Spice Bazaar Istanbul"},
+  ist:{n:"伊斯坦堡機場",lat:41.2753,lng:28.7519,k:"base",q:"Istanbul Airport IST"}
+};
+
+const days=[
+{
+  id:"d1",date:"2026-12-12",shortLabel:"D1",label:"D1 12/12",title:"桃園 → 伊斯坦堡",
+  route:["T2 08:00 集合","TK125","Pullman Istanbul"],
+  pins:["tpe","pullman"],
+  free:"長途直飛約 12–13 小時；落地後進房休息為主。",
+  cards:[
+    {n:"1",t:"集合＋TK125 桃園 → 伊斯坦堡",w:"08:00 桃園 T2、土耳其航空（華航代理）4 號後方櫃台。11:00 起飛、19:10 抵達。",tags:[["機場","opt"],["集合已確認","mine"]],meta:"餐：早／午機上；晚無｜飛行約 12h+",maps:P.tpe.q,
+      detail:{intro:"團體座位由航空公司安排；預留起飛前約三小時緩衝。",shots:[],tips:["舒適衣物與保暖外套","貴重品手提"]}},
+    {n:"2",t:"Pullman Istanbul Hotel",w:"伊斯坦堡首晚。自備牙膏／牙刷／拖鞋；無熱水壺。",tags:[["住宿","mine"]],meta:"公開頁不列房號與電話",maps:P.pullman.q,
+      detail:{intro:"進房休息，養精神隔日長途。",shots:[],tips:[]}}
+  ]
+},
+{
+  id:"d2",date:"2026-12-13",shortLabel:"D2",label:"D2 12/13",title:"伊斯坦堡 → 番紅花城",
+  route:["聖索菲亞拍照","藍色清真寺","約 426 km","番紅花城民宿"],
+  pins:["hagia","blue","hidirlikHotel"],
+  free:"民宿在古蹟保護區；石板路可能需小包過夜行李。",
+  cards:[
+    {n:"1",t:"聖索菲亞（下車拍照）＋藍色清真寺（入內）",w:"聖索菲亞下車拍照；藍色清真寺入內參觀。清真寺服裝規範：勿短褲／露肩；女性需頭巾。",tags:[["景點","opt"],["服裝規範","warn"]],meta:"餐：早飯店／午土式風味／晚民宿",maps:P.blue.q,
+      detail:{intro:"若關閉或整修，可能改其他清真寺。",shots:["圓頂與尖塔輪廓","廣場遠景"],tips:["易穿脫的鞋","尊重禱告空間"]}},
+    {n:"2",t:"長途車往番紅花城 Safranbolu",w:"約 426 km。UNESCO 古蹟山城；鄂圖曼風格街景。",tags:[["移動","opt"]],meta:"住宿：Hidirlik Konaklari",maps:P.hidirlikHotel.q,
+      detail:{intro:"民宿無空調；房型大小不一，抽籤或民宿安排。",shots:["木屋街景","石板巷"],tips:["另備過夜小包","無法接受配房方式者不宜此團型"]}}
+  ]
+},
+{
+  id:"d3",date:"2026-12-14",shortLabel:"D3",label:"D3 12/14",title:"番紅花城 → 安卡拉 → 鹽湖 → 卡帕多奇亞",
+  route:["希德爾立克","安卡拉陵寢","鹽湖","陶瓷工坊","Perissia"],
+  pins:["hidirlik","anitkabir","tuz","perissia"],
+  free:"長途日；晚上卡帕多奇亞進房休息。",
+  cards:[
+    {n:"1",t:"希德爾立克山丘",w:"俯瞰番紅花城全景，適合拍山城輪廓。",tags:[["景點","opt"]],meta:"早：民宿",maps:P.hidirlik.q,
+      detail:{intro:"登高望遠即可，勿為機位拖團。",shots:["山城全景"],tips:[]}},
+    {n:"2",t:"凱莫爾陵寢紀念館 Anitkabir",w:"安卡拉國父陵寢；需安檢，大型背包不宜。",tags:[["景點","opt"]],meta:"午：土耳其烤肉風味",maps:P.anitkabir.q,
+      detail:{intro:"隨身小包入內較方便。",shots:["廣場與建築線條"],tips:["安靜尊重"]}},
+    {n:"3",t:"鹽湖 Lake Tuz＋陶瓷工坊 → Perissia",w:"鹽湖下車拍照；阿瓦諾斯一帶陶瓷觀光工坊入內。晚住卡帕多奇亞。",tags:[["景點","opt"],["工坊","warn"]],meta:"晚：飯店｜住宿：Perissia Hotel",maps:P.perissia.q,
+      detail:{intro:"工坊為行程安排；不需要可不買。",shots:["鹽湖白晶","陶藝"],tips:[]}}
+  ]
+},
+{
+  id:"d4",date:"2026-12-15",shortLabel:"D4",label:"D4 12/15",title:"卡帕多奇亞全日",
+  route:["奇岩怪石","岩城","三姊妹","地毯工廠"],
+  pins:["fairy","uchisar","sisters","perissia"],
+  free:"自費熱氣球若成行約凌晨起床；詳見「自費選項」。連泊第二晚。",
+  cards:[
+    {n:"1",t:"奇岩怪石（駱駝岩／烏其沙／獵人谷）",w:"風化奇岩區下車拍照；若整修可能改玫瑰谷等。",tags:[["景點","opt"]],meta:"餐：早飯店／午陶甕料理／晚飯店",maps:P.fairy.q,
+      detail:{intro:"以天然石雕尺度與光影為主。",shots:["錐岩／駱駝岩輪廓"],tips:[]}},
+    {n:"2",t:"卡亞瑟希爾岩城＋三姊妹岩",w:"岩城入內；三姊妹岩下車拍照。",tags:[["景點","opt"]],meta:"",maps:P.uchisar.q,
+      detail:{intro:"岩居與蕈狀岩並看。",shots:["岩城俯瞰","三姊妹岩"],tips:[]}},
+    {n:"3",t:"手工地毯工廠",w:"入內參觀編織與材質說明。",tags:[["工坊","warn"]],meta:"住宿：Perissia Hotel（連泊）",maps:P.perissia.q,
+      detail:{intro:"不需要可不買。",shots:[],tips:[]}}
+  ]
+},
+{
+  id:"d5",date:"2026-12-16",shortLabel:"D5",label:"D5 12/16",title:"卡帕多奇亞 → 孔亞",
+  route:["古驛站","錫萊村","梅夫拉納","Bayir Diamond"],
+  pins:["sultanhani","sille","mevlana","bayir"],
+  free:"孔亞 overnight；晚上飯店為主。",
+  cards:[
+    {n:"1",t:"古驛站 Sultanhani",w:"塞爾柱商隊驛站；下車拍照。",tags:[["景點","opt"]],meta:"早：飯店",maps:P.sultanhani.q,
+      detail:{intro:"看石造門廊與院落尺度。",shots:["拱門／中庭"],tips:[]}},
+    {n:"2",t:"錫萊村＋梅夫拉納博物館",w:"石隱小鎮氣氛；梅夫拉納博物館入內。",tags:[["景點","opt"]],meta:"午：鐵板＋PIDE｜晚：飯店｜住 Bayir Diamond",maps:P.mevlana.q,
+      detail:{intro:"錫萊相對靜謐；博物館尊重宗教空間。",shots:["石屋巷","綠圓頂輪廓"],tips:[]}}
+  ]
+},
+{
+  id:"d6",date:"2026-12-17",shortLabel:"D6",label:"D6 12/17",title:"孔亞 → 棉堡",
+  route:["約 405 km","棉堡","希拉波里斯","乳膠中心"],
+  pins:["pamukkale","hierapolis","pamThermal"],
+  free:"石灰棚須脫鞋；注意防滑。",
+  cards:[
+    {n:"1",t:"棉堡 Pamukkale＋希拉波里斯",w:"白色石灰棚與古城遺址入內參觀。",tags:[["景點","opt"],["脫鞋","warn"]],meta:"餐：早飯店／午土式風味／晚飯店",maps:P.pamukkale.q,
+      detail:{intro:"脫鞋步行；地面濕滑。",shots:["白棚層層","劇場遺址"],tips:["穿易脫鞋","小心腳步"]}},
+    {n:"2",t:"乳膠展示中心 → Pam Thermal",w:"乳膠產品展示選購點；晚住溫泉飯店。",tags:[["工坊","warn"],["住宿","mine"]],meta:"住宿：Pam Thermal Hotel",maps:P.pamThermal.q,
+      detail:{intro:"不需要可不買。",shots:[],tips:[]}}
+  ]
+},
+{
+  id:"d7",date:"2026-12-18",shortLabel:"D7",label:"D7 12/18",title:"棉堡 → 艾菲索斯 → 庫薩達西",
+  route:["艾菲索斯","皮衣工廠","庫薩達西"],
+  pins:["ephesus","belish"],
+  free:"旺季客滿時住宿可能改伊茲密爾區域。",
+  cards:[
+    {n:"1",t:"艾菲索斯古城 Ephesus",w:"希臘羅馬古城遺址入內；大理石街、劇場、圖書館等。",tags:[["景點","opt"]],meta:"餐：早飯店／午土耳其料理／晚飯店",maps:P.ephesus.q,
+      detail:{intro:"面積大，跟團節奏走重點即可。",shots:["圖書館立面","劇場"],tips:["遮陽與水"]}},
+    {n:"2",t:"皮衣工廠 → Grand Belish",w:"皮衣展示／秀場性質；晚住庫薩達西度假飯店（或伊茲密爾備案）。",tags:[["工坊","warn"],["住宿","mine"]],meta:"住宿：Grand Belish Resort & Spa",maps:P.belish.q,
+      detail:{intro:"不需要可不買。",shots:[],tips:[]}}
+  ]
+},
+{
+  id:"d8",date:"2026-12-19",shortLabel:"D8",label:"D8 12/19",title:"庫薩達西 → 伊茲密爾 → 布爾薩",
+  route:["鐘樓","Asansor","約 349 km","布爾薩大清真寺"],
+  pins:["izmirClock","asansor","ulu","baia"],
+  free:"又一日長途；晚上布爾薩飯店休息。",
+  cards:[
+    {n:"1",t:"伊茲密爾鐘樓＋阿珊索爾塔",w:"鐘樓下車拍照；Asansor 百年電梯入內登高看海港。",tags:[["景點","opt"]],meta:"餐：早飯店／午土式風味／晚飯店",maps:P.asansor.q,
+      detail:{intro:"天氣好時沿海景觀是重點。",shots:["鐘樓廣場","電梯塔海景"],tips:[]}},
+    {n:"2",t:"布爾薩大清真寺 → Hotel Baia",w:"Ulu Camii 入內；清真寺服裝規範同前。若關閉可能改其他寺。",tags:[["景點","opt"],["住宿","mine"]],meta:"住宿：Hotel Baia Bursa",maps:P.ulu.q,
+      detail:{intro:"早期鄂圖曼建築；安靜參觀。",shots:["多圓頂外觀","內部書法"],tips:["頭巾／長褲"]}}
+  ]
+},
+{
+  id:"d9",date:"2026-12-20",shortLabel:"D9",label:"D9 12/20",title:"布爾薩 → 伊斯坦堡 → 機場",
+  route:["博斯普魯斯包船","香料市集拍照","TK124"],
+  pins:["bosphorus","spice","ist"],
+  free:"午餐自理；午後往機場辦理登機。夜宿機上。",
+  cards:[
+    {n:"1",t:"博斯普魯斯海峽遊船（整團包船）",w:"團標示整團包船，不另售自費、不擠公共船。",tags:[["景點","opt"],["團含","mine"]],meta:"早：飯店｜午：自理｜晚：機上",maps:P.bosphorus.q,
+      detail:{intro:"看海峽兩岸宮殿與別墅線。",shots:["歐亞兩岸輪廓"],tips:[]}},
+    {n:"2",t:"香料市集（下車拍照）→ IST → TK124",w:"市集下車拍照後往機場。17:15 起飛，隔日 08:45 抵桃園。",tags:[["機場","opt"]],meta:"夜宿機上",maps:P.ist.q,
+      detail:{intro:"預留安檢與退稅緩衝。",shots:["市集色彩一瞥"],tips:["趕機放棄久逛"]}}
+  ]
+},
+{
+  id:"d10",date:"2026-12-21",shortLabel:"D10",label:"D10 12/21",title:"抵達桃園",
+  route:["TK124 落地","桃園"],
+  pins:["tpe"],
+  free:"早餐機上；出關後各自回家。",
+  cards:[
+    {n:"1",t:"桃園國際機場",w:"08:45 抵達。期待下次旅程。",tags:[["機場","opt"]],meta:"早：機上",maps:P.tpe.q,
+      detail:{intro:"",shots:[],tips:[]}}
+  ]
+}
+];
+
+const TRAVELOGUE_HREF=null;
+
+const sights=[
+  {t:"聖索菲亞／藍色清真寺",d:"聖索菲亞下車拍照；藍色清真寺入內。注意服裝與頭巾。",shot:"圓頂尖塔、廣場遠景",map:P.blue.q},
+  {t:"番紅花城／希德爾立克",d:"UNESCO 鄂圖曼山城；山丘俯瞰全景。",shot:"木屋街、山城全景",map:P.hidirlik.q},
+  {t:"凱莫爾陵寢",d:"安卡拉國父陵寢與廣場。",shot:"建築線條、廣場",map:P.anitkabir.q},
+  {t:"鹽湖",d:"季節性白色鹽晶地景。",shot:"白晶與天際",map:P.tuz.q},
+  {t:"卡帕多奇亞奇岩／岩城／三姊妹",d:"風化奇岩、岩城、蕈狀岩。",shot:"錐岩、俯瞰、三姊妹",map:P.fairy.q},
+  {t:"古驛站／錫萊／梅夫拉納",d:"商隊驛站、石隱小鎮、蘇非文化博物館。",shot:"拱門、石屋、綠圓頂",map:P.mevlana.q},
+  {t:"棉堡／希拉波里斯",d:"石灰棚＋古城；須脫鞋。",shot:"白棚層、劇場",map:P.pamukkale.q},
+  {t:"艾菲索斯",d:"希臘羅馬古城遺址。",shot:"圖書館、劇場",map:P.ephesus.q},
+  {t:"伊茲密爾鐘樓／Asansor",d:"廣場鐘樓與百年電梯海景。",shot:"鐘樓、海港",map:P.asansor.q},
+  {t:"布爾薩大清真寺",d:"早期鄂圖曼多圓頂清真寺。",shot:"外觀圓頂、內部",map:P.ulu.q},
+  {t:"博斯普魯斯／香料市集",d:"整團包船看海峽；市集下車拍照。",shot:"兩岸、市集色彩",map:P.bosphorus.q}
+];
+
+function mapsUrl(q){return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(q)}
+function el(tag,cls,html){const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e}
+
+let map,layer;
+function ensureMap(){
+  if(map)return;
+  map=L.map("map",{scrollWheelZoom:false});
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"© OpenStreetMap"}).addTo(map);
+  layer=L.layerGroup().addTo(map);
+}
+function color(k){return k==="base"?"#166534":k==="food"?"#c2410c":"#2563eb"}
+function showPins(keys){
+  ensureMap();layer.clearLayers();
+  const latlngs=[];
+  keys.forEach(id=>{
+    const p=P[id];if(!p)return;
+    const m=L.circleMarker([p.lat,p.lng],{radius:8,color:"#fff",weight:2,fillColor:color(p.k),fillOpacity:.95});
+    m.bindPopup("<strong>"+p.n+"</strong><br><a target=_blank rel=noopener href=\""+mapsUrl(p.q)+"\">Google Maps ↗</a>");
+    m.addTo(layer);latlngs.push([p.lat,p.lng]);
+  });
+  if(latlngs.length)map.fitBounds(latlngs,{padding:[36,36],maxZoom:11});
+  setTimeout(()=>map.invalidateSize(),80);
+}
+
+let todayDayIndex=null;
+function renderDays(){
+  const tabs=document.getElementById("dayTabs");
+  const box=document.getElementById("dayContent");
+  tabs.replaceChildren();box.replaceChildren();
+  days.forEach((d,i)=>{
+    const b=document.createElement("button");
+    b.type="button";b.dataset.dayId=d.id;
+    b.append(document.createTextNode(d.label));
+    if(i===0)b.classList.add("active");
+    b.onclick=()=>selectDay(i);
+    tabs.append(b);
+    const panel=el("div","daypanel"+(i===0?" active":""));
+    panel.id=d.id;panel.dataset.i=i;panel.dataset.date=d.date||"";
+    const h=el("h2","sectiontitle",d.title);panel.append(h);
+    const route=el("div","route");d.route.forEach(t=>{const s=document.createElement("span");s.textContent=t;route.append(s)});panel.append(route);
+    d.cards.forEach(c=>{
+      const card=el("article","card");
+      const row=el("div","row");
+      row.append(el("div","num",c.n));
+      const grow=el("div","grow");
+      grow.append(el("h3",null,c.t));
+      grow.append(el("p","why",c.w));
+      if(c.meta)grow.append(el("p","meta",c.meta));
+      const tags=el("div","tags");(c.tags||[]).forEach(([t,k])=>{const s=document.createElement("span");s.className="tag "+(k||"");s.textContent=t;tags.append(s)});grow.append(tags);
+      const actions=el("div","actions");
+      const a=document.createElement("a");a.href=mapsUrl(c.maps);a.target="_blank";a.rel="noopener";a.textContent="Google 導航 ↗";actions.append(a);grow.append(actions);
+      if(c.detail&&(c.detail.intro||(c.detail.shots&&c.detail.shots.length)||(c.detail.tips&&c.detail.tips.length))){
+        const det=document.createElement("details");det.className="detailbox";
+        det.innerHTML="<summary>看點・拍照・提醒</summary>";
+        const body=el("div","detailbody");
+        if(c.detail.intro)body.append(el("p",null,c.detail.intro));
+        const grid=el("div","detailgrid");
+        if(c.detail.shots&&c.detail.shots.length){const m=el("div","detailmini");m.innerHTML="<b>建議取景</b>"+c.detail.shots.map(x=>"・"+x).join("<br>");grid.append(m)}
+        if(c.detail.tips&&c.detail.tips.length){const m=el("div","detailmini");m.innerHTML="<b>別做／提醒</b>"+c.detail.tips.map(x=>"・"+x).join("<br>");grid.append(m)}
+        body.append(grid);det.append(body);grow.append(det);
+      }
+      row.append(grow);card.append(row);panel.append(card);
+    });
+    if(d.free){
+      const foot=el("article","card");
+      foot.append(el("h3",null,"🕘 現場節奏"));
+      foot.append(el("p","why",d.free));
+      panel.append(foot);
+    }
+    box.append(panel);
+  });
+  selectDay(0);
+  paintTodayMarks();
+}
+function paintTodayMarks(){
+  document.querySelectorAll("#dayTabs button").forEach((b,idx)=>{
+    const old=b.querySelector(".today-mark");if(old)old.remove();
+    if(todayDayIndex!=null&&idx===todayDayIndex){
+      const m=document.createElement("span");m.className="today-mark";m.textContent="今天";b.append(m);
+    }
+  });
+}
+function selectDay(i){
+  document.querySelectorAll("#dayTabs button").forEach((b,idx)=>b.classList.toggle("active",idx===i));
+  document.querySelectorAll(".daypanel").forEach((p,idx)=>p.classList.toggle("active",idx===i));
+  showPins(days[i].pins);
+}
+function showPlanPanel(){
+  document.querySelectorAll("#mainTabs [data-tab]").forEach(x=>x.classList.toggle("active",x.dataset.tab==="plan"));
+  document.querySelectorAll(".panel").forEach(p=>p.hidden=p.id!=="plan");
+  setTimeout(()=>{if(map)map.invalidateSize()},100);
+}
+
+function renderSights(){
+  const box=document.getElementById("sightsList");box.replaceChildren();
+  sights.forEach(s=>{
+    const card=el("article","card");
+    card.append(el("h3",null,s.t));
+    card.append(el("p","why",s.d));
+    card.append(el("p","meta","<b>拍照：</b>"+s.shot));
+    const actions=el("div","actions");
+    const a=document.createElement("a");a.href=mapsUrl(s.map);a.target="_blank";a.rel="noopener";a.textContent="Maps ↗";actions.append(a);
+    card.append(actions);box.append(card);
+  });
+}
+
+document.querySelectorAll("#mainTabs [data-tab]").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("#mainTabs [data-tab]").forEach(x=>x.classList.toggle("active",x===b));
+  document.querySelectorAll(".panel").forEach(p=>p.hidden=p.id!==b.dataset.tab);
+  if(b.dataset.tab==="plan")setTimeout(()=>{if(map)map.invalidateSize()},100);
+}));
+
+renderDays();renderSights();
+
+(function wireTripDayNav(){
+  const nav=document.getElementById("tripDayNav");
+  if(!nav||!window.TripDayNav)return;
+  nav.hidden=false;
+  document.body.classList.add("has-trip-day-nav");
+  TripDayNav.init({
+    timezone:"Asia/Taipei",
+    days:days,
+    travelogueHref:TRAVELOGUE_HREF,
+    navEl:nav,
+    onSelectDay:function(i){
+      showPlanPanel();
+      selectDay(i);
+    },
+    onOverview:function(){
+      showPlanPanel();
+    },
+    getDayEl:function(id){return document.getElementById(id)},
+    markToday:function(i){
+      todayDayIndex=i;
+      paintTodayMarks();
+    }
+  });
+})();
+</script>
+</body>
+</html>
