@@ -100,6 +100,7 @@ body.has-trip-day-nav{padding-bottom:72px}
 .pm--4a .pm-cell-4{grid-row:3;grid-column:2}
 .pm--4b{grid-template:1fr 1fr/1fr 1fr}
 .pm--4c{grid-template:1fr 1fr/1fr 1fr}
+.sightguide{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)}
 </style>
 </head>
 <body><main class="wrap">
@@ -265,12 +266,20 @@ body.has-trip-day-nav{padding-bottom:72px}
     <p><strong>2026/11/05</strong>：依行前 brief 更新集合鐘點、六晚飯店、日序（南湖改 D2、青山湖改 D3）、餐標、行李／電源／天氣；公開檔省略私人聯絡。</p>
   </div>
 </section>
+
+<section class="card" id="travelogue-placeholder" hidden aria-live="polite">
+  <h2 class="sectiontitle">遊記</h2>
+  <p class="why">上海江南 2026.11 回程後若有獨立遊記，會以不公開聯想的 <code>/s/&lt;亂碼&gt;/</code> 網址單向連結；目前尚未建立，完成後會自這裡開啟。</p>
+  <p class="small">規劃頁仍保留「今天」「總覽」與行程卡；遊記內容不預先編寫。</p>
+</section>
 </main>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="../js/trip-day-nav.js"></script>
+<script src="../js/sight-guide-ui.js"></script>
 <script src="./notes-config.js"></script>
 <script src="places-data.js"></script>
+<script src="sight-guides.js"></script>
 <script>
 const P={
   pvg:{n:"浦東國際機場",lat:31.1443,lng:121.8083,k:"base",q:"Shanghai Pudong International Airport"},
@@ -549,7 +558,8 @@ function renderSights(){
     const p=data[id];if(!p) return;
     const card=el("article","card");
     card.append(el("h3",null,p.title));
-    if(p.blurb) card.append(el("p","why",p.blurb));
+    if(window.SightGuideUI) SightGuideUI.appendSightGuide(card,p);
+  else if(p.blurb) card.append(el("p","why",p.blurb));
     appendMosaic(card,p.photos,i);
     appendPlaceHistory(card,p);
     appendLearnLinks(card,p.learn);
@@ -588,12 +598,20 @@ function showIdeasPanel(){
     days:days,
     travelogueHref:TRAVELOGUE_HREF,
     navEl:nav,
+    compactBottomNav:true,
+    onTraveloguePlaceholder:function(){
+      showPlanPanel();
+      var el=document.getElementById("travelogue-placeholder");
+      if(el){el.hidden=false;el.scrollIntoView({behavior:"smooth",block:"start"})}
+    },
+    extraNavButtons:[{text:"記錄",className:"is-ideas",onClick:showIdeasPanel}],
     onSelectDay:function(i){
       showPlanPanel();
       selectDay(i);
     },
     onOverview:function(){
       showPlanPanel();
+      try{document.getElementById("overview").scrollIntoView({behavior:"smooth",block:"start"})}catch(e){scrollTo(0,0)}
     },
     getDayEl:function(id){return document.getElementById(id)},
     markToday:function(i){
@@ -601,12 +619,6 @@ function showIdeasPanel(){
       paintTodayMarks();
     }
   });
-  const ideasBtn=document.createElement("button");
-  ideasBtn.type="button";
-  ideasBtn.className="trip-day-nav__btn is-ideas";
-  ideasBtn.textContent="記錄";
-  ideasBtn.addEventListener("click",showIdeasPanel);
-  nav.appendChild(ideasBtn);
 })();
 
 const IDEAS_API=(window.ShanghaiNotesConfig&&ShanghaiNotesConfig.endpoint)||"";
