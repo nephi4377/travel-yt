@@ -176,6 +176,47 @@
         return node;
       }
 
+      if (opts.compactBottomNav) {
+        addBtn(
+          "今天",
+          function () {
+            if (todayIndex != null) goDay(todayIndex);
+            else goOverview();
+          },
+          todayIndex != null ? "is-today-ctrl" : "is-muted"
+        );
+        addBtn(
+          "總覽",
+          function () {
+            goOverview();
+          },
+          "is-overview"
+        );
+        if (opts.travelogueHref) {
+          addBtn("遊記", null, "is-travelogue", true, opts.travelogueHref);
+        } else if (typeof opts.onTraveloguePlaceholder === "function") {
+          addBtn(
+            "遊記",
+            function () {
+              opts.onTraveloguePlaceholder();
+            },
+            "is-travelogue"
+          );
+        } else {
+          addBtn(
+            "遊記",
+            function () {
+              goOverview();
+            },
+            "is-travelogue is-muted"
+          );
+        }
+        (opts.extraNavButtons || []).forEach(function (b) {
+          addBtn(b.text, b.onClick, b.className || "");
+        });
+        return;
+      }
+
       // After trip: surface 遊記 first when a link exists
       if (phase === "after" && opts.travelogueHref) {
         addBtn("遊記", null, "is-travelogue", true, opts.travelogueHref);

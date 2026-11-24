@@ -88,6 +88,7 @@ body.has-trip-day-nav{padding-bottom:72px}
 .pm--4a .pm-cell-4{grid-row:3;grid-column:2}
 .pm--4b{grid-template:1fr 1fr/1fr 1fr}
 .pm--4c{grid-template:1fr 1fr/1fr 1fr}
+.sightguide{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)}
 </style>
 </head>
 <body><main class="wrap">
@@ -239,7 +240,9 @@ body.has-trip-day-nav{padding-bottom:72px}
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="../js/trip-day-nav.js"></script>
+<script src="../js/sight-guide-ui.js"></script>
 <script src="places-data.js"></script>
+<script src="sight-guides.js"></script>
 <script>
 const P={
   tpe:{n:"桃園國際機場 T2",lat:25.0797,lng:121.2342,k:"base",q:"Taoyuan Airport Terminal 2"},
@@ -553,7 +556,8 @@ function renderSights(){
     const p=data[id];if(!p) return;
     const card=el("article","card");
     card.append(el("h3",null,p.title));
-    if(p.blurb) card.append(el("p","why",p.blurb));
+    if(window.SightGuideUI) SightGuideUI.appendSightGuide(card,p);
+  else if(p.blurb) card.append(el("p","why",p.blurb));
     appendMosaic(card,p.photos,i);
     appendPlaceHistory(card,p);
     appendLearnLinks(card,p.learn);
