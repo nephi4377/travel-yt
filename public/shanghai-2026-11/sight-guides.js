@@ -56,9 +56,7 @@
       intro: "湖州南潯一帶現代地標建築夜景；跟團看完即回。",
       highlights: "太陽與大象造型建築輪廓",
       shots: ["夜景輪廓"],
-      tips: ["看完即回，不另開夜場"],
-      pending: "觀景動線待現場確認",
-      photosPending: true
+      tips: ["看完即回，不另開夜場"]
     },
     gongqing: {
       intro: "上海市區近郊森林公園，適合短走秋色林道。",
@@ -87,8 +85,7 @@
     coke: {
       intro: "可口可樂品牌體驗館；短停互動展即可。",
       highlights: "品牌展陳與互動區",
-      tips: ["行程點，不需要可不進"],
-      photosPending: true
+      tips: ["行程點，不需要可不進"]
     }
   };
   var P = window.SHANGHAI_PLACES || {};
