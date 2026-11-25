@@ -77,7 +77,7 @@ window.TURKEY_PLACES = {
     map: "Lake Tuz Turkey",
     photos: [
       { src: "photos/tuz-1.jpg", alt: "鹽湖地景", credit: "Wikimedia Commons · CC BY-SA · https://commons.wikimedia.org/wiki/File:Tuz_G%C3%B6l%C3%BC_2.jpg" },
-      { src: "photos/tuz-2.jpg", alt: "鹽湖鳥瞰", credit: "Wikimedia Commons · Public domain (NASA) · https://commons.wikimedia.org/wiki/File:Satellite_image_of_Lake_Tuz,_Turkey.tif" }
+      { src: "photos/tuz-2.jpg", alt: "鹽湖地景", credit: "Lethiciasouza · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Salt_lake,_Tuz_golu.jpg" }
     ],
     themes: [
       { t: "土耳其第二大湖", b: "Tuz Gölü（鹽湖）位於土耳其中部，介於安卡拉以南與卡帕多奇亞西側，為內陸封閉鹽湖，面積隨雨季入流與夏季蒸發大幅變化，有時縮至乾涸鹽灘。湖水因高鹽度與礦物沉積呈現粉白或淡紅地表，在特定光線下極具辨識度。地質上屬圖茲盆地一部，與周邊農牧經濟及鹽業開採密切相關，是安納托利亞內陸自然景觀的代表之一。衛星影像常用於監測湖面季節性縮張，是氣候與水文研究的案例。" },
