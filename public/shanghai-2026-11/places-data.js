@@ -4,8 +4,8 @@ window.SHANGHAI_PLACES = {
     title: "嘉興南湖",
     map: "嘉兴南湖",
     photos: [
-      { src: "photos/nanhu-1.jpg", alt: "南湖湖面", credit: "EnglishEfternamn · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:South_Lake_(Jiaxing).jpg" },
-      { src: "photos/nanhu-2.jpg", alt: "煙雨樓一帶", credit: "Wubin616 · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:20240120_Wanghu_Pavilion_in_South_Lake,_Jiaxing.jpg" }
+      { src: "photos/nanhu-1.jpg", alt: "南湖湖面", credit: "钉钉 · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:South_Lake_(Jiaxing).jpg" },
+      { src: "photos/nanhu-2.jpg", alt: "煙雨樓一帶", credit: "Windmemories · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:20240120_Wanghu_Pavilion_in_South_Lake,_Jiaxing.jpg" }
     ],
     themes: [
       { t: "江南名湖與運河水系", b: "南湖位於浙江省嘉興市區南端，與杭州、湖州等湖沼相連，歷史上屬江南水網一環。湖面開闊、堤岸曲折，自古為漕運與農田灌溉的重要水域。嘉興因湖而興，城湖相依的格局在方志與古畫中屢見記載。今日南湖景區結合湖心島、堤橋與園林，並列紅船會址紀念設施，是理解嘉興「魚米之鄉」水陸關係的典型場域，亦為長三角遊湖線的經典一站。" },
@@ -25,7 +25,7 @@ window.SHANGHAI_PLACES = {
     photos: [{
       src: "photos/jingshan-1.jpg",
       alt: "徑山寺山門",
-      credit: "CatOnMars · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Main_gate_of_Jingshan_Temple_1.jpg"
+      credit: "User:CatOnMars · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Main_gate_of_Jingshan_Temple_1.jpg"
     }],
     themes: [
       { t: "臨濟禪風與茶禪傳統", b: "徑山寺位於杭州市餘杭區徑山，唐代天寶四年（745 年）由法欽禪師開山，初屬牛頭宗一系，後被尊為宋代臨濟宗重要道場，與日本臨濟禪傳入淵源深。陸羽《茶經》成書前後，徑山即以茶事聞名，「茶禪一味」傳統在此延續。寺院屢興屢廢，近代重建後保留山林寺院格局。宋元日僧如圓爾辨圓等曾在此學法，僧傳與方志均記其為江南禪林重鎮，亦見於中日文化交流研究。" },
@@ -42,7 +42,7 @@ window.SHANGHAI_PLACES = {
   qingshan: {
     title: "青山湖水上森林",
     map: "青山湖水上森林公园",
-    photos: [{ src: "photos/qingshan-1.jpg", alt: "水上森林", credit: "AbelMono11 · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Qingshanhu_Guojia_Senlin_Gongyuan.jpg" }],
+    photos: [{ src: "photos/qingshan-1.jpg", alt: "水上森林", credit: "Yumeto · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Qingshanhu_Guojia_Senlin_Gongyuan.jpg" }],
     themes: [
       { t: "臨安湖區與水上林木", b: "青山湖位於杭州市臨安區，為人工湖與周邊山地共同構成的郊野景觀帶。水上森林段因池杉等喬木植於淺水區，樹幹與湖面形成「立於水中」的獨特視覺。此類營造多見於近世生態修復與景觀林建設，結合濕地保育與遊憩步道。了解湖區與天目山餘脈的地理關係，有助閱讀長三角西部山水格局。水域與青山橋一帶連通苕溪幹流，兼具區域防洪與郊野遊憩功能。" },
       { t: "船遊動線與季節變化", b: "公園以棧道與船遊為主要體驗方式，從水面近距離觀察樹冠與水鳥棲息環境。秋冬時節池杉葉色轉褐或微紅，常見於遊客影像，惟色澤與密度受當年氣候影響。景區管理單位對船班、安全裝備與水位有季節性規定；歷史與自然敘事以地方林業、水利公開資料為準，不以網路濾鏡效果為預期。春夏季節可見鷺類與野鴨在水杉根際覓食，水質與水位隨流域降水調整，船遊區域可能暫時關閉。" }
@@ -57,8 +57,8 @@ window.SHANGHAI_PLACES = {
     title: "柯岩風景區",
     map: "柯岩风景区",
     photos: [
-      { src: "photos/keyan-1.jpg", alt: "柯岩步道", credit: "Windmemories · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Towpath_in_Keyan_Scenic_Area,_Shaoxing.jpg" },
-      { src: "photos/keyan-2.jpg", alt: "柯岩大佛", credit: "Gromtau · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:%E6%9F%AF%E5%B2%A9%E5%A4%A7%E4%BD%9B_-_panoramio.jpg" }
+      { src: "photos/keyan-1.jpg", alt: "柯岩步道", credit: "decar66 · CC BY 2.0 · https://commons.wikimedia.org/wiki/File:Towpath_in_Keyan_Scenic_Area,_Shaoxing.jpg" },
+      { src: "photos/keyan-2.jpg", alt: "柯岩大佛", credit: "liubozhi · CC BY 3.0 · https://commons.wikimedia.org/wiki/File:%E6%9F%AF%E5%B2%A9%E5%A4%A7%E4%BD%9B_-_panoramio.jpg" }
     ],
     themes: [
       { t: "千年採石遺址", b: "柯岩風景區位於紹興柯橋一帶，石峰、摩崖與掏空山體為歷代石匠開採松石留下的遺跡。自漢晉以來地方志即有採石記錄，至隋唐宋時規模擴大，形成今日所見奇石立面。天工大佛、雲骨等景點名稱源自民間與文獻對石形的比擬。此類採石遺址是江南石作產業史的實地教材，考古與地方志研究均可查證。隋代以降越地石材供應城邑建設，柯岩崖面留有的開採層級與棧道孔痕，為石匠工具史提供實物線索。" },
@@ -116,8 +116,8 @@ window.SHANGHAI_PLACES = {
     title: "潮樂之城／鹽官",
     map: "盐官潮乐之城",
     photos: [
-      { src: "photos/yanguan-1.jpg", alt: "鹽官古城", credit: "Songfa · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:Yanguan_Town_Haining_2016.jpg" },
-      { src: "photos/yanguan-2.jpg", alt: "錢塘涌潮示意", credit: "Woudloper · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Tidal_Bore_Qiantang_River.png" }
+      { src: "photos/yanguan-1.jpg", alt: "鹽官古城", credit: "Foxy1219 · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Yanguan_Town_Haining_2016.jpg" },
+      { src: "photos/yanguan-2.jpg", alt: "錢塘涌潮示意", credit: "Pchxiao · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Tidal_Bore_Qiantang_River.png" }
     ],
     themes: [
       { t: "海寧鹽官與觀潮傳統", b: "鹽官鎮屬嘉興海寧市，瀕杭州灣，自古以煮海製鹽、漕運與觀潮聞名。農曆八月十八大潮為傳統觀潮時節，蘇軾、徐志摩等文章均留下潮汐描寫。交叉潮、一字潮等景觀名稱來自民間對潮頭形態的觀察。觀潮受月球引力、風向與河槽地形影響，每日潮時須查天文潮曆與官方安全公告。明代以降海寧為觀潮勝地，乾隆皇帝曾多次駐蹕海塘，地方志載有御題詩刻與閱潮儀式，強化官方觀潮傳統。" },
@@ -135,9 +135,9 @@ window.SHANGHAI_PLACES = {
     title: "南潯古鎮",
     map: "南浔古镇",
     photos: [
-      { src: "photos/nanxun-1.jpg", alt: "南潯水巷", credit: "Zhangzhugang · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:Nanxun_-_Ancient_water_town_-_0081.jpg" },
-      { src: "photos/nanxun-2.jpg", alt: "百間樓", credit: "Zhangzhugang · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:Nanxun_-_Ancient_water_town_-_0095.jpg" },
-      { src: "photos/nanxun-3.jpg", alt: "石橋與搖櫓船", credit: "Zhangzhugang · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:Nanxun_-_Ancient_water_town_-_0333.jpg" }
+      { src: "photos/nanxun-1.jpg", alt: "南潯水巷", credit: "Stefan Fussan · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:Nanxun_-_Ancient_water_town_-_0081.jpg" },
+      { src: "photos/nanxun-2.jpg", alt: "百間樓", credit: "Stefan Fussan · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:Nanxun_-_Ancient_water_town_-_0095.jpg" },
+      { src: "photos/nanxun-3.jpg", alt: "石橋與搖櫓船", credit: "Stefan Fussan · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:Nanxun_-_Ancient_water_town_-_0333.jpg" }
     ],
     themes: [
       { t: "絲綢之府與巨賈", b: "南潯位於湖州市，太湖南岸，明清時因蠶絲產銷興盛，有「四象八牛」之稱，指最富四大家族與次富八姓的財力比擬。地方志與商業檔案記載絲經、絲綢外銷上海、江南各地。財富積累催生大宅院與公益建築，形成今日古鎮核心資產。江南絲綢史研究常以潯溪為案例。清末南潯絲商在上海開辦機器繅絲廠，技術與資本外流，顯示江南絲業由鄉鎮向埠頭城市轉移的過程。" },
@@ -167,7 +167,7 @@ window.SHANGHAI_PLACES = {
   gongqing: {
     title: "共青森林公園",
     map: "上海共青森林公园",
-    photos: [{ src: "photos/gongqing-1.jpg", alt: "共青森林", credit: "Gunking · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:%E5%85%B1%E9%9D%92%E6%A3%AE%E6%9E%97%E5%85%AC%E5%9B%AD%EF%BC%8CGongqing_Forest_Park_-_panoramio.jpg" }],
+    photos: [{ src: "photos/gongqing-1.jpg", alt: "共青森林", credit: "Adazzy.Gonzo · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:%E5%85%B1%E9%9D%92%E6%A3%AE%E6%9E%97%E5%85%AC%E5%9B%AD%EF%BC%8CGongqing_Forest_Park_-_panoramio.jpg" }],
     themes: [
       { t: "上海近郊城市森林", b: "共青森林公園位於楊浦區黃浦江北岸，前身為共青森林公園苗圃與林場，1986 年對外開放，1995 年更名為國家森林公園。園內林木以杉、樟、銀杏等為主，承擔城市綠肺與郊野休憩功能。上海城市擴張過程中，此地保留大片人工林，見證從濱江灘地到生態公園的土地利用轉變。園名源自共青團組織參與義務植樹的歷史記憶，今仍設林業科普與樹種標識，可讀作上海近郊造林的活樣本。" },
       { t: "季節林相與開放設施", b: "園區設林蔭道、湖泊、露營草坪與小型遊樂設施，秋冬銀杏、水杉變色為常見景象，惟葉色年份差異大。公園多次列入市級綠化示範項目，管理單位公布休憩、火種與水域安全規定。歷史敘事以林業與園林檔案為限，適合作為上海段「城市自然」短停閱讀點。春季桃花、杜鵑花期與秋季楓色同樣受栽培品種與養護影響，露營區與燒烤點須預約並遵守公園防火季令。" }
@@ -181,7 +181,7 @@ window.SHANGHAI_PLACES = {
   dishui: {
     title: "滴水湖",
     map: "上海滴水湖洲际酒店",
-    photos: [{ src: "photos/dishui-1.jpg", alt: "滴水湖", credit: "N509FZ · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:201812_Dishui_Lake_from_35L_Final_Approach_Kopie.jpg" }],
+    photos: [{ src: "photos/dishui-1.jpg", alt: "滴水湖", credit: "MNXANL · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:201812_Dishui_Lake_from_35L_Final_Approach_Kopie.jpg" }],
     themes: [
       { t: "臨港新城人工湖", b: "滴水湖位於上海浦東臨港新片區，為 2002 年起吹填造陸後開掘的圓形人工湖，直徑約 2.5 公里，作為新城水景與雨水調蓄核心。臨港承載先進製造、航運與科研功能，滴水湖周邊建設會展、酒店與海岸線綠帶。此區原為長江口濕地與灘塗，城市規劃文件記錄其開發歷程。湖水經環湖泵站與東海滯洪區聯動，工程設計同時服務景觀與排洪，是閱讀上海向海拓展的典型人工地貌案例。" },
       { t: "濱湖度假與海岸線", b: "湖周設環湖步道、雕塑與帆船等休閒設施，連接南匯嘴海岸與東海大橋視野。氣候上臨海風較大，水體透明度隨季節變化。滴水湖標榜「湖海相連」地理關係，有助理解上海向海發展軸線；具體船班與岸線開放以浦東新區文旅公告為準。環湖單車道與軌交滴水湖站相銜，可轉乘接駁至會展中心、海昌海洋公園等新市域景點，形成臨港一日周邊動線。" }
@@ -208,7 +208,7 @@ window.SHANGHAI_PLACES = {
   nanhui: {
     title: "南匯嘴觀海公園",
     map: "南汇嘴观海公园",
-    photos: [{ src: "photos/nanhui-1.jpg", alt: "南匯嘴觀海公園", credit: "Zhang 2008 · Public domain · https://commons.wikimedia.org/wiki/File:Donghai_Bridge.jpg" }],
+    photos: [{ src: "photos/nanhui-1.jpg", alt: "南匯嘴觀海公園", credit: "w:User:Zhang 2008 · Public domain · https://commons.wikimedia.org/wiki/File:Donghai_Bridge.jpg" }],
     themes: [
       { t: "長江口與杭州灣交會", b: "南匯嘴位於上海浦東最南端突岬，長江口南岸與杭州灣北岸水域在此相鄰。地理上屬潮間帶與濱海濕地，歷史上為鹽業、漁業與海塘防護重點。觀海公園設燈塔造型雕塑與棧道，供遊客眺望東海方向。海水含沙量高，視程常呈渾濁，與熱帶清潔海灘景觀不同，須有合理預期。潮汐表中可見日潮不等現象，高潮時段適合觀察水色分界，亦須遵守海岸警戒線與台風期封閉指令。" },
       { t: "濱海堤岸與開放空間", b: "園區為 2000 年後濱海休閒設施之一，結合吹填陸域與海塘安全線。可見貨輪航道、東海大橋遠景及風電設施。氣象部門對颱風期間濱海活動發布警示，公園可能臨時關閉。此地標重在地形與工程地理閱讀，而非沙灘戲水；開放區域與警戒線以管理單位標示為準。園內「港城第一滴水」雕塑點明臨港新城吹填起點，與滴水湖人工湖可構成同一地理敘事鏈。" }
