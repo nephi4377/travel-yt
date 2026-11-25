@@ -219,6 +219,20 @@ window.SHANGHAI_PLACES = {
       { label: "Wikipedia (EN)・Nanhui", href: "https://en.wikipedia.org/wiki/Nanhui_District" }
     ]
   },
+  huangjiu: {
+    title: "黃酒小鎮",
+    kind: "shop",
+    map: "绍兴 黄酒小镇",
+    themes: [],
+    learn: []
+  },
+  bicester: {
+    title: "比斯特購物村",
+    kind: "shop",
+    map: "上海比斯特购物村",
+    themes: [],
+    learn: []
+  },
   coke: {
     title: "可口可樂探索中心",
     map: "上海可口可乐探索中心",
@@ -226,12 +240,12 @@ window.SHANGHAI_PLACES = {
     learn: [
       { label: "維基百科・可口可乐", href: "https://zh.wikipedia.org/wiki/%E5%8F%AF%E5%8F%A3%E5%8F%AF%E4%B9%90" },
       { label: "Wikipedia (EN)・The Coca-Cola Company", href: "https://en.wikipedia.org/wiki/The_Coca-Cola_Company" },
-      { label: "上海旅游网", href: "https://www.meet-in-shanghai.net/" }
+      { label: "Meet in Shanghai", href: "https://www.meet-in-shanghai.net/" }
     ]
   }
 };
 
 window.SHANGHAI_SIGHT_ORDER = [
-  "nanhu", "jingshan", "qingshan", "keyan", "lanting", "shenyuan", "yanguan", "nanxun",
-  "sunElephant", "gongqing", "dishui", "duoyun", "nanhui", "coke"
+  "nanhu", "jingshan", "qingshan", "keyan", "lanting", "shenyuan", "huangjiu", "yanguan", "nanxun",
+  "sunElephant", "gongqing", "dishui", "duoyun", "nanhui", "coke", "bicester"
 ];

@@ -1,4 +1,4 @@
-/** Append spec §3.2 sight guide block (intro / highlights / shots / tips) — separate from history & mosaic. */
+/** Append spec §3.2 sight guide block (intro / highlights / shots [/ tips]) — separate from history & mosaic. */
 (function (global) {
   "use strict";
 
@@ -9,9 +9,16 @@
     return e;
   }
 
-  function appendSightGuide(parent, place) {
+  /**
+   * @param {HTMLElement} parent
+   * @param {object} place  with .guide
+   * @param {object} [opts]  opts.tips === false → skip tips (use TripPlaceCard walk tips instead)
+   */
+  function appendSightGuide(parent, place, opts) {
     var g = place && place.guide;
     if (!g) return;
+    opts = opts || {};
+    var showTips = opts.tips !== false;
     var box = el("div", "sightguide");
     if (g.intro) box.append(el("p", "why", g.intro));
     if (g.highlights)
@@ -22,24 +29,27 @@
           "p",
           "meta",
           "<b>建議拍照：</b>" +
-            g.shots.map(function (s) {
-              return "・" + s;
-            }).join(" ")
+            g.shots
+              .map(function (s) {
+                return "・" + s;
+              })
+              .join(" ")
         )
       );
-    if (g.tips && g.tips.length)
+    if (showTips && g.tips && g.tips.length)
       box.append(
         el(
           "p",
           "meta",
           "<b>提醒：</b>" +
-            g.tips.map(function (t) {
-              return "・" + t;
-            }).join(" ")
+            g.tips
+              .map(function (t) {
+                return "・" + t;
+              })
+              .join(" ")
         )
       );
-    if (g.pending)
-      box.append(el("p", "meta", '<span class="pending">' + g.pending + "</span>"));
+    /* Do not invent 「待確認」 placeholders for missing photos/shots (豪哥 2026-11-25). */
     parent.append(box);
   }
 

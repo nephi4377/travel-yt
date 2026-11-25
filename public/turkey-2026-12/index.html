@@ -72,7 +72,12 @@ body.has-trip-day-nav{padding-bottom:72px}
 .themebox p{margin:0;padding:0 0 8px;font-size:.86rem;line-height:1.62;color:#555}
 .learnrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .learnrow a{display:inline-block;padding:9px 11px;background:#f4f8fa;border:1px solid #d9e6ee;border-radius:10px;text-decoration:none;color:#1e4a63;font-weight:700;font-size:.82rem}
-.sightguide{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)}
+.sightguide{margin-top:4px}
+.placeblock{margin-top:12px;padding-top:10px;border-top:1px dashed var(--line)}
+.placeblock .placename{margin:0 0 6px;font-size:.95rem;color:#222}
+.walktips{margin-top:8px}
+.sightguide{margin-top:4px}
+
 </style>
 </head>
 <body><main class="wrap">
@@ -93,7 +98,6 @@ body.has-trip-day-nav{padding-bottom:72px}
 
 <nav class="tabs" aria-label="土耳其旅行內容" id="mainTabs">
   <button type="button" class="active" data-tab="plan">規劃行程</button>
-  <button type="button" data-tab="sights">景點速覽</button>
   <button type="button" data-tab="practical">實用資訊</button>
   <button type="button" data-tab="info">航班・住宿</button>
   <button type="button" data-tab="extras">自費選項</button>
@@ -115,11 +119,6 @@ body.has-trip-day-nav{padding-bottom:72px}
   </div>
 </section>
 
-<section class="panel" id="sights" hidden>
-  <h2 class="sectiontitle">景點速覽｜看什麼・怎麼拍</h2>
-  <p class="small">跟團不重排順序。行程卡的「看點・拍照・提醒」保留現場技巧；此處另列可考史料與外部參考，預設收合。</p>
-  <div id="sightsList"></div>
-</section>
 
 <section class="panel" id="practical" hidden>
   <h2 class="sectiontitle">時差・天氣・穿衣</h2>
@@ -226,6 +225,7 @@ body.has-trip-day-nav{padding-bottom:72px}
 <script src="../js/trip-day-nav.js"></script>
 <script src="../js/trip-hero-status.js"></script>
 <script src="../js/sight-guide-ui.js"></script>
+<script src="../js/trip-place-card.js"></script>
 <script src="places-data.js"></script>
 <script src="sight-guides.js"></script>
 <script>
@@ -280,8 +280,10 @@ const days=[
   free:"民宿在古蹟保護區；石板路可能需小包過夜行李。",
   cards:[
     {n:"1",t:"聖索菲亞（下車拍照）＋藍色清真寺（入內）",w:"聖索菲亞下車拍照；藍色清真寺入內參觀。清真寺服裝規範：勿短褲／露肩；女性需頭巾。",tags:[["景點","opt"],["服裝規範","warn"]],meta:"餐：早飯店／午土式風味／晚民宿",maps:P.blue.q,
+      places:["hagia","blue"],
       detail:{intro:"若關閉或整修，可能改其他清真寺。",shots:["圓頂與尖塔輪廓","廣場遠景"],tips:["易穿脫的鞋","尊重禱告空間"]}},
     {n:"2",t:"長途車往番紅花城 Safranbolu",w:"約 426 km。UNESCO 古蹟山城；鄂圖曼風格街景。",tags:[["移動","opt"]],meta:"住宿：Hidirlik Konaklari",maps:P.hidirlikHotel.q,
+      places:["safranbolu"],
       detail:{intro:"民宿無空調；房型大小不一，抽籤或民宿安排。",shots:["木屋街景","石板巷"],tips:["另備過夜小包","無法接受配房方式者不宜此團型"]}}
   ]
 },
@@ -292,10 +294,13 @@ const days=[
   free:"長途日；晚上卡帕多奇亞進房休息。",
   cards:[
     {n:"1",t:"希德爾立克山丘",w:"俯瞰番紅花城全景，適合拍山城輪廓。",tags:[["景點","opt"]],meta:"早：民宿",maps:P.hidirlik.q,
+      places:["hidirlik"],
       detail:{intro:"登高望遠即可，勿為機位拖團。",shots:["山城全景"],tips:[]}},
     {n:"2",t:"凱莫爾陵寢紀念館 Anitkabir",w:"安卡拉國父陵寢；需安檢，大型背包不宜。",tags:[["景點","opt"]],meta:"午：土耳其烤肉風味",maps:P.anitkabir.q,
+      places:["anitkabir"],
       detail:{intro:"隨身小包入內較方便。",shots:["廣場與建築線條"],tips:["安靜尊重"]}},
     {n:"3",t:"鹽湖 Lake Tuz＋陶瓷工坊 → Perissia",w:"鹽湖下車拍照；阿瓦諾斯一帶陶瓷觀光工坊入內。晚住卡帕多奇亞。",tags:[["景點","opt"],["工坊","warn"]],meta:"晚：飯店｜住宿：Perissia Hotel",maps:P.perissia.q,
+      places:["tuz","ceramic"],
       detail:{intro:"工坊為行程安排；不需要可不買。",shots:["鹽湖白晶","陶藝"],tips:[]}}
   ]
 },
@@ -306,11 +311,14 @@ const days=[
   free:"自費熱氣球若成行約凌晨起床；詳見「自費選項」。連泊第二晚。",
   cards:[
     {n:"1",t:"奇岩怪石（駱駝岩／烏其沙／獵人谷）",w:"風化奇岩區下車拍照；若整修可能改玫瑰谷等。",tags:[["景點","opt"]],meta:"餐：早飯店／午陶甕料理／晚飯店",maps:P.fairy.q,
+      places:["fairy"],
       detail:{intro:"以天然石雕尺度與光影為主。",shots:["錐岩／駱駝岩輪廓"],tips:[]}},
     {n:"2",t:"卡亞瑟希爾岩城＋三姊妹岩",w:"岩城入內；三姊妹岩下車拍照。",tags:[["景點","opt"]],meta:"",maps:P.uchisar.q,
+      places:["uchisar","sisters"],
       detail:{intro:"岩居與蕈狀岩並看。",shots:["岩城俯瞰","三姊妹岩"],tips:[]}},
     {n:"3",t:"手工地毯工廠",w:"入內參觀編織與材質說明。",tags:[["工坊","warn"]],meta:"住宿：Perissia Hotel（連泊）",maps:P.perissia.q,
-      detail:{intro:"不需要可不買。",shots:[],tips:[]}}
+      places:["carpet"],
+      detail:{intro:"不需要可不買.",shots:[],tips:[]}}
   ]
 },
 {
@@ -320,8 +328,10 @@ const days=[
   free:"孔亞 overnight；晚上飯店為主。",
   cards:[
     {n:"1",t:"古驛站 Sultanhani",w:"塞爾柱商隊驛站；下車拍照。",tags:[["景點","opt"]],meta:"早：飯店",maps:P.sultanhani.q,
+      places:["sultanhani"],
       detail:{intro:"看石造門廊與院落尺度。",shots:["拱門／中庭"],tips:[]}},
     {n:"2",t:"錫萊村＋梅夫拉納博物館",w:"石隱小鎮氣氛；梅夫拉納博物館入內。",tags:[["景點","opt"]],meta:"午：鐵板＋PIDE｜晚：飯店｜住 Bayir Diamond",maps:P.mevlana.q,
+      places:["sille","mevlana"],
       detail:{intro:"錫萊相對靜謐；博物館尊重宗教空間。",shots:["石屋巷","綠圓頂輪廓"],tips:[]}}
   ]
 },
@@ -332,8 +342,10 @@ const days=[
   free:"石灰棚須脫鞋；注意防滑。",
   cards:[
     {n:"1",t:"棉堡 Pamukkale＋希拉波里斯",w:"白色石灰棚與古城遺址入內參觀。",tags:[["景點","opt"],["脫鞋","warn"]],meta:"餐：早飯店／午土式風味／晚飯店",maps:P.pamukkale.q,
+      places:["pamukkale"],
       detail:{intro:"脫鞋步行；地面濕滑。",shots:["白棚層層","劇場遺址"],tips:["穿易脫鞋","小心腳步"]}},
     {n:"2",t:"乳膠展示中心 → Pam Thermal",w:"乳膠產品展示選購點；晚住溫泉飯店。",tags:[["工坊","warn"],["住宿","mine"]],meta:"住宿：Pam Thermal Hotel",maps:P.pamThermal.q,
+      places:["latex"],
       detail:{intro:"不需要可不買。",shots:[],tips:[]}}
   ]
 },
@@ -344,8 +356,10 @@ const days=[
   free:"旺季客滿時住宿可能改伊茲密爾區域。",
   cards:[
     {n:"1",t:"艾菲索斯古城 Ephesus",w:"希臘羅馬古城遺址入內；大理石街、劇場、圖書館等。",tags:[["景點","opt"]],meta:"餐：早飯店／午土耳其料理／晚飯店",maps:P.ephesus.q,
+      places:["ephesus"],
       detail:{intro:"面積大，跟團節奏走重點即可。",shots:["圖書館立面","劇場"],tips:["遮陽與水"]}},
     {n:"2",t:"皮衣工廠 → Grand Belish",w:"皮衣展示／秀場性質；晚住庫薩達西度假飯店（或伊茲密爾備案）。",tags:[["工坊","warn"],["住宿","mine"]],meta:"住宿：Grand Belish Resort & Spa",maps:P.belish.q,
+      places:["leather"],
       detail:{intro:"不需要可不買。",shots:[],tips:[]}}
   ]
 },
@@ -356,8 +370,10 @@ const days=[
   free:"又一日長途；晚上布爾薩飯店休息。",
   cards:[
     {n:"1",t:"伊茲密爾鐘樓＋阿珊索爾塔",w:"鐘樓下車拍照；Asansor 百年電梯入內登高看海港。",tags:[["景點","opt"]],meta:"餐：早飯店／午土式風味／晚飯店",maps:P.asansor.q,
+      places:["izmir"],
       detail:{intro:"天氣好時沿海景觀是重點。",shots:["鐘樓廣場","電梯塔海景"],tips:[]}},
     {n:"2",t:"布爾薩大清真寺 → Hotel Baia",w:"Ulu Camii 入內；清真寺服裝規範同前。若關閉可能改其他寺。",tags:[["景點","opt"],["住宿","mine"]],meta:"住宿：Hotel Baia Bursa",maps:P.ulu.q,
+      places:["ulu"],
       detail:{intro:"早期鄂圖曼建築；安靜參觀。",shots:["多圓頂外觀","內部書法"],tips:["頭巾／長褲"]}}
   ]
 },
@@ -368,8 +384,10 @@ const days=[
   free:"午餐自理；午後往機場辦理登機。夜宿機上。",
   cards:[
     {n:"1",t:"博斯普魯斯海峽遊船（整團包船）",w:"團標示整團包船，不另售自費、不擠公共船。",tags:[["景點","opt"],["團含","mine"]],meta:"早：飯店｜午：自理｜晚：機上",maps:P.bosphorus.q,
+      places:["bosphorus"],
       detail:{intro:"看海峽兩岸宮殿與別墅線。",shots:["歐亞兩岸輪廓"],tips:[]}},
     {n:"2",t:"香料市集（下車拍照）→ IST → TK124",w:"市集下車拍照後往機場。17:15 起飛，隔日 08:45 抵桃園。",tags:[["機場","opt"]],meta:"夜宿機上",maps:P.ist.q,
+      places:["spice"],
       detail:{intro:"預留安檢與退稅緩衝。",shots:["市集色彩一瞥"],tips:["趕機放棄久逛"]}}
   ]
 },
@@ -491,15 +509,8 @@ function renderDays(){
       const tags=el("div","tags");(c.tags||[]).forEach(([t,k])=>{const s=document.createElement("span");s.className="tag "+(k||"");s.textContent=t;tags.append(s)});grow.append(tags);
       const actions=el("div","actions");
       const a=document.createElement("a");a.href=mapsUrl(c.maps);a.target="_blank";a.rel="noopener";a.textContent="Google 導航 ↗";actions.append(a);grow.append(actions);
-      if(c.detail&&(c.detail.intro||(c.detail.shots&&c.detail.shots.length)||(c.detail.tips&&c.detail.tips.length))){
-        const det=document.createElement("details");det.className="detailbox";
-        det.innerHTML="<summary>看點・拍照・提醒</summary>";
-        const body=el("div","detailbody");
-        if(c.detail.intro)body.append(el("p",null,c.detail.intro));
-        const grid=el("div","detailgrid");
-        if(c.detail.shots&&c.detail.shots.length){const m=el("div","detailmini");m.innerHTML="<b>建議取景</b>"+c.detail.shots.map(x=>"・"+x).join("<br>");grid.append(m)}
-        if(c.detail.tips&&c.detail.tips.length){const m=el("div","detailmini");m.innerHTML="<b>別做／提醒</b>"+c.detail.tips.map(x=>"・"+x).join("<br>");grid.append(m)}
-        body.append(grid);det.append(body);grow.append(det);
+      if(window.TripPlaceCard){
+        TripPlaceCard.appendCardPlaces(grow,c,window.TURKEY_PLACES||{},i*10+Number(c.n||0));
       }
       row.append(grow);card.append(row);panel.append(card);
     });
@@ -533,24 +544,6 @@ function showPlanPanel(){
   setTimeout(()=>{if(map)map.invalidateSize()},100);
 }
 
-function renderSights(){
-  const box=document.getElementById("sightsList");box.replaceChildren();
-  const order=window.TURKEY_SIGHT_ORDER||[];
-  const data=window.TURKEY_PLACES||{};
-  order.forEach((id,i)=>{
-    const p=data[id];if(!p) return;
-    const card=el("article","card");
-    card.append(el("h3",null,p.title));
-    if(window.SightGuideUI) SightGuideUI.appendSightGuide(card,p);
-  else if(p.blurb) card.append(el("p","why",p.blurb));
-    appendMosaic(card,p.photos,i);
-    appendPlaceHistory(card,p);
-    appendLearnLinks(card,p.learn);
-    const actions=el("div","actions");
-    const a=document.createElement("a");a.href=mapsUrl(p.map||"");a.target="_blank";a.rel="noopener";a.textContent="Google Maps ↗";actions.append(a);
-    card.append(actions);box.append(card);
-  });
-}
 
 document.querySelectorAll("#mainTabs [data-tab]").forEach(b=>b.addEventListener("click",()=>{
   document.querySelectorAll("#mainTabs [data-tab]").forEach(x=>x.classList.toggle("active",x===b));
@@ -558,7 +551,7 @@ document.querySelectorAll("#mainTabs [data-tab]").forEach(b=>b.addEventListener(
   if(b.dataset.tab==="plan")setTimeout(()=>{if(map)map.invalidateSize()},100);
 }));
 
-renderDays();renderSights();
+renderDays();
 
 (function wireTripDayNav(){
   const nav=document.getElementById("tripDayNav");
