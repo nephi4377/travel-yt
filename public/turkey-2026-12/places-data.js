@@ -76,12 +76,12 @@ window.TURKEY_PLACES = {
     title: "鹽湖 Lake Tuz",
     map: "Lake Tuz Turkey",
     photos: [
-      { src: "photos/tuz-1.jpg", alt: "鹽湖地景", credit: "Wikimedia Commons · CC BY-SA" },
-      { src: "photos/tuz-2.jpg", alt: "鹽湖鳥瞰", credit: "Wikimedia Commons · Public domain" }
+      { src: "photos/tuz-1.jpg", alt: "鹽湖地景", credit: "Wikimedia Commons · CC BY-SA · https://commons.wikimedia.org/wiki/File:Tuz_G%C3%B6l%C3%BC_2.jpg" },
+      { src: "photos/tuz-2.jpg", alt: "鹽湖鳥瞰", credit: "Wikimedia Commons · Public domain (NASA) · https://commons.wikimedia.org/wiki/File:Satellite_image_of_Lake_Tuz,_Turkey.tif" }
     ],
     themes: [
       { t: "土耳其第二大湖", b: "Tuz Gölü（鹽湖）位於土耳其中部，介於安卡拉以南與卡帕多奇亞西側，為內陸封閉鹽湖，面積隨雨季入流與夏季蒸發大幅變化，有時縮至乾涸鹽灘。湖水因高鹽度與礦物沉積呈現粉白或淡紅地表，在特定光線下極具辨識度。地質上屬圖茲盆地一部，與周邊農牧經濟及鹽業開採密切相關，是安納托利亞內陸自然景觀的代表之一。衛星影像常用於監測湖面季節性縮張，是氣候與水文研究的案例。" },
-      { t: "火烈鳥與鹽業", b: "春秋候鳥遷徙季節，湖區可見火烈鳥、瓣蹼鷸等水鳥棲息或過境，實際鳥況與可達岸線受當年水量與保護區管制影響。湖區鹽業開採歷史悠久，岩鹽供應國內調味與工業用途；部分區段設有採鹽設施與道路。自然景觀、鹽業與鳥類生態三者交織，使鹽湖成為公路旅行中常見的地質與經濟地理教材，亦須尊重保護區規定與現場路況。土耳其鳥類學會亦發布鹽湖年度水鳥調查摘要供公眾參考。" }
+      { t: "火烈鳥與鹽業", b: "春秋候鳥遷徙季節，湖區可見火烈鳥、瓣蹼鷸等水鳥棲息或過境，實際鳥況與可達岸線受當年水量與保護區管制影響。湖區鹽業開採歷史悠久，岩鹽供應國內調味與工業用途；部分區段設有採鹽設施與道路。自然景觀、鹽業與鳥類生態三者交織，使鹽湖成為公路旅行中常見的地質與經濟地理教材；亦須尊重保護區規定、現場路況與標示禁入區，並依當年水量選擇可達岸線。" }
     ],
     learn: [
       { label: "維基百科（中文）", href: "https://zh.wikipedia.org/wiki/%E5%9C%96%E8%8C%B2%E6%B9%96" },
@@ -95,12 +95,12 @@ window.TURKEY_PLACES = {
     photos: [
       { src: "photos/cap-1.jpg", alt: "戈雷梅谷地", credit: "Wikimedia Commons · CC BY-SA" },
       { src: "photos/cap-2.jpg", alt: "烏奇希薩岩城", credit: "Wikimedia Commons · CC BY-SA" },
-      { src: "photos/cap-3.jpg", alt: "妖精煙囪", credit: "Wikimedia Commons · CC BY-SA" }
+      { src: "photos/cap-3.jpg", alt: "妖精煙囪", credit: "Wikimedia Commons · CC BY-SA · https://commons.wikimedia.org/wiki/File:Goreme_fairy_chimneys-3.jpg" }
     ],
     themes: [
       { t: "火山凝灰岩地形", b: "數百萬年前附近火山噴發堆積凝灰岩與火山灰，經風蝕、河流切割與溫差風化形成錐狀「妖精煙囪」（fairy chimneys）。岩層軟硬交替使上方較硬岩帽保留下方較軟柱身，造就帽蓋狀外形。這種地貌散布於戈雷梅山谷周邊，成為卡帕多奇亞最顯著的自然符號，也影響古人開鑿岩室、選址避難與農耕的空間策略。地質學文獻以本地凝灰岩分層解釋侵蝕速率差異，是地貌教材。" },
       { t: "岩居與地下聚落", b: "古代居民在凝灰岩壁鑿出居所、倉儲與教堂；烏奇希薩（Uçhisar）天然岩峰在拜占庭時期即作瞭望據點。戈雷梅露天博物館一帶岩窟教堂保留10至12世紀壁畫，呈現東羅馬藝術與本地方言場景。地下城（如德林庫尤、凱馬克利等）則展示多層防禦與通風系統，見證中世紀安納托利亞在政治動盪下的聚落型態，為學界與遊客研究重點。" },
-      { t: "三姊妹岩", b: "「三姊妹岩」指烏希薩爾近郊三座並立、頂部較寬的蕈狀岩柱，常見於明信片與導覽敘事；卡帕多奇亞多處亦有不完全相同的「三姊妹」型地貌。其形成機制為差異侵蝕：較堅硬岩帽保護柱身，鄰近較軟岩層先被剝離。此案例有助理解風化選擇性如何塑造觀光地標，而正式命名景點與自然散布地貌宜區分閱讀。國家公園標示牌說明最終外形仍受持續風化與降雨沖刷影響。" },
+      { t: "三姊妹岩", b: "「三姊妹岩」（Üç Güzeller）指 Ürgüp 近郊、通往阿瓦諾斯公路旁三座並立、頂部較寬的蕈狀岩柱，是卡帕多奇亞最常見的明信片取景點；峽谷其他區域亦有類似但不完全相同的「三姊妹」型地貌。其形成機制為差異侵蝕：較堅硬岩帽保護柱身，鄰近較軟岩層先被剝離。此案例有助理解風化選擇性如何塑造觀光地標，而正式命名景點與自然散布地貌宜區分閱讀。國家公園標示牌說明最終外形仍受持續風化與降雨沖刷影響。" },
       { t: "世界遺產戈雷梅國家公園", b: "戈雷梅國家公園與卡帕多奇亞岩石地貌於 1985 年列入 UNESCO 世界遺產，範圍涵蓋岩窟教堂、修道院與自然奇岩景觀。遺產敘述強調 4 至 13 世紀基督教社群在火山岩地景中開鑿禮拜空間，以及壁畫藝術與隱修傳統。今日公園仍受文化自然雙重保護框架管制，徒步與熱氣球等活動亦須符合當地法規與安全規範；世界遺產界線圖可在土耳其文化部網站查閱。" }
     ],
     learn: [
@@ -150,7 +150,7 @@ window.TURKEY_PLACES = {
     ],
     learn: [
       { label: "維基百科（中文）", href: "https://zh.wikipedia.org/wiki/%E9%AD%AF%E7%B1%B3" },
-      { label: "博物館官網", href: "https://www.kulturportali.gov.tr/turkiye/konya/gezilecekyer/mevlanamuzesi" },
+      { label: "博物館官網", href: "https://muze.gov.tr/muze-detay?SectionId=MEV01&DistId=MRK" },
       { label: "Wikipedia (EN)", href: "https://en.wikipedia.org/wiki/Mevlana_Museum" }
     ]
   },
@@ -158,13 +158,13 @@ window.TURKEY_PLACES = {
     title: "棉堡 Pamukkale／希拉波里斯",
     map: "Pamukkale Turkey",
     photos: [
-      { src: "photos/pam-1.jpg", alt: "石灰梯級", credit: "Wikimedia Commons · CC BY-SA 4.0" },
-      { src: "photos/pam-2.jpg", alt: "希拉波里斯劇場", credit: "Wikimedia Commons · CC BY" }
+      { src: "photos/pam-1.jpg", alt: "石灰梯級", credit: "Wikimedia Commons · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:TR_Pamukkale_White_Terraces_asv2020-02_img16.jpg" },
+      { src: "photos/pam-2.jpg", alt: "希拉波里斯劇場", credit: "Wikimedia Commons · CC BY · https://commons.wikimedia.org/wiki/File:The_Roman_theatre,_built_in_the_2nd_century_AD_under_Hadrian_on_the_ruins_of_an_earlier_theatre,_later_renovated_under_Septimius_Severus,_Hierapolis,_Turkey_-_17033619498.jpg" }
     ],
     themes: [
       { t: "石灰華梯田", b: "含碳酸鈣的溫泉自山坡湧出，水流沿途沉積石灰華，形成層層白色梯形台地，土耳其語 Pamukkale 意即「棉堡」。沉積持續進行亦易受踩踏與乾涸影響，管理單位因此劃定步道、限制赤腳區域並調控供水，以保護易脆的結晶層。此自然奇觀與上方的希拉波里斯古城共用 UNESCO 保護框架，展現地質過程與人類活動的緊密連結。" },
       { t: "希拉波里斯古城", b: "希拉波里斯（Hierapolis）建於西元前 2 世紀後期，希臘化與羅馬時期為愛琴海內陸著名溫泉療養城，留有柱廊街、尼祿門、古劇場與公墓遺跡。劇場依山而建，可容納逾萬名觀眾，俯瞰 Denizli 平原。城市與溫泉治療傳統相關，考古出土顯示多神教與後期基督教社群並存，廢棄與地震在古典晚期影響城市命運。" },
-      { t: "溫泉與療養傳統", b: "古人相信希拉波里斯泉水具療效，公共浴場與溫泉池與城市規劃結合。克雷奧帕特拉古池（Antique Pool）中可見倒沒於水中的羅馬柱等遺跡，為瀝青與礦泉沉積形成的特殊景觀（部分區域門票另計）。這種「廢墟中的溫泉」體現羅馬享受文化與景觀消費，亦須注意池水礦物質與管理單位安全規範。考古文獻記載羅馬醫師蓋倫等曾討論溫泉療法，與希拉波里斯名氣相連。" },
+      { t: "溫泉與療養傳統", b: "古人相信希拉波里斯泉水具療效，公共浴場與溫泉池與城市規劃結合。克雷奧帕特拉古池（Antique Pool）中可見倒沒於水中的羅馬柱等遺跡，為溫泉碳酸鈣長期沉積形成的石灰華（travertine）逐步包裹石柱所致（部分區域門票另計）。這種「廢墟中的溫泉」體現羅馬享受文化與景觀消費，亦須注意池水礦物質與管理單位安全規範。考古文獻記載羅馬醫師蓋倫等曾討論溫泉療法，與希拉波里斯名氣相連。" },
       { t: "UNESCO 雙遺產", b: "1988 年棉堡石灰梯田與希拉波里斯古蹟以自然與文化複合遺產登錄 UNESCO，強調地質奇觀與古典城市遺址不可分割。遺產敘述涵蓋羅馬浴場傳統、基督教殉道者聖菲力普傳說及喇叭筒形石灰華地貌的科學價值。當地保護政策兼顧科學研究、旅遊承載與遺跡修復，是土耳其最知名的雙遺產景點之一。世界遺產委員會文件同時要求控制旅遊鞋跡對石灰華沉積的影響。" }
     ],
     learn: [
@@ -177,18 +177,18 @@ window.TURKEY_PLACES = {
     title: "艾菲索斯古城 Ephesus",
     map: "Ephesus Turkey",
     photos: [
-      { src: "photos/eph-1.jpg", alt: "塞爾蘇斯圖書館", credit: "Wikimedia Commons · CC BY-SA" },
-      { src: "photos/eph-2.jpg", alt: "大劇場", credit: "Wikimedia Commons · CC BY-SA" }
+      { src: "photos/eph-1.jpg", alt: "塞爾蘇斯圖書館", credit: "Wikimedia Commons · CC BY-SA · https://commons.wikimedia.org/wiki/File:Ephesus_Celsus_Library.jpg" },
+      { src: "photos/eph-2.jpg", alt: "大劇場", credit: "Wikimedia Commons · CC BY-SA · https://commons.wikimedia.org/wiki/File:Great_Theatre_of_Ephesus_2024.jpg" }
     ],
     themes: [
       { t: "愛奧尼亞海港城市", b: "Ephesus（艾菲索斯）遺跡可追溯至青銅時代，早期希臘殖民者建立愛奧尼亞城邦，後依羅馬帝國東方行省繁榮。港灣長期泥沙淤積使河道遠離海岸，促成城市最終衰敗；同一遺址可見希臘、羅馬與拜占庭多時期層位堆疊。考古工作自 19 世紀以來持續揭露大理石街、公共浴場與民居，是地中海東岸古典城市研究的標竿遺址。以弗所考古博物館收藏出土雕塑，補足遺址現場已移置文物。" },
       { t: "塞爾蘇斯圖書館", b: "塞爾蘇斯圖書館（約西元 2 世紀）由羅馬總督 Tiberius Julius Celsus Polemaeanus 紀念其父而建，立面兩層科林斯柱廊經現代復原，為古城最完整立面之一。館內設藏書壁龕與紀念性墓室，象徵城市行政、學術與高雅文化自我形象。圖書館與大力士門、商談客廳等並讀，展示羅馬晚期以弗所東方都會的面貌。" },
       { t: "大劇場與公共生活", b: "大劇場依山而建，可容納約兩萬五千人，為羅馬公民集會、戲劇與宗教儀式空間；《使徒行傳》載群眾因亞底米女神崇拜與保羅傳道起衝突的敘事即與此城相關。劇場下方市集與通往港區的大理石大道遺跡，還原古代商業與儀典動線。遺址導覽常引導遊客理解坡度、回音與城市規劃的關係。劇場上坡入口階梯設計，展示羅馬工程利用地形的實例。" },
-      { t: "早期基督教聖地", b: "以弗所早期基督教傳統深厚，《啟示錄》七教會書信之一即致此城；傳統亦將使徒約翰與聖母晚年連結於附近。聖母瑪利亞故居（Meryemana）在肉卻里山丘另有朝聖路線，由天主教與土耳其官方分別整建維護。古城與基督教聖地並讀，呈現古典異教中心轉型為拜占庭宗教重鎮的歷史弧線。該朝聖地與以弗所古城分屬不同管理單位，史料對媽祖故里敘事各有傳統文獻。" }
+      { t: "早期基督教聖地", b: "以弗所早期基督教傳統深厚，《啟示錄》七教會書信之一即致此城；傳統亦將使徒約翰與聖母晚年連結於塞爾丘（Selçuk）近郊。聖母瑪利亞故居（Meryemana／House of the Virgin Mary）位於古城以北的 Bülbül Dağı（夜鶯山）一帶，為天主教朝聖與土耳其官方整建的傳統聖地，與以弗所考古遺址分地管理。古城與聖地並讀，呈現古典異教中心轉型為拜占庭宗教重鎮的歷史弧線；關於聖母晚年居所的敘事見於各種基督教傳統文獻，不宜與其他文化女神崇拜混為一談。" }
     ],
     learn: [
       { label: "維基百科（中文）", href: "https://zh.wikipedia.org/wiki/%E4%BB%A5%E5%BC%97%E6%89%80" },
-      { label: "Hierapolis（EN）", href: "https://en.wikipedia.org/wiki/Hierapolis" },
+      { label: "以弗所考古博物館（EN）", href: "https://en.wikipedia.org/wiki/Ephesus_Archaeological_Museum" },
       { label: "Wikipedia (EN)", href: "https://en.wikipedia.org/wiki/Ephesus" }
     ]
   },
@@ -212,10 +212,10 @@ window.TURKEY_PLACES = {
   ulu: {
     title: "布爾薩大清真寺",
     map: "Ulu Camii Bursa",
-    photos: [{ src: "photos/ulu-1.jpg", alt: "烏盧清真寺", credit: "Wikimedia Commons · CC BY-SA" }],
+    photos: [{ src: "photos/ulu-1.jpg", alt: "烏盧清真寺", credit: "Wikimedia Commons · CC BY-SA · https://commons.wikimedia.org/wiki/File:Bursa_Ulu_Camii_2007.jpg" }],
     themes: [
-      { t: "早期鄂圖曼宗教建築", b: "布爾薩大清真寺（Ulu Camii）於 1396 至 1399 年由鄂圖曼蘇丹 Bayezid I（閃電）下令興建，為耶尼爾里（Yenişehir）戰後勝利與建國初期的宗教宣言。室內以二十座圓頂覆蓋寬廣方形禱告廳，繼承塞爾柱與早期鄂圖曼「多圓頂」傳統，不同於後來 Sinan 式單大穹頂。布爾薩為鄂圖曼首座首都，此寺象徵從公國到帝國的宗教正統與都市規模。" },
-      { t: "書法與噴泉中庭", b: "內牆滿佈鄂圖曼書法銘文與幾何綿延彩繪，中庭設 ablution 噴泉供小淨儀式。建築鄰近市場與絲綢貿易區，反映布爾薩作為絲綢之路節點與早期工業城市的地位。寺內禁止非穆斯林進入禱告廳核心時段的情形可能發生；外觀與庭院仍可見證 14 世紀末鄂圖曼美學如何結合波斯與拜占庭裝飾傳統。大清真寺同區亦有鄂圖曼早期舒魯巴市集建築，可見城市商貿史脈絡。" }
+      { t: "早期鄂圖曼宗教建築", b: "布爾薩大清真寺（Ulu Camii）於 1396 至 1399 年由鄂圖曼蘇丹 Bayezid I（閃電）下令興建，是早期鄂圖曼首都布爾薩的集體禮拜清真寺。室內以二十座圓頂覆蓋寬廣方形禱告廳，繼承塞爾柱與早期鄂圖曼「多圓頂」傳統，不同於後來 Sinan 式單大穹頂。布爾薩為鄂圖曼首座首都，此寺展示公國時期宗教建築的尺度與裝飾語彙，亦為理解後續帝國清真寺演化的基準案例。" },
+      { t: "書法與噴泉中庭", b: "內牆滿佈鄂圖曼書法銘文與幾何綿延彩繪，中庭設 ablution 噴泉供小淨儀式，為 14 世紀末清真寺庭院的典型配置。建築鄰近歷史市集與絲綢貿易區，反映布爾薩作為安納托利亞絲綢產地與貿易節點的地位。寺內於禱告時段可能限制非穆斯林進入禱告廳核心；外觀與庭院仍可見證早期鄂圖曼美學如何結合波斯書法與拜占庭裝飾傳統。" }
     ],
     learn: [
       { label: "維基百科（中文）", href: "https://zh.wikipedia.org/wiki/%E5%B8%83%E7%88%BE%E8%96%A9" },
@@ -245,10 +245,10 @@ window.TURKEY_PLACES = {
   spice: {
     title: "香料市集",
     map: "Spice Bazaar Istanbul",
-    photos: [{ src: "photos/spice-1.jpg", alt: "香料市集", credit: "Wikimedia Commons · CC BY-SA" }],
+    photos: [{ src: "photos/spice-1.jpg", alt: "香料市集", credit: "Wikimedia Commons · CC BY-SA · https://commons.wikimedia.org/wiki/File:Spices_on_Spice_Bazaar_in_Istanbul_02.jpg" }],
     themes: [
       { t: "埃及市集別名", b: "香料市集土耳其語 Mısır Çarşısı，意為「埃及市集」，建於 1664 年鄂圖曼蘇丹 Mehmed IV 時期，收益曾撥予新清真寺（Yeni Cami）維護與社會福利，故得別名。L 形有頂拱廊約容八十五間店鋪，位於加拉塔橋近端金角灣側，與大巴扎互補。建築結構以磚拱與採光穹頂組合，展示 17 世紀伊斯坦堡市集型商業建築的標準格局。" },
-      { t: "香料與帖木兒傳統", b: "歷史上交易香料、乾果、藥草、乳香與番紅花等，來自鄂圖曼帝國廣袤貿易網與印度洋—地中海轉運；今日店鋪多以土耳其軟糖、茶葉、彩色香料堆疊與觀光紀念品為主。市集氛圍折射帝國時期「東方香料」想像與當代旅遊消費並存。價格與品項須自行比較；建築本身仍是理解伊斯坦堡港口貿易史與瓦克夫基金維護制度的實地案例。鄂圖曼瓦克夫檔案記錄市集租金如何支應清真寺維修，是制度史材料。" }
+      { t: "香料與鄂圖曼貿易網", b: "歷史上交易香料、乾果、藥草、乳香與番紅花等，來自鄂圖曼帝國廣袤貿易網與印度洋—地中海轉運；今日店鋪多以土耳其軟糖、茶葉、彩色香料堆疊與觀光紀念品為主。市集氛圍折射帝國時期「東方香料」想像與當代旅遊消費並存。價格與品項須自行比較；建築本身仍是理解伊斯坦堡港口貿易史與瓦克夫基金維護制度的實地案例。鄂圖曼瓦克夫檔案記錄市集租金如何支應清真寺維修，是制度史材料。" }
     ],
     learn: [
       { label: "Wikipedia (EN)", href: "https://en.wikipedia.org/wiki/Spice_Bazaar,_Istanbul" },
