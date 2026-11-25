@@ -230,7 +230,7 @@ window.TURKEY_PLACES = {
     map: "Bosphorus Cruise Istanbul",
     photos: [
       { src: "photos/bos-1.jpg", alt: "海峽與城市天際線", credit: "NASA · Public domain · https://commons.wikimedia.org/wiki/File:ISS008-E-21752.jpg" },
-      { src: "photos/bos-2.jpg", alt: "博斯普魯斯大橋", credit: "Myself · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:Bosporus_Bridge_from_Ortak%C3%B6y_01.JPG" }
+      { src: "photos/bos-2.jpg", alt: "步道望大橋與渡輪", credit: "Myself · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:Bosporus_Bridge_from_Ortak%C3%B6y_01.JPG" }
     ],
     themes: [
       { t: "歐亞分界水道", b: "博斯普魯斯（Bosporus）海峽北接黑海、南達馬爾馬拉海，土耳其境內段約三十公里，最窄處約七百公尺，是歐洲與亞洲的著名水文分界。海峽自古為黑海穀物、木材與能源航運要道，伊斯坦堡港區經濟高度依賴通航安全。《蒙特勒公約》等 20 世紀條約仍影響非黑海國家軍艦通過規則，使此地緣兼具觀光與戰略意義。君士坦丁堡海峽博物館與相關檔案介紹近代航運與條約沿革。" },
