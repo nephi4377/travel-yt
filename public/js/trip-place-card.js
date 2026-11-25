@@ -90,6 +90,60 @@
     parent.append(box);
   }
 
+  function placeGuideTexts(placesCatalog, ids) {
+    var intros = {};
+    var shots = {};
+    (ids || []).forEach(function (id) {
+      var place = placesCatalog && placesCatalog[id];
+      var g = place && place.guide;
+      if (!g) return;
+      if (g.intro) intros[String(g.intro).trim()] = 1;
+      (g.shots || []).forEach(function (s) {
+        if (s) shots[String(s).trim()] = 1;
+      });
+    });
+    return { intros: intros, shots: shots };
+  }
+
+  /**
+   * Keep card.detail.intro / detail.shots visible outside history.
+   * - No places: always show (hotels / airports / meals).
+   * - With places: only show leftovers not already covered by place guides
+   *   (so logistics notes like room lottery are not dropped).
+   */
+  function appendCardDetailExtras(parent, card, placesCatalog) {
+    var d = card && card.detail;
+    if (!d) return;
+    var ids = card.places || [];
+    var covered = placeGuideTexts(placesCatalog, ids);
+    var intro = d.intro && String(d.intro).trim();
+    if (intro) {
+      var introCovered =
+        !!covered.intros[intro] ||
+        Object.keys(covered.intros).some(function (p) {
+          return p.indexOf(intro) !== -1 || intro.indexOf(p) !== -1;
+        });
+      if (!introCovered) parent.append(el("p", "meta card-note", intro));
+    }
+    var leftoverShots = (d.shots || []).filter(function (s) {
+      return s && !covered.shots[String(s).trim()];
+    });
+    if (leftoverShots.length) {
+      parent.append(
+        el(
+          "p",
+          "meta card-shots",
+          "<b>建議拍照：</b>" +
+            leftoverShots
+              .map(function (s) {
+                return "・" + s;
+              })
+              .join(" ")
+        )
+      );
+    }
+  }
+
   /**
    * One place block: intro / 看點 / 建議拍照 (open) + mosaic + history (collapsed) + learn.
    * Shopping/workshop: only the shop note, no history / shots.
@@ -140,6 +194,7 @@
    */
   function appendCardPlaces(grow, card, placesCatalog, seedBase) {
     appendWalkTips(grow, collectWalkTips(card, placesCatalog));
+    appendCardDetailExtras(grow, card, placesCatalog);
 
     var ids = card.places || [];
     if (!ids.length) return;
@@ -159,6 +214,7 @@
     appendPlaceHistory: appendPlaceHistory,
     appendLearnLinks: appendLearnLinks,
     appendWalkTips: appendWalkTips,
+    appendCardDetailExtras: appendCardDetailExtras,
     appendPlaceBlock: appendPlaceBlock,
     appendCardPlaces: appendCardPlaces
   };
