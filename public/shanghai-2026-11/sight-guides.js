@@ -1,4 +1,4 @@
-/* Merge spec §3.2 guide blocks into SHANGHAI_PLACES (intro / 看點 / 建議拍照 / 提醒). */
+/* Merge spec §3.2 guide blocks into SHANGHAI_PLACES (intro / 看點 / 建議拍照 / 行程走法 tips). */
 (function () {
   var G = {
     nanhu: {
@@ -11,15 +11,13 @@
       intro: "餘杭千年古剎；秋冬常見殿前銀杏。",
       highlights: "青瓦白牆殿宇與山林寺院格局",
       shots: ["寺門銀杏落葉", "石階與殿簷"],
-      tips: ["尊重寺院禮儀", "不大聲錄影擋路"],
-      pending: "葉況待確認"
+      tips: ["尊重寺院禮儀", "不大聲錄影擋路"]
     },
     qingshan: {
       intro: "臨安水上森林，團安排船遊。",
       highlights: "樹與水面層次",
       shots: ["船側樹列", "碼頭棧道"],
-      tips: ["防風防滑", "勿為空景拖團"],
-      pending: "葉況不保證"
+      tips: ["防風防滑", "勿為空景拖團"]
     },
     keyan: {
       intro: "千年採石遺跡；天工大佛、雲骨等石景為主線。",
@@ -29,7 +27,7 @@
     },
     lanting: {
       intro: "《蘭亭序》相關園林；曲水流觴、碑亭。",
-      highlights: "曲水流觸與碑林",
+      highlights: "曲水流觴與碑林",
       shots: ["曲水岸", "碑亭／竹影"],
       tips: ["不必追劇情打卡清單"]
     },
@@ -39,12 +37,15 @@
       shots: ["廊影", "池水"],
       tips: ["不必追劇情清單"]
     },
+    huangjiu: {
+      intro: "黃酒主題展示／選購點。",
+      tips: ["不需要可不買"]
+    },
     yanguan: {
       intro: "潮樂之城古城；潮牆、北門潮集、御碼頭。",
       highlights: "古城街巷與潮文化空間",
       shots: ["潮牆水幕", "御碼頭夜景"],
-      tips: ["觀潮聽安全指示", "不脫隊追網紅機位"],
-      pending: "潮況待確認"
+      tips: ["觀潮聽安全指示", "不脫隊追網紅機位"]
     },
     nanxun: {
       intro: "江南絲商古鎮；嘉業堂、小蓮莊、搖櫓船。",
@@ -55,14 +56,13 @@
     sunElephant: {
       intro: "湖州南潯一帶現代地標建築夜景；跟團看完即回。",
       highlights: "太陽與大象造型建築輪廓",
-      shots: ["夜景輪廓"],
+      shots: [],
       tips: ["看完即回，不另開夜場"]
     },
     gongqing: {
       intro: "上海市區近郊森林公園，適合短走秋色林道。",
       highlights: "林蔭道與季節葉相",
-      shots: ["林蔭道", "秋葉鋪地"],
-      pending: "葉況不保證"
+      shots: ["林蔭道", "秋葉鋪地"]
     },
     dishui: {
       intro: "臨港圓湖度假區；環湖曲線與海風。",
@@ -73,7 +73,7 @@
     duoyun: {
       intro: "滴水湖片區公共文化書店；書牆短停即可。",
       highlights: "通高書牆與閱讀階梯",
-      shots: ["書牆全景"],
+      shots: [],
       tips: ["勿為拍照占位過久"]
     },
     nanhui: {
@@ -85,7 +85,12 @@
     coke: {
       intro: "可口可樂品牌體驗館；短停互動展即可。",
       highlights: "品牌展陳與互動區",
+      shots: [],
       tips: ["行程點，不需要可不進"]
+    },
+    bicester: {
+      intro: "名牌 Outlet；休息站心態。",
+      tips: ["不需要可不買", "預留安檢緩衝"]
     }
   };
   var P = window.SHANGHAI_PLACES || {};

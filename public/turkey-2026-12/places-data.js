@@ -40,17 +40,30 @@ window.TURKEY_PLACES = {
   },
   safranbolu: {
     title: "番紅花城 Safranbolu",
-    map: "Hidirlik Hill Safranbolu",
+    map: "Safranbolu Turkey",
     photos: [
       { src: "photos/safranbolu-1.jpg", alt: "UNESCO 山城", credit: "İmmortalance · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Safranbolu_-_Unesco_World_Heritage.jpg" },
-      { src: "photos/safranbolu-2.jpg", alt: "木屋街道", credit: "Dosseman · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Safranbolu_walk_about_town_8279.jpg" },
-      { src: "photos/hidirlik-1.jpg", alt: "山城全景", credit: "Uğur Başak · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Safranbolu_Panorama.jpg" }
+      { src: "photos/safranbolu-2.jpg", alt: "木屋街道", credit: "Dosseman · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Safranbolu_walk_about_town_8279.jpg" }
     ],
     themes: [
       { t: "UNESCO 鄂圖曼山城", b: "Safranbolu 老城保存 13 至 20 世紀木石結構民居、清真寺、浴室與商隊設施，1994 年列入 UNESCO 世界遺產，理由在於「鄂圖曼城市紋理」的完整性。地名與歷史上番紅花（saffron）種植與貿易相關，Turkish safran 詞源亦見於地方經濟史。山城依坡地發展，紅瓦屋頂與木構外廊是安納托利亞內陸少見的大規模聚落標本，吸引建築與保存研究者。" },
       { t: "首席建築與工匠街區", b: "Çarşı（市集區）與 Bağlar 等街區保存兩層木構「首席住宅」（konak）與石基外牆、突出木樑的鄂圖曼民居型態；狹巷配合坡度設有石砌排水溝。木材、石材分工反映氣候與防火考量，以及工匠行會分工。這類街區在 20 世紀都市化浪潮中較少遭全面拆除，因而成為理解安納托利亞城鎮紋理與日常居住史的戶外教材。" },
-      { t: "希德爾立克山丘", b: "Hıdırlık Tepesi 位於老城高處，可俯瞰紅瓦與山谷地勢。山名與安納托利亞傳統的 Hıdırellez 春季慶祝活動相關，民間信仰以先知赫德爾（Hızır）象徵旅途平安。此制高點有助理解番紅花城垂直向聚落結構：商業、手工坊、上層住家如何沿坡地配置，以及遠程眺望與防禦／信號在歷史上的角色。市區保存條例限制屋頂高度，有助維持遺產區視野。" },
       { t: "保存與現代生活的拉鋸", b: "世界遺產登錄後，旅館、紀念品店與修復工程並進，形成保存、旅遊與當地生活的長期拉鋸。街道多為石板與陡坡，反映水源匱乏、取木材與地形防禦共同塑造的聚落型態。國際遊客增加也促使部分木構進行結構補強；觀察修復細節與新舊材質並置，可見當代土耳其對遺產「活化」而非凍結取樣的取向。UNESCO 定期審查報告亦記錄木構防腐與消防演練措施。" }
+    ],
+    learn: [
+      { label: "維基百科（中文）", href: "https://zh.wikipedia.org/wiki/%E8%90%A8%E5%A4%AB%E5%85%B0%E5%8D%9A%E5%8D%A2" },
+      { label: "UNESCO", href: "https://whc.unesco.org/en/list/614/" },
+      { label: "Wikipedia (EN)", href: "https://en.wikipedia.org/wiki/Safranbolu" }
+    ]
+  },
+  hidirlik: {
+    title: "希德爾立克山丘",
+    map: "Hidirlik Hill Safranbolu",
+    photos: [
+      { src: "photos/hidirlik-1.jpg", alt: "山城全景", credit: "Uğur Başak · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Safranbolu_Panorama.jpg" }
+    ],
+    themes: [
+      { t: "希德爾立克山丘", b: "Hıdırlık Tepesi 位於老城高處，可俯瞰紅瓦與山谷地勢。山名與安納托利亞傳統的 Hıdırellez 春季慶祝活動相關，民間信仰以先知赫德爾（Hızır）象徵旅途平安。此制高點有助理解番紅花城垂直向聚落結構：商業、手工坊、上層住家如何沿坡地配置，以及遠程眺望與防禦／信號在歷史上的角色。市區保存條例限制屋頂高度，有助維持遺產區視野。" }
     ],
     learn: [
       { label: "維基百科（中文）", href: "https://zh.wikipedia.org/wiki/%E8%90%A8%E5%A4%AB%E5%85%B0%E5%8D%9A%E5%8D%A2" },
@@ -89,18 +102,14 @@ window.TURKEY_PLACES = {
       { label: "維基百科・科尼亞", href: "https://zh.wikipedia.org/wiki/%E7%A7%91%E5%B0%BC%E4%BA%9E" }
     ]
   },
-  cappadocia: {
-    title: "卡帕多奇亞奇岩・岩城・三姊妹",
+  fairy: {
+    title: "卡帕多奇亞奇岩怪石",
     map: "Goreme Cappadocia",
     photos: [
-      { src: "photos/cap-1.jpg", alt: "戈雷梅谷地", credit: "Brocken Inaglory · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:G%C3%B6reme_Valley_in_Cappadocia_edit1.jpg" },
-      { src: "photos/cap-2.jpg", alt: "烏奇希薩岩城", credit: "This Photo was taken by Wolfgang Moroder. Feel free to use my photos, but please mention me as the author and send me a  · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:Castle_U%C3%A7hisar_in_Cappadocia.jpg" },
-      { src: "photos/cap-3.jpg", alt: "妖精煙囪", credit: "Dosseman · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:U%C3%A7hisar_View_from_castle_top_to_east_side_panorama_0300.jpg" }
+      { src: "photos/cap-1.jpg", alt: "戈雷梅谷地", credit: "Brocken Inaglory · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:G%C3%B6reme_Valley_in_Cappadocia_edit1.jpg" }
     ],
     themes: [
       { t: "火山凝灰岩地形", b: "數百萬年前附近火山噴發堆積凝灰岩與火山灰，經風蝕、河流切割與溫差風化形成錐狀「妖精煙囪」（fairy chimneys）。岩層軟硬交替使上方較硬岩帽保留下方較軟柱身，造就帽蓋狀外形。這種地貌散布於戈雷梅山谷周邊，成為卡帕多奇亞最顯著的自然符號，也影響古人開鑿岩室、選址避難與農耕的空間策略。地質學文獻以本地凝灰岩分層解釋侵蝕速率差異，是地貌教材。" },
-      { t: "岩居與地下聚落", b: "古代居民在凝灰岩壁鑿出居所、倉儲與教堂；烏奇希薩（Uçhisar）天然岩峰在拜占庭時期即作瞭望據點。戈雷梅露天博物館一帶岩窟教堂保留10至12世紀壁畫，呈現東羅馬藝術與本地方言場景。地下城（如德林庫尤、凱馬克利等）則展示多層防禦與通風系統，見證中世紀安納托利亞在政治動盪下的聚落型態，為學界與遊客研究重點。" },
-      { t: "三姊妹岩", b: "「三姊妹岩」（Üç Güzeller）指 Ürgüp 近郊、通往阿瓦諾斯公路旁三座並立、頂部較寬的蕈狀岩柱，是卡帕多奇亞最常見的明信片取景點；峽谷其他區域亦有類似但不完全相同的「三姊妹」型地貌。其形成機制為差異侵蝕：較堅硬岩帽保護柱身，鄰近較軟岩層先被剝離。此案例有助理解風化選擇性如何塑造觀光地標，而正式命名景點與自然散布地貌宜區分閱讀。國家公園標示牌說明最終外形仍受持續風化與降雨沖刷影響。" },
       { t: "世界遺產戈雷梅國家公園", b: "戈雷梅國家公園與卡帕多奇亞岩石地貌於 1985 年列入 UNESCO 世界遺產，範圍涵蓋岩窟教堂、修道院與自然奇岩景觀。遺產敘述強調 4 至 13 世紀基督教社群在火山岩地景中開鑿禮拜空間，以及壁畫藝術與隱修傳統。今日公園仍受文化自然雙重保護框架管制，徒步與熱氣球等活動亦須符合當地法規與安全規範；世界遺產界線圖可在土耳其文化部網站查閱。" }
     ],
     learn: [
@@ -108,6 +117,64 @@ window.TURKEY_PLACES = {
       { label: "UNESCO", href: "https://whc.unesco.org/en/list/357/" },
       { label: "Wikipedia (EN)", href: "https://en.wikipedia.org/wiki/Cappadocia" }
     ]
+  },
+  uchisar: {
+    title: "烏奇希薩岩城",
+    map: "Uchisar Castle Cappadocia",
+    photos: [
+      { src: "photos/cap-2.jpg", alt: "烏奇希薩岩城", credit: "This Photo was taken by Wolfgang Moroder. Feel free to use my photos, but please mention me as the author and send me a  · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:Castle_U%C3%A7hisar_in_Cappadocia.jpg" }
+    ],
+    themes: [
+      { t: "岩居與地下聚落", b: "古代居民在凝灰岩壁鑿出居所、倉儲與教堂；烏奇希薩（Uçhisar）天然岩峰在拜占庭時期即作瞭望據點。戈雷梅露天博物館一帶岩窟教堂保留10至12世紀壁畫，呈現東羅馬藝術與本地方言場景。地下城（如德林庫尤、凱馬克利等）則展示多層防禦與通風系統，見證中世紀安納托利亞在政治動盪下的聚落型態，為學界與遊客研究重點。" }
+    ],
+    learn: [
+      { label: "維基百科（中文）", href: "https://zh.wikipedia.org/wiki/%E5%8D%A1%E5%B8%95%E5%A4%9A%E5%A5%87%E4%BA%9E" },
+      { label: "UNESCO", href: "https://whc.unesco.org/en/list/357/" },
+      { label: "Wikipedia (EN)・Uçhisar", href: "https://en.wikipedia.org/wiki/U%C3%A7hisar" }
+    ]
+  },
+  sisters: {
+    title: "三姊妹岩",
+    map: "Three Sisters Fairy Chimneys Cappadocia",
+    photos: [
+      { src: "photos/cap-3.jpg", alt: "妖精煙囪", credit: "Dosseman · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:U%C3%A7hisar_View_from_castle_top_to_east_side_panorama_0300.jpg" }
+    ],
+    themes: [
+      { t: "三姊妹岩", b: "「三姊妹岩」（Üç Güzeller）指 Ürgüp 近郊、通往阿瓦諾斯公路旁三座並立、頂部較寬的蕈狀岩柱，是卡帕多奇亞最常見的明信片取景點；峽谷其他區域亦有類似但不完全相同的「三姊妹」型地貌。其形成機制為差異侵蝕：較堅硬岩帽保護柱身，鄰近較軟岩層先被剝離。此案例有助理解風化選擇性如何塑造觀光地標，而正式命名景點與自然散布地貌宜區分閱讀。國家公園標示牌說明最終外形仍受持續風化與降雨沖刷影響。" }
+    ],
+    learn: [
+      { label: "維基百科（中文）", href: "https://zh.wikipedia.org/wiki/%E5%8D%A1%E5%B8%95%E5%A4%9A%E5%A5%87%E4%BA%9E" },
+      { label: "UNESCO", href: "https://whc.unesco.org/en/list/357/" },
+      { label: "Wikipedia (EN)", href: "https://en.wikipedia.org/wiki/Cappadocia" }
+    ]
+  },
+  ceramic: {
+    title: "陶瓷工坊",
+    kind: "shop",
+    map: "Avanos pottery Cappadocia",
+    themes: [],
+    learn: []
+  },
+  carpet: {
+    title: "手工地毯工廠",
+    kind: "shop",
+    map: "Cappadocia carpet workshop",
+    themes: [],
+    learn: []
+  },
+  latex: {
+    title: "乳膠展示中心",
+    kind: "shop",
+    map: "Pamukkale latex center",
+    themes: [],
+    learn: []
+  },
+  leather: {
+    title: "皮衣工廠",
+    kind: "shop",
+    map: "Kusadasi leather factory",
+    themes: [],
+    learn: []
   },
   sultanhani: {
     title: "古驛站 Sultanhanı",
@@ -261,6 +328,7 @@ window.TURKEY_PLACES = {
 };
 
 window.TURKEY_SIGHT_ORDER = [
-  "hagia", "blue", "safranbolu", "anitkabir", "tuz", "cappadocia",
-  "sultanhani", "sille", "mevlana", "pamukkale", "ephesus", "izmir", "ulu", "bosphorus", "spice"
+  "hagia", "blue", "safranbolu", "hidirlik", "anitkabir", "tuz", "ceramic",
+  "fairy", "uchisar", "sisters", "carpet",
+  "sultanhani", "sille", "mevlana", "pamukkale", "latex", "ephesus", "leather", "izmir", "ulu", "bosphorus", "spice"
 ];

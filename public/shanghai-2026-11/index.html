@@ -84,7 +84,12 @@ body.has-trip-day-nav{padding-bottom:72px}
 .themebox p{margin:0;padding:0 0 8px;font-size:.86rem;line-height:1.62;color:#555}
 .learnrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .learnrow a{display:inline-block;padding:9px 11px;background:#f4f8fa;border:1px solid #d9e6ee;border-radius:10px;text-decoration:none;color:#1e4a63;font-weight:700;font-size:.82rem}
-.sightguide{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)}
+.sightguide{margin-top:4px}
+.placeblock{margin-top:12px;padding-top:10px;border-top:1px dashed var(--line)}
+.placeblock .placename{margin:0 0 6px;font-size:.95rem;color:#222}
+.walktips{margin-top:8px}
+.sightguide{margin-top:4px}
+
 </style>
 </head>
 <body><main class="wrap">
@@ -105,7 +110,6 @@ body.has-trip-day-nav{padding-bottom:72px}
 
 <nav class="tabs" aria-label="上海旅行內容" id="mainTabs">
   <button type="button" class="active" data-tab="plan">規劃行程</button>
-  <button type="button" data-tab="sights">景點速覽</button>
   <button type="button" data-tab="practical">實用資訊</button>
   <button type="button" data-tab="info">航班・住宿</button>
   <button type="button" data-tab="extras">自費選項</button>
@@ -129,11 +133,6 @@ body.has-trip-day-nav{padding-bottom:72px}
   </div>
 </section>
 
-<section class="panel" id="sights" hidden>
-  <h2 class="sectiontitle">景點速覽｜看什麼・怎麼拍</h2>
-  <p class="small">跟團不重排順序。行程卡的「看點・拍照・提醒」保留現場技巧；此處另列可考史料與外部參考，預設收合。</p>
-  <div id="sightsList"></div>
-</section>
 
 <section class="panel" id="practical" hidden>
   <h2 class="sectiontitle">天氣與穿衣</h2>
@@ -282,6 +281,7 @@ body.has-trip-day-nav{padding-bottom:72px}
 <script src="../js/trip-day-nav.js"></script>
 <script src="../js/trip-hero-status.js"></script>
 <script src="../js/sight-guide-ui.js"></script>
+<script src="../js/trip-place-card.js"></script>
 <script src="./notes-config.js"></script>
 <script src="places-data.js"></script>
 <script src="sight-guides.js"></script>
@@ -321,9 +321,9 @@ const days=[
   free:"19:05 落地、到飯店已晚，建議早點休息養精神。",
   cards:[
     {n:"1",t:"集合＋長榮 BR706 高雄 → 上海",w:"14:50 高雄小港長榮團體櫃台集合；16:50 起飛、19:05 抵達。入境領行李後團車至飯店。",tags:[["機場","opt"],["集合已確認","mine"]],meta:"移動：飛行約 2h15m｜住宿：上海伊敦康得思",maps:P.pvg.q,
-      detail:{intro:"抵達日以進房與休息為主，不硬排外灘。",shots:["飯店窗外天際（有就拍）"],tips:["認清大門與隔日集合點","名物可改後面上海段再補"]}},
+      detail:{intro:"抵達日以進房與休息為主，不硬排外灘。",shots:[],tips:["認清大門與隔日集合點","名物可改後面上海段再補"]}},
     {n:"2",t:"上海伊敦康得思酒店",w:"晚餐：機上簡餐＋迎賓水果。晚上自由但以睡為主。自備牙膏／牙刷／拖鞋。",tags:[["住宿","mine"],["團餐輕","food"]],meta:"團餐：晚輕｜名物：可放棄｜晚上：進房",maps:P.cordis.q,
-      detail:{intro:"公開頁不列房號與飯店電話。",shots:["大廳／走廊結構"],tips:["支付 App 落地測一小筆","檢查簡訊與網路"]}}
+      detail:{intro:"公開頁不列房號與飯店電話。",shots:[],tips:["支付 App 落地測一小筆","檢查簡訊與網路"]}}
   ]
 },
 {
@@ -333,8 +333,10 @@ const days=[
   free:"晚餐在飯店內，飯後無行程，可在飯店附近散步或享受飯店設施，準備隔天青山湖拍照。",
   cards:[
     {n:"1",t:"嘉興南湖（含遊船）",w:"江南名湖；煙雨樓／湖心島園林。葉況與秋色不保證。",tags:[["景點","opt"]],meta:"團餐：午南湖春天 RMB 60｜住宿城：青山湖",maps:P.nanhu.q,
+      places:["nanhu"],
       detail:{intro:"船上看湖面與堤柳即可。",shots:["船上湖面","島上亭廊"],tips:["不為網紅機位脫隊"]}},
     {n:"2",t:"徑山寺",w:"千年古剎；賞銀杏常見約 11/15–12/8，當日葉況待確認。",tags:[["景點","opt"],["葉況待確認","warn"]],meta:"團餐：晚酒店豪華美食 RMB 200",maps:P.jingshan.q,
+      places:["jingshan"],
       detail:{intro:"殿前銀杏與青瓦白牆；尊重寺院禮儀。",shots:["寺門銀杏落葉","石階與殿簷"],tips:["不大聲錄影擋路"]}},
     {n:"3",t:"杭州青山湖美爵酒店",w:"晚上飯店圈短走即可，不另開杭州市區夜場。",tags:[["住宿","mine"]],meta:"名物：今天以團為主｜晚上：飯店圈",maps:P.mercure.q,
       detail:{intro:"自備盥洗與拖鞋。",shots:[],tips:[]}}
@@ -347,8 +349,10 @@ const days=[
   free:"晚餐咸亨酒樓在魯迅故里一帶，飯後可順逛魯迅故里夜景，來杯紹興黃酒配茴香豆。",
   cards:[
     {n:"1",t:"青山湖水上森林公園（船遊）",w:"水際林木；賞秋／紅杉常見約 11/15–12/5。之後車程約 2 h 往紹興。",tags:[["景點","opt"]],meta:"團餐：午馬嘯人家 RMB 60",maps:P.qingshan.q,
+      places:["qingshan"],
       detail:{intro:"重點是船上看樹與水面關係。",shots:["船側樹列","碼頭棧道"],tips:["防風防滑","勿為空景拖團"]}},
     {n:"2",t:"柯岩風景區（古鎮／魯鎮／倉橋）",w:"採石遺址與石景為主；魯鎮主題街一眼即可；倉橋看河岸民居。",tags:[["景點","opt"]],meta:"團餐：晚鹹亨酒樓 RMB 150｜住宿城：紹興",maps:P.keyan.q,
+      places:["keyan"],
       detail:{intro:"天工大佛、雲骨等石景當主軸。",shots:["石壁尺度","河埠廊簷"],tips:["魯鎮少排演員合影"]}},
     {n:"3",t:"紹興蘇寧希爾頓酒店",w:"晚上飯店圈可搜麵館／小吃；非上海名物主日。",tags:[["住宿","mine"]],meta:"名物：可選補｜晚上：短走",maps:P.hiltonSx.q,detail:{intro:"",shots:[],tips:[]}}
   ]
@@ -360,8 +364,10 @@ const days=[
   free:"全程最大空檔——晚餐自理且住在古城景區內，推薦晚上看鹽官潮牆水幕燈光秀、逛北門潮集吃小吃，夜拍最美。",
   cards:[
     {n:"1",t:"蘭亭＋沈園＋黃酒小鎮",w:"蘭亭看曲水流觴；沈園看園林節奏；黃酒氛圍即可。午餐越鄉小院 RMB 60。",tags:[["景點","opt"],["黃酒","food"]],meta:"住宿城：鹽官",maps:P.lanting.q,
+      places:["lanting","shenyuan","huangjiu"],
       detail:{intro:"不必追劇情打卡清單。",shots:["曲水岸／碑亭","廊影池水"],tips:["購物區不需要就不進"]}},
     {n:"2",t:"潮樂之城（鹽官）",w:"潮牆、報社、北門潮集、御碼頭；夜宿古城。大潮與否待確認。",tags:[["景點","opt"],["潮況待確認","warn"]],meta:"團餐：晚自理",maps:P.yanguan.q,
+      places:["yanguan"],
       detail:{intro:"觀潮聽安全指示，勿翻護欄。",shots:["潮牆水幕","御碼頭夜景"],tips:["不脫隊追網紅機位"]}},
     {n:"3",t:"古城集市自理晚餐",w:"本團少數自理正餐窗：吃飽＋試在地味（缸肉／熱食等，店名待確認）。",tags:[["自理","food"],["名物窗","mine"]],meta:"晚上：古城內短走",maps:P.foodYanguan.q,
       detail:{intro:"以現場開放攤位為準。",shots:[],tips:["設排隊上限"]}}
@@ -374,9 +380,11 @@ const days=[
   free:"行程含湖州「太陽與大象」夜景，回飯店後體力夠可在附近散步。",
   cards:[
     {n:"1",t:"清晨潮樂之城 → 南潯古鎮",w:"嘉業堂、小蓮莊、搖櫓船。選 1–2 處深看勝過每戶打卡。",tags:[["景點","opt"]],meta:"團餐：午合菜 RMB 60",maps:P.nanxun.q,
+      places:["nanxun"],
       detail:{intro:"百間樓河岸與藏書樓／園林。",shots:["百間樓","石橋倒影","船過橋洞"],tips:["景區小吃 40 分鐘換下一攤"]}},
     {n:"2",t:"湖州地標夜景「太陽與大象」",w:"跟團看完即回。晚東大方包廂 RMB 200。",tags:[["景點","opt"]],meta:"住宿：湖州南潯希爾頓",maps:P.sunElephant.q,
-      detail:{intro:"具體觀景動線聽現場。",shots:["夜景輪廓"],tips:["看完即回，不另開夜場"]}},
+      places:["sunElephant"],
+      detail:{intro:"具體觀景動線聽現場。",shots:[],tips:["看完即回，不另開夜場"]}},
     {n:"3",t:"湖州南潯希爾頓酒店",w:"古鎮少排隊；晚上以飯店為主。",tags:[["住宿","mine"]],meta:"名物：古鎮少排隊｜晚上：飯店",maps:P.hiltonNx.q,detail:{intro:"",shots:[],tips:[]}}
   ]
 },
@@ -387,10 +395,14 @@ const days=[
   free:"滴水湖洲際位在湖中島上，晚餐後適合環島散步看湖景。宮宴可加價漢服 RMB100/人、髮飾化妝 RMB100/人。",
   cards:[
     {n:"1",t:"上海共青森林公園",w:"城市森林秋色；銀杏常見約 12 初–12 中（葉況不保證）。",tags:[["景點","opt"]],meta:"住宿城：臨港／滴水湖",maps:P.gongqing.q,
+      places:["gongqing"],
       detail:{intro:"不當登山，走林道即可。",shots:["林蔭道","秋葉鋪地"],tips:[]}},
     {n:"2",t:"浸入式宮廷宴",w:"午餐宮宴 RMB 398（3–4 排）。可選：漢服 +RMB 100／人；髮飾化妝 +RMB 100／人。",tags:[["團餐","food"],["可選加價","warn"]],meta:"名物改晚或明早補",maps:P.gongqing.q,detail:{intro:"體驗日，不要求本幫日常味。",shots:[],tips:["不想加價就拒","吃飽即可"]}},
     {n:"3",t:"上海滴水湖洲際酒店",w:"臨港圓湖度假區；晚北島・臻味 RMB 150。可湖邊短走，不回浦西外灘。",tags:[["住宿","mine"]],meta:"共青→滴水湖約 1–1.5 h",maps:P.dishui.q,
-      detail:{intro:"公開頁不列房號。",shots:["環湖曲線","暮色燈帶"],tips:["臨港名店選擇較少，待確認"]}}
+      detail:{intro:"公開頁不列房號。",shots:[],tips:["臨港名店選擇較少，待確認"]}},
+    {n:"4",t:"滴水湖",w:"臨港人工圓湖；環湖步道與湖岸天際，適合短走。",tags:[["景點","opt"]],meta:"",maps:"上海滴水湖",
+      places:["dishui"],
+      detail:{intro:"",shots:[],tips:["臨港名店選擇較少"]}}
   ]
 },
 {
@@ -400,8 +412,10 @@ const days=[
   free:"早上為「享受酒店設施」半自由時間，可早起看滴水湖日出、到朵雲書院拍落地窗；比斯特購物村是名牌 Outlet，建議先列好想買清單。",
   cards:[
     {n:"1",t:"朵雲書院＋可口可樂探索中心＋南匯嘴",w:"書牆短停；可樂中心當趣味站；觀海看堤岸與交匯，海水常偏濁。",tags:[["景點","opt"]],meta:"團餐：早酒店；午聚金宴 RMB 60",maps:P.duoyun.q,
-      detail:{intro:"預期管理成看交匯而非清水沙灘。",shots:["書牆全景","堤岸線"],tips:["勿為拍照占位過久"]}},
+      places:["duoyun","coke","nanhui"],
+      detail:{intro:"預期管理成看交匯而非清水沙灘。",shots:[],tips:["勿為拍照占位過久"]}},
     {n:"2",t:"比斯特購物村 → 機場",w:"奧特萊斯型休息站心態；不需要可不買。預留安檢緩衝。",tags:[["可跳過購物","warn"],["機場","opt"]],meta:"滴水湖→PVG 約 40–60 分｜晚機上輕食",maps:P.pvg.q,
+      places:["bicester"],
       detail:{intro:"BR705 20:05→22:20。",shots:[],tips:["名物能補再補，趕機放棄"]}}
   ]
 }
@@ -513,15 +527,8 @@ function renderDays(){
       const tags=el("div","tags");(c.tags||[]).forEach(([t,k])=>{const s=document.createElement("span");s.className="tag "+(k||"");s.textContent=t;tags.append(s)});grow.append(tags);
       const actions=el("div","actions");
       const a=document.createElement("a");a.href=mapsUrl(c.maps);a.target="_blank";a.rel="noopener";a.textContent="Google 導航 ↗";actions.append(a);grow.append(actions);
-      if(c.detail&&(c.detail.intro||(c.detail.shots&&c.detail.shots.length)||(c.detail.tips&&c.detail.tips.length))){
-        const det=document.createElement("details");det.className="detailbox";
-        det.innerHTML="<summary>看點・拍照・提醒</summary>";
-        const body=el("div","detailbody");
-        if(c.detail.intro)body.append(el("p",null,c.detail.intro));
-        const grid=el("div","detailgrid");
-        if(c.detail.shots&&c.detail.shots.length){const m=el("div","detailmini");m.innerHTML="<b>建議取景</b>"+c.detail.shots.map(x=>"・"+x).join("<br>");grid.append(m)}
-        if(c.detail.tips&&c.detail.tips.length){const m=el("div","detailmini");m.innerHTML="<b>別做／提醒</b>"+c.detail.tips.map(x=>"・"+x).join("<br>");grid.append(m)}
-        body.append(grid);det.append(body);grow.append(det);
+      if(window.TripPlaceCard){
+        TripPlaceCard.appendCardPlaces(grow,c,window.SHANGHAI_PLACES||{},i*10+Number(c.n||0));
       }
       row.append(grow);card.append(row);panel.append(card);
     });
@@ -555,24 +562,6 @@ function showPlanPanel(){
   setTimeout(()=>{if(map)map.invalidateSize()},100);
 }
 
-function renderSights(){
-  const box=document.getElementById("sightsList");box.replaceChildren();
-  const order=window.SHANGHAI_SIGHT_ORDER||[];
-  const data=window.SHANGHAI_PLACES||{};
-  order.forEach((id,i)=>{
-    const p=data[id];if(!p) return;
-    const card=el("article","card");
-    card.append(el("h3",null,p.title));
-    if(window.SightGuideUI) SightGuideUI.appendSightGuide(card,p);
-  else if(p.blurb) card.append(el("p","why",p.blurb));
-    appendMosaic(card,p.photos,i);
-    appendPlaceHistory(card,p);
-    appendLearnLinks(card,p.learn);
-    const actions=el("div","actions");
-    const a=document.createElement("a");a.href=mapsUrl(p.map||"");a.target="_blank";a.rel="noopener";a.textContent="Google Maps ↗";actions.append(a);
-    card.append(actions);box.append(card);
-  });
-}
 
 document.querySelectorAll("#mainTabs [data-tab]").forEach(b=>b.addEventListener("click",()=>{
   document.querySelectorAll("#mainTabs [data-tab]").forEach(x=>x.classList.toggle("active",x===b));
@@ -580,7 +569,7 @@ document.querySelectorAll("#mainTabs [data-tab]").forEach(b=>b.addEventListener(
   if(b.dataset.tab==="plan")setTimeout(()=>{if(map)map.invalidateSize()},100);
 }));
 
-renderDays();renderSights();
+renderDays();
 
 function showIdeasPanel(){
   document.querySelectorAll("#mainTabs [data-tab]").forEach(x=>x.classList.toggle("active",x.dataset.tab==="ideas"));
