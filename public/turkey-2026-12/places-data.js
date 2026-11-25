@@ -76,7 +76,7 @@ window.TURKEY_PLACES = {
     title: "鹽湖 Lake Tuz",
     map: "Lake Tuz Turkey",
     photos: [
-      { src: "photos/tuz-1.jpg", alt: "鹽湖地景", credit: "Wikimedia Commons · CC BY-SA · https://commons.wikimedia.org/wiki/File:Tuz_G%C3%B6l%C3%BC_2.jpg" },
+      { src: "photos/tuz-1.jpg", alt: "鹽湖地景", credit: "Wokege · CC0 · https://commons.wikimedia.org/wiki/File:Tuz_G%C3%B6l%C3%BC_2.jpg" },
       { src: "photos/tuz-2.jpg", alt: "鹽湖地景", credit: "Lethiciasouza · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Salt_lake,_Tuz_golu.jpg" }
     ],
     themes: [
@@ -119,7 +119,8 @@ window.TURKEY_PLACES = {
     ],
     learn: [
       { label: "Wikipedia (EN)", href: "https://en.wikipedia.org/wiki/Sultan_Han" },
-      { label: "維基百科・絲綢之路", href: "https://zh.wikipedia.org/wiki/%E4%B8%9D%E7%BB%B8%E4%B9%8B%E8%B7%AF" }
+      { label: "維基百科・絲綢之路", href: "https://zh.wikipedia.org/wiki/%E4%B8%9D%E7%BB%B8%E4%B9%8B%E8%B7%AF" },
+      { label: "Wikipedia (EN)・Aksaray", href: "https://en.wikipedia.org/wiki/Aksaray_Province" }
     ]
   },
   sille: {
@@ -132,7 +133,8 @@ window.TURKEY_PLACES = {
     ],
     learn: [
       { label: "Wikipedia (EN)", href: "https://en.wikipedia.org/wiki/Sille,_Konya" },
-      { label: "維基百科・科尼亞", href: "https://zh.wikipedia.org/wiki/%E7%A7%91%E5%B0%BC%E4%BA%9E" }
+      { label: "維基百科・科尼亞", href: "https://zh.wikipedia.org/wiki/%E7%A7%91%E5%B0%BC%E4%BA%9E" },
+      { label: "維基百科・梅夫拉納博物館", href: "https://zh.wikipedia.org/wiki/%E6%A2%85%E5%A4%AB%E6%8B%89%E7%B4%8D%E5%8D%9A%E7%89%A9%E9%A4%A8" }
     ]
   },
   mevlana: {
@@ -150,7 +152,7 @@ window.TURKEY_PLACES = {
     ],
     learn: [
       { label: "維基百科（中文）", href: "https://zh.wikipedia.org/wiki/%E9%AD%AF%E7%B1%B3" },
-      { label: "博物館官網", href: "https://muze.gov.tr/muze-detay?SectionId=MEV01&DistId=MRK" },
+      { label: "土耳其文化部・梅夫拉納博物館", href: "https://muze.gov.tr/muze-detay?SectionId=MEV01&DistId=MEV" },
       { label: "Wikipedia (EN)", href: "https://en.wikipedia.org/wiki/Mevlana_Museum" }
     ]
   },
@@ -158,8 +160,8 @@ window.TURKEY_PLACES = {
     title: "棉堡 Pamukkale／希拉波里斯",
     map: "Pamukkale Turkey",
     photos: [
-      { src: "photos/pam-1.jpg", alt: "石灰梯級", credit: "Wikimedia Commons · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:TR_Pamukkale_White_Terraces_asv2020-02_img16.jpg" },
-      { src: "photos/pam-2.jpg", alt: "希拉波里斯劇場", credit: "Wikimedia Commons · CC BY · https://commons.wikimedia.org/wiki/File:The_Roman_theatre,_built_in_the_2nd_century_AD_under_Hadrian_on_the_ruins_of_an_earlier_theatre,_later_renovated_under_Septimius_Severus,_Hierapolis,_Turkey_-_17033619498.jpg" }
+      { src: "photos/pam-1.jpg", alt: "石灰梯級", credit: "A.Savin · FAL · https://commons.wikimedia.org/wiki/File:TR_Pamukkale_White_Terraces_asv2020-02_img16.jpg" },
+      { src: "photos/pam-2.jpg", alt: "希拉波里斯劇場", credit: "Carole Raddato · CC BY-SA 2.0 · https://commons.wikimedia.org/wiki/File:The_Roman_theatre,_built_in_the_2nd_century_AD_under_Hadrian_on_the_ruins_of_an_earlier_theatre,_later_renovated_under_Septimius_Severus,_Hierapolis,_Turkey_-_17033619498.jpg" }
     ],
     themes: [
       { t: "石灰華梯田", b: "含碳酸鈣的溫泉自山坡湧出，水流沿途沉積石灰華，形成層層白色梯形台地，土耳其語 Pamukkale 意即「棉堡」。沉積持續進行亦易受踩踏與乾涸影響，管理單位因此劃定步道、限制赤腳區域並調控供水，以保護易脆的結晶層。此自然奇觀與上方的希拉波里斯古城共用 UNESCO 保護框架，展現地質過程與人類活動的緊密連結。" },
@@ -212,15 +214,15 @@ window.TURKEY_PLACES = {
   ulu: {
     title: "布爾薩大清真寺",
     map: "Ulu Camii Bursa",
-    photos: [{ src: "photos/ulu-1.jpg", alt: "烏盧清真寺", credit: "Wikimedia Commons · CC BY-SA · https://commons.wikimedia.org/wiki/File:Bursa_Ulu_Camii_2007.jpg" }],
+    photos: [{ src: "photos/ulu-1.jpg", alt: "烏盧清真寺", credit: "Dosseman · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:Bursa_Ulu_Cami.jpg" }],
     themes: [
       { t: "早期鄂圖曼宗教建築", b: "布爾薩大清真寺（Ulu Camii）於 1396 至 1399 年由鄂圖曼蘇丹 Bayezid I（閃電）下令興建，是早期鄂圖曼首都布爾薩的集體禮拜清真寺。室內以二十座圓頂覆蓋寬廣方形禱告廳，繼承塞爾柱與早期鄂圖曼「多圓頂」傳統，不同於後來 Sinan 式單大穹頂。布爾薩為鄂圖曼首座首都，此寺展示公國時期宗教建築的尺度與裝飾語彙，亦為理解後續帝國清真寺演化的基準案例。" },
       { t: "書法與噴泉中庭", b: "內牆滿佈鄂圖曼書法銘文與幾何綿延彩繪，中庭設 ablution 噴泉供小淨儀式，為 14 世紀末清真寺庭院的典型配置。建築鄰近歷史市集與絲綢貿易區，反映布爾薩作為安納托利亞絲綢產地與貿易節點的地位。寺內於禱告時段可能限制非穆斯林進入禱告廳核心；外觀與庭院仍可見證早期鄂圖曼美學如何結合波斯書法與拜占庭裝飾傳統。" }
     ],
     learn: [
-      { label: "維基百科（中文）", href: "https://zh.wikipedia.org/wiki/%E5%B8%83%E7%88%BE%E8%96%A9" },
-      { label: "Wikipedia 大清真寺 (EN)", href: "https://en.wikipedia.org/wiki/Bursa_Grand_Mosque" },
-      { label: "維基百科・布爾薩", href: "https://zh.wikipedia.org/wiki/%E5%B8%83%E7%88%BE%E8%96%A9" }
+      { label: "Wikipedia (EN)・Grand Mosque", href: "https://en.wikipedia.org/wiki/Bursa_Grand_Mosque" },
+      { label: "維基百科（中文）・布爾薩", href: "https://zh.wikipedia.org/wiki/%E5%B8%83%E7%88%BE%E8%96%A9" },
+      { label: "Wikipedia (EN)・Ottoman architecture", href: "https://en.wikipedia.org/wiki/Ottoman_architecture" }
     ]
   },
   bosphorus: {
@@ -252,8 +254,8 @@ window.TURKEY_PLACES = {
     ],
     learn: [
       { label: "Wikipedia (EN)", href: "https://en.wikipedia.org/wiki/Spice_Bazaar,_Istanbul" },
-      { label: "維基百科・伊斯坦堡（中文）", href: "https://zh.wikipedia.org/wiki/%E4%BC%8A%E6%96%AF%E5%9D%A6%E5%A0%A1" },
-      { label: "維基百科・伊斯坦堡", href: "https://zh.wikipedia.org/wiki/%E4%BC%8A%E6%96%AF%E5%9D%A6%E5%A0%A1" }
+      { label: "維基百科・伊斯坦堡", href: "https://zh.wikipedia.org/wiki/%E4%BC%8A%E6%96%AF%E5%9D%A6%E5%A0%A1" },
+      { label: "Wikipedia (EN)・Egyptian Bazaar", href: "https://en.wikipedia.org/wiki/Egyptian_Bazaar" }
     ]
   }
 };

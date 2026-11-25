@@ -2,138 +2,190 @@
   {
     "place": "anitkabir",
     "file": "anitkabir-1.jpg",
-    "bytes": 128431
+    "bytes": 128431,
+    "alt": "國父陵寢",
+    "credit": "Wikimedia Commons · CC BY"
   },
   {
     "place": "blue",
     "file": "blue-1.jpg",
-    "bytes": 195588
+    "bytes": 195588,
+    "alt": "清真寺庭院",
+    "credit": "Wikimedia Commons · CC BY-SA"
   },
   {
     "place": "blue",
     "file": "blue-2.jpg",
-    "bytes": 165031
+    "bytes": 165031,
+    "alt": "清真寺外觀",
+    "credit": "Wikimedia Commons · CC BY-SA"
   },
   {
     "place": "bosphorus",
     "file": "bos-1.jpg",
-    "bytes": 196090
+    "bytes": 196090,
+    "alt": "海峽與城市天際線",
+    "credit": "Wikimedia Commons · CC BY-SA"
   },
   {
     "place": "bosphorus",
     "file": "bos-2.jpg",
-    "bytes": 180995
+    "bytes": 180995,
+    "alt": "博斯普魯斯大橋",
+    "credit": "Wikimedia Commons · CC BY-SA"
   },
   {
     "place": "cappadocia",
     "file": "cap-1.jpg",
-    "bytes": 195010
+    "bytes": 195010,
+    "alt": "戈雷梅谷地",
+    "credit": "Wikimedia Commons · CC BY-SA"
   },
   {
     "place": "cappadocia",
     "file": "cap-2.jpg",
-    "bytes": 194269
+    "bytes": 194269,
+    "alt": "烏奇希薩岩城",
+    "credit": "Wikimedia Commons · CC BY-SA"
   },
   {
     "place": "cappadocia",
     "file": "cap-3.jpg",
-    "bytes": 129985
+    "bytes": 129985,
+    "alt": "妖精煙囪",
+    "credit": "Wikimedia Commons · CC BY-SA · https://commons.wikimedia.org/wiki/File:Goreme_fairy_chimneys-3.jpg"
   },
   {
     "place": "ephesus",
     "file": "eph-1.jpg",
-    "bytes": 199475
+    "bytes": 199475,
+    "alt": "塞爾蘇斯圖書館",
+    "credit": "Wikimedia Commons · CC BY-SA · https://commons.wikimedia.org/wiki/File:Ephesus_Celsus_Library.jpg"
   },
   {
     "place": "ephesus",
     "file": "eph-2.jpg",
-    "bytes": 192586
+    "bytes": 192586,
+    "alt": "大劇場",
+    "credit": "Wikimedia Commons · CC BY-SA · https://commons.wikimedia.org/wiki/File:Great_Theatre_of_Ephesus_2024.jpg"
   },
   {
     "place": "hagia",
     "file": "hagia-1.jpg",
-    "bytes": 192599
+    "bytes": 192599,
+    "alt": "聖索菲亞外觀",
+    "credit": "Wikimedia Commons · CC BY-SA 3.0"
   },
   {
     "place": "hagia",
     "file": "hagia-2.jpg",
-    "bytes": 197548
+    "bytes": 197548,
+    "alt": "歷史內部視角（版畫）",
+    "credit": "Wikimedia Commons · Public domain"
   },
   {
     "place": "hidirlik",
     "file": "hidirlik-1.jpg",
-    "bytes": 109744
+    "bytes": 109744,
+    "alt": "山城全景",
+    "credit": "Wikimedia Commons · CC BY-SA"
   },
   {
     "place": "izmir",
     "file": "izm-1.jpg",
-    "bytes": 199589
+    "bytes": 199589,
+    "alt": "康納克鐘樓",
+    "credit": "Wikimedia Commons · CC BY-SA"
   },
   {
     "place": "izmir",
     "file": "izm-2.jpg",
-    "bytes": 195247
+    "bytes": 195247,
+    "alt": "阿珊索爾",
+    "credit": "Wikimedia Commons · CC BY-SA 4.0"
   },
   {
     "place": "mevlana",
     "file": "mevlana-1.jpg",
-    "bytes": 197310
+    "bytes": 197310,
+    "alt": "博物館建築",
+    "credit": "Wikimedia Commons · CC BY-SA"
   },
   {
     "place": "mevlana",
     "file": "mevlana-2.jpg",
-    "bytes": 193645
+    "bytes": 193645,
+    "alt": "陵園庭院",
+    "credit": "Wikimedia Commons · CC BY"
   },
   {
     "place": "pamukkale",
     "file": "pam-1.jpg",
-    "bytes": 194622
+    "bytes": 194622,
+    "alt": "石灰梯級",
+    "credit": "A.Savin · FAL · https://commons.wikimedia.org/wiki/File:TR_Pamukkale_White_Terraces_asv2020-02_img16.jpg"
   },
   {
     "place": "pamukkale",
     "file": "pam-2.jpg",
-    "bytes": 194968
+    "bytes": 194968,
+    "alt": "希拉波里斯劇場",
+    "credit": "Carole Raddato · CC BY-SA 2.0 · https://commons.wikimedia.org/wiki/File:The_Roman_theatre,_built_in_the_2nd_century_AD_under_Hadrian_on_the_ruins_of_an_earlier_theatre,_later_renovated_under_Septimius_Severus,_Hierapolis,_Turkey_-_17033619498.jpg"
   },
   {
     "place": "safranbolu",
     "file": "safranbolu-1.jpg",
-    "bytes": 189752
+    "bytes": 189752,
+    "alt": "UNESCO 山城",
+    "credit": "Wikimedia Commons · CC BY-SA"
   },
   {
     "place": "safranbolu",
     "file": "safranbolu-2.jpg",
-    "bytes": 191399
+    "bytes": 191399,
+    "alt": "木屋街道",
+    "credit": "Wikimedia Commons · CC BY-SA"
   },
   {
     "place": "sille",
     "file": "sille-1.jpg",
-    "bytes": 190041
+    "bytes": 190041,
+    "alt": "石造小村",
+    "credit": "Wikimedia Commons · CC BY-SA"
   },
   {
     "place": "spice",
     "file": "spice-1.jpg",
-    "bytes": 197076
+    "bytes": 197076,
+    "alt": "香料市集",
+    "credit": "Wikimedia Commons · CC BY-SA · https://commons.wikimedia.org/wiki/File:Spices_on_Spice_Bazaar_in_Istanbul_02.jpg"
   },
   {
     "place": "sultanhani",
     "file": "sultanhani-1.jpg",
-    "bytes": 199596
+    "bytes": 414945,
+    "alt": "商隊驛站",
+    "credit": "Wikimedia Commons · CC BY"
   },
   {
     "place": "tuz",
     "file": "tuz-1.jpg",
-    "bytes": 98655
+    "bytes": 70121,
+    "alt": "鹽湖地景",
+    "credit": "Wokege · CC0 · https://commons.wikimedia.org/wiki/File:Tuz_G%C3%B6l%C3%BC_2.jpg"
   },
   {
     "place": "tuz",
     "file": "tuz-2.jpg",
     "bytes": 172482,
-    "alt": "Lake Tuz salt lake",
+    "alt": "鹽湖地景",
     "credit": "Lethiciasouza · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Salt_lake,_Tuz_golu.jpg"
   },
   {
     "place": "ulu",
     "file": "ulu-1.jpg",
-    "bytes": 181659
+    "bytes": 104485,
+    "alt": "烏盧清真寺",
+    "credit": "Dosseman · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:Bursa_Ulu_Cami.jpg"
   }
 ]

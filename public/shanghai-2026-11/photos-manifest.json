@@ -2,86 +2,113 @@
   {
     "place": "dishui",
     "file": "dishui-1.jpg",
-    "bytes": 199669
-  },
-  {
-    "place": "duoyun",
-    "file": "duoyun-1.jpg",
-    "bytes": 178012
+    "bytes": 199669,
+    "alt": "滴水湖",
+    "credit": "Wikimedia Commons · CC BY-SA"
   },
   {
     "place": "gongqing",
     "file": "gongqing-1.jpg",
-    "bytes": 170256
+    "bytes": 170256,
+    "alt": "共青森林",
+    "credit": "Wikimedia Commons · CC BY-SA"
   },
   {
     "place": "jingshan",
     "file": "jingshan-1.jpg",
-    "bytes": 195536
+    "bytes": 195536,
+    "alt": "徑山寺山門",
+    "credit": "CatOnMars · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:Main_gate_of_Jingshan_Temple_1.jpg"
   },
   {
     "place": "keyan",
     "file": "keyan-1.jpg",
-    "bytes": 162929
+    "bytes": 296035,
+    "alt": "柯岩步道",
+    "credit": "Wikimedia Commons · CC BY-SA"
   },
   {
     "place": "keyan",
     "file": "keyan-2.jpg",
-    "bytes": 198084
+    "bytes": 198084,
+    "alt": "柯岩大佛",
+    "credit": "Wikimedia Commons · CC BY-SA"
   },
   {
     "place": "lanting",
     "file": "lanting-1.jpg",
-    "bytes": 142288
+    "bytes": 194666,
+    "alt": "蘭亭曲水流觴",
+    "credit": "Gisling · CC BY 3.0 · https://commons.wikimedia.org/wiki/File:Lanting,_2021-04-17_01.jpg"
   },
   {
     "place": "nanhu",
     "file": "nanhu-1.jpg",
-    "bytes": 189378
+    "bytes": 189378,
+    "alt": "南湖湖面",
+    "credit": "Wikimedia Commons · CC BY-SA"
   },
   {
     "place": "nanhu",
     "file": "nanhu-2.jpg",
-    "bytes": 192745
+    "bytes": 192745,
+    "alt": "煙雨樓一帶",
+    "credit": "Wikimedia Commons · CC BY-SA"
   },
   {
     "place": "nanhui",
     "file": "nanhui-1.jpg",
-    "bytes": 179365
+    "bytes": 179365,
+    "alt": "南匯嘴觀海公園",
+    "credit": "Natuur12 · Public domain · https://commons.wikimedia.org/wiki/File:Donghai_Bridge.jpg"
   },
   {
     "place": "nanxun",
     "file": "nanxun-1.jpg",
-    "bytes": 184002
+    "bytes": 184002,
+    "alt": "南潯水巷",
+    "credit": "Wikimedia Commons · CC BY-SA"
   },
   {
     "place": "nanxun",
     "file": "nanxun-2.jpg",
-    "bytes": 160016
+    "bytes": 160016,
+    "alt": "百間樓",
+    "credit": "Wikimedia Commons · CC BY-SA"
   },
   {
     "place": "nanxun",
     "file": "nanxun-3.jpg",
-    "bytes": 187013
+    "bytes": 187013,
+    "alt": "石橋與搖櫓船",
+    "credit": "Wikimedia Commons · CC BY-SA"
   },
   {
     "place": "qingshan",
     "file": "qingshan-1.jpg",
-    "bytes": 196863
+    "bytes": 196863,
+    "alt": "水上森林",
+    "credit": "Wikimedia Commons · CC BY-SA"
   },
   {
     "place": "shenyuan",
     "file": "shenyuan-1.jpg",
-    "bytes": 192674
+    "bytes": 192674,
+    "alt": "沈園園林水榭",
+    "credit": "猫猫的日记本 · CC BY-SA · https://commons.wikimedia.org/wiki/File:Shen_Garden_in_Shaoxing_2012-07.JPG"
   },
   {
     "place": "yanguan",
     "file": "yanguan-1.jpg",
-    "bytes": 189890
+    "bytes": 189890,
+    "alt": "鹽官古城",
+    "credit": "Wikimedia Commons · CC BY-SA"
   },
   {
     "place": "yanguan",
     "file": "yanguan-2.jpg",
-    "bytes": 48804
+    "bytes": 48804,
+    "alt": "海塘潮景",
+    "credit": "Wikimedia Commons · CC BY-SA"
   }
 ]
