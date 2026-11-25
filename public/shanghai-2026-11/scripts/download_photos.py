@@ -28,7 +28,8 @@ ITEMS = [
     ("nanxun", "nanxun-3.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b7/Nanxun_-_Ancient_water_town_-_0333.jpg/1280px-Nanxun_-_Ancient_water_town_-_0333.jpg", "廊橋石橋", "CC BY-SA"),
     ("gongqing", "gongqing-1.jpg", "https://upload.wikimedia.org/wikipedia/commons/8/87/%E5%85%B1%E9%9D%92%E6%A3%AE%E6%9E%97%E5%85%AC%E5%9B%AD%EF%BC%8CGongqing_Forest_Park_-_panoramio.jpg", "共青森林公園", "CC BY-SA"),
     ("dishui", "dishui-1.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/201812_Dishui_Lake_from_35L_Final_Approach_Kopie.jpg/1280px-201812_Dishui_Lake_from_35L_Final_Approach_Kopie.jpg", "滴水湖空拍", "CC BY-SA"),
-    ("duoyun", "duoyun-1.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/78/Dishui_Lake_Station.jpg/1280px-Dishui_Lake_Station.jpg", "臨港湖區", "CC BY-SA"),
+    ("duoyun", "duoyun-1.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1c/Sinan_Bookstore_1.jpg/1280px-Sinan_Bookstore_1.jpg", "書店閱讀空間", "CC BY-SA"),
+    ("nanhui", "nanhui-1.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6d/Donghai_Bridge.jpg/1280px-Donghai_Bridge.jpg", "東海大橋遠景", "CC BY-SA"),
 ]
 
 

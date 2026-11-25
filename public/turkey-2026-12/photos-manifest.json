@@ -1,163 +1,137 @@
 [
   {
-    "place": "hagia",
-    "file": "hagia-1.jpg",
-    "alt": "Hagia Sophia exterior",
-    "credit": "Wikimedia Commons · CC BY-SA 3.0",
-    "bytes": 192599
-  },
-  {
-    "place": "hagia",
-    "file": "hagia-2.jpg",
-    "alt": "Historic interior view",
-    "credit": "Wikimedia Commons · Public domain",
-    "bytes": 197548
+    "place": "anitkabir",
+    "file": "anitkabir-1.jpg",
+    "bytes": 128431
   },
   {
     "place": "blue",
     "file": "blue-1.jpg",
-    "alt": "Blue Mosque courtyard",
-    "credit": "Wikimedia Commons · CC BY-SA",
     "bytes": 195588
   },
   {
     "place": "blue",
     "file": "blue-2.jpg",
-    "alt": "Sultan Ahmed Mosque",
-    "credit": "Wikimedia Commons · CC BY-SA",
     "bytes": 165031
   },
   {
-    "place": "safranbolu",
-    "file": "safranbolu-1.jpg",
-    "alt": "Safranbolu UNESCO town",
-    "credit": "Wikimedia Commons · CC BY-SA",
-    "bytes": 189752
+    "place": "bosphorus",
+    "file": "bos-1.jpg",
+    "bytes": 196090
   },
   {
-    "place": "safranbolu",
-    "file": "safranbolu-2.jpg",
-    "alt": "Ottoman wooden houses",
-    "credit": "Wikimedia Commons · CC BY-SA",
-    "bytes": 191399
-  },
-  {
-    "place": "hidirlik",
-    "file": "hidirlik-1.jpg",
-    "alt": "Panorama over Safranbolu",
-    "credit": "Wikimedia Commons · CC BY-SA",
-    "bytes": 109744
-  },
-  {
-    "place": "anitkabir",
-    "file": "anitkabir-1.jpg",
-    "alt": "Anitkabir mausoleum",
-    "credit": "Wikimedia Commons · CC BY",
-    "bytes": 128431
-  },
-  {
-    "place": "tuz",
-    "file": "tuz-1.jpg",
-    "alt": "Lake Tuz salt flats",
-    "credit": "Wikimedia Commons · CC BY-SA",
-    "bytes": 98655
-  },
-  {
-    "place": "tuz",
-    "file": "tuz-2.jpg",
-    "alt": "Lake Tuz aerial",
-    "credit": "Wikimedia Commons · Public domain (NASA)",
-    "bytes": 198558
+    "place": "bosphorus",
+    "file": "bos-2.jpg",
+    "bytes": 180995
   },
   {
     "place": "cappadocia",
     "file": "cap-1.jpg",
-    "alt": "Goreme valley chimneys",
-    "credit": "Wikimedia Commons · CC BY-SA",
     "bytes": 195010
   },
   {
     "place": "cappadocia",
     "file": "cap-2.jpg",
-    "alt": "Uchisar rock castle",
-    "credit": "Wikimedia Commons · CC BY-SA",
     "bytes": 194269
   },
   {
-    "place": "sultanhani",
-    "file": "sultanhani-1.jpg",
-    "alt": "Sultanhani caravanserai",
-    "credit": "Wikimedia Commons · CC BY",
-    "bytes": 414945
+    "place": "cappadocia",
+    "file": "cap-3.jpg",
+    "bytes": 129985
   },
   {
-    "place": "sille",
-    "file": "sille-1.jpg",
-    "alt": "Sille stone village",
-    "credit": "Wikimedia Commons · CC BY-SA",
-    "bytes": 190041
-  },
-  {
-    "place": "mevlana",
-    "file": "mevlana-1.jpg",
-    "alt": "Mevlana Museum",
-    "credit": "Wikimedia Commons · CC BY-SA",
-    "bytes": 197310
-  },
-  {
-    "place": "mevlana",
-    "file": "mevlana-2.jpg",
-    "alt": "Mausoleum courtyard",
-    "credit": "Wikimedia Commons · CC BY",
-    "bytes": 193645
-  },
-  {
-    "place": "pamukkale",
-    "file": "pam-1.jpg",
-    "alt": "White travertine terraces",
-    "credit": "Wikimedia Commons · CC BY-SA 4.0",
-    "bytes": 194622
-  },
-  {
-    "place": "pamukkale",
-    "file": "pam-2.jpg",
-    "alt": "Hierapolis Roman theatre",
-    "credit": "Wikimedia Commons · CC BY",
-    "bytes": 194968
+    "place": "ephesus",
+    "file": "eph-1.jpg",
+    "bytes": 199475
   },
   {
     "place": "ephesus",
     "file": "eph-2.jpg",
-    "alt": "Great Theatre",
-    "credit": "Wikimedia Commons · CC BY-SA",
     "bytes": 192586
+  },
+  {
+    "place": "hagia",
+    "file": "hagia-1.jpg",
+    "bytes": 192599
+  },
+  {
+    "place": "hagia",
+    "file": "hagia-2.jpg",
+    "bytes": 197548
+  },
+  {
+    "place": "hidirlik",
+    "file": "hidirlik-1.jpg",
+    "bytes": 109744
   },
   {
     "place": "izmir",
     "file": "izm-1.jpg",
-    "alt": "Konak Clock Tower",
-    "credit": "Wikimedia Commons · CC BY-SA",
     "bytes": 199589
   },
   {
     "place": "izmir",
     "file": "izm-2.jpg",
-    "alt": "Asansor elevator",
-    "credit": "Wikimedia Commons · CC BY-SA 4.0",
     "bytes": 195247
   },
   {
-    "place": "bosphorus",
-    "file": "bos-1.jpg",
-    "alt": "Bosphorus and skyline",
-    "credit": "Wikimedia Commons · CC BY-SA",
-    "bytes": 196090
+    "place": "mevlana",
+    "file": "mevlana-1.jpg",
+    "bytes": 197310
+  },
+  {
+    "place": "mevlana",
+    "file": "mevlana-2.jpg",
+    "bytes": 193645
+  },
+  {
+    "place": "pamukkale",
+    "file": "pam-1.jpg",
+    "bytes": 194622
+  },
+  {
+    "place": "pamukkale",
+    "file": "pam-2.jpg",
+    "bytes": 194968
+  },
+  {
+    "place": "safranbolu",
+    "file": "safranbolu-1.jpg",
+    "bytes": 189752
+  },
+  {
+    "place": "safranbolu",
+    "file": "safranbolu-2.jpg",
+    "bytes": 191399
+  },
+  {
+    "place": "sille",
+    "file": "sille-1.jpg",
+    "bytes": 190041
   },
   {
     "place": "spice",
     "file": "spice-1.jpg",
-    "alt": "Spice Bazaar",
-    "credit": "Wikimedia Commons · CC BY-SA",
     "bytes": 197076
+  },
+  {
+    "place": "sultanhani",
+    "file": "sultanhani-1.jpg",
+    "bytes": 414945
+  },
+  {
+    "place": "tuz",
+    "file": "tuz-1.jpg",
+    "bytes": 98655
+  },
+  {
+    "place": "tuz",
+    "file": "tuz-2.jpg",
+    "bytes": 198558
+  },
+  {
+    "place": "ulu",
+    "file": "ulu-1.jpg",
+    "bytes": 181659
   }
 ]

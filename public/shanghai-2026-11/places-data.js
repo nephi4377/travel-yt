@@ -36,7 +36,7 @@ window.SHANGHAI_PLACES = {
     learn: [
       { label: "維基百科（中文）", href: "https://zh.wikipedia.org/wiki/%E5%BE%91%E5%B1%B1%E5%AF%BA" },
       { label: "維基百科・徑山", href: "https://zh.wikipedia.org/wiki/%E5%BE%91%E5%B1%B1" },
-      { label: "Wikipedia (EN)・Jingshan Temple", href: "https://en.wikipedia.org/wiki/Jingshan_Temple,_Hangzhou" }
+      { label: "Wikipedia (EN)・Jingshan Temple", href: "https://en.wikipedia.org/wiki/Jingshan%20Temple%20(Hangzhou)" }
     ]
   },
   qingshan: {
@@ -50,7 +50,7 @@ window.SHANGHAI_PLACES = {
     learn: [
       { label: "維基百科（中文）・青山湖", href: "https://zh.wikipedia.org/wiki/%E9%9D%92%E5%B1%B1%E6%B9%96" },
       { label: "Wikipedia (EN)・Lin'an", href: "https://en.wikipedia.org/wiki/Lin'an_District" },
-      { label: "杭州市政府門戶", href: "https://www.hangzhou.gov.cn/" }
+      { label: "維基百科・杭州市", href: "https://zh.wikipedia.org/wiki/%E6%9D%AD%E5%B7%9E%E5%B8%82" }
     ]
   },
   keyan: {
@@ -126,7 +126,7 @@ window.SHANGHAI_PLACES = {
       { t: "鹽業與運河交通", b: "漢代起此地設亭煮鹽，唐宋官鹽制度下鹽官為重要產銷節點。方志與鹽志記載鹽倉、灘地與漕船往來，帶動市集與人文積累。金庸故里等近世文化標籤疊加於同一城鎮，形成多重敘事。歷史經濟史研究可追溯鹽政檔案；旅遊介紹則多聚焦水鄉街景與觀潮體驗，細節以博物館陳列為準。清末鹽務改革後，鹽場廢除改農，老鹽倉改建民宿與展館，仍可於城牆內街巷見灰磚小廟與漕司遺址碑。" }
     ],
     learn: [
-      { label: "維基百科（中文）", href: "https://zh.wikipedia.org/wiki/%E9%96%B9%E5%AE%98%E9%8E%AE" },
+      { label: "維基百科（中文）・鹽官鎮", href: "https://zh.wikipedia.org/wiki/%E7%9B%90%E5%AE%98%E9%95%87" },
       { label: "維基百科・錢塘江", href: "https://zh.wikipedia.org/wiki/%E9%8C%A2%E5%A1%98%E6%B1%9F" },
       { label: "Wikipedia (EN)・Haining", href: "https://en.wikipedia.org/wiki/Haining" }
     ]
@@ -159,7 +159,7 @@ window.SHANGHAI_PLACES = {
       { t: "建築形態與夜景", b: "大象酒店以大象造型超高層為城市辨識符，結構採用裝配式與綠色建築技術；太陽酒店球體臨水布置，夜間泛光勾勒輪廓。兩建築與太湖沿岸地標形成現代城市天際線組合。開業時間、觀景平台與亮燈時段可能調整，以現場公告為準；公開資料僅述可查的工程定位與文化寓意。觀景與住宿功能分屬酒店物業，外客可否登頂觀景須依營運方當日規則，不宜假設全時開放。" }
     ],
     learn: [
-      { label: "維基百科・南潯區", href: "https://zh.wikipedia.org/wiki/%E5%8D%97%E6%BD%9F%E5%8D%80" },
+      { label: "維基百科・南潯區", href: "https://zh.wikipedia.org/wiki/%E5%8D%97%E6%B5%94%E5%8C%BA" },
       { label: "維基百科・湖州市", href: "https://zh.wikipedia.org/wiki/%E6%B9%96%E5%B7%9E%E5%B8%82" },
       { label: "維基百科・湖州太湖旅遊度假區", href: "https://zh.wikipedia.org/wiki/%E6%B9%96%E5%B7%9E%E5%A4%AA%E6%B9%96%E6%97%85%E6%B8%B8%E5%BA%A6%E5%81%87%E5%8C%BA" }
     ]

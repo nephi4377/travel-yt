@@ -258,18 +258,9 @@
       } else if (phase === "during" && todayIndex != null) {
         goDay(todayIndex, false);
       } else if (phase === "after" && opts.travelogueHref) {
-        // Prefer travelogue entry: scroll nav into view / focus link; stay on page unless opted
-        var link = (opts.navEl || document.getElementById("tripDayNav") || {}).querySelector
-          ? (opts.navEl || document.getElementById("tripDayNav")).querySelector(".is-travelogue")
-          : null;
-        if (link) {
-          setTimeout(function () {
-            scrollToEl(link, "auto");
-            try {
-              link.focus();
-            } catch (e) {}
-          }, 50);
-        }
+        setTimeout(function () {
+          goTravelogue();
+        }, 50);
       } else {
         // before / after-without-travelogue / unknown → overview
         goOverview(false);

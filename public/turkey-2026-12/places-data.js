@@ -34,7 +34,7 @@ window.TURKEY_PLACES = {
     ],
     learn: [
       { label: "維基百科（中文）", href: "https://zh.wikipedia.org/wiki/%E8%8B%8F%E4%B8%B9%E8%89%BE%E5%93%88%E8%BF%88%E5%BE%B7%E6%B8%85%E7%9C%9F%E5%AF%BA" },
-      { label: "伊斯坦堡（Goturkiye）", href: "https://goturkiye.com/istanbul" },
+      { label: "維基百科・伊斯坦堡", href: "https://zh.wikipedia.org/wiki/%E4%BC%8A%E6%96%AF%E5%9D%A6%E5%A0%A1" },
       { label: "Wikipedia (EN)", href: "https://en.wikipedia.org/wiki/Blue_Mosque,_Istanbul" }
     ]
   },
@@ -86,7 +86,7 @@ window.TURKEY_PLACES = {
     learn: [
       { label: "維基百科（中文）", href: "https://zh.wikipedia.org/wiki/%E5%9C%96%E8%8C%B2%E6%B9%96" },
       { label: "Wikipedia (EN)", href: "https://en.wikipedia.org/wiki/Lake_Tuz" },
-      { label: "Goturkiye Konya", href: "https://www.goturkiye.com/konya" }
+      { label: "維基百科・科尼亞", href: "https://zh.wikipedia.org/wiki/%E7%A7%91%E5%B0%BC%E4%BA%9E" }
     ]
   },
   cappadocia: {
@@ -132,7 +132,7 @@ window.TURKEY_PLACES = {
     ],
     learn: [
       { label: "Wikipedia (EN)", href: "https://en.wikipedia.org/wiki/Sille,_Konya" },
-      { label: "Goturkiye Konya", href: "https://www.goturkiye.com/konya" }
+      { label: "維基百科・科尼亞", href: "https://zh.wikipedia.org/wiki/%E7%A7%91%E5%B0%BC%E4%BA%9E" }
     ]
   },
   mevlana: {
@@ -220,7 +220,7 @@ window.TURKEY_PLACES = {
     learn: [
       { label: "維基百科（中文）", href: "https://zh.wikipedia.org/wiki/%E5%B8%83%E7%88%BE%E8%96%A9" },
       { label: "Wikipedia 大清真寺 (EN)", href: "https://en.wikipedia.org/wiki/Bursa_Grand_Mosque" },
-      { label: "Goturkiye Bursa", href: "https://www.goturkiye.com/bursa" }
+      { label: "維基百科・布爾薩", href: "https://zh.wikipedia.org/wiki/%E5%B8%83%E7%88%BE%E8%96%A9" }
     ]
   },
   bosphorus: {
@@ -239,7 +239,7 @@ window.TURKEY_PLACES = {
     learn: [
       { label: "維基百科（中文）", href: "https://zh.wikipedia.org/wiki/%E5%8D%9A%E6%96%AF%E6%99%AE%E9%AD%AF%E6%96%AF%E6%B5%B7%E5%B3%A1" },
       { label: "Wikipedia (EN)", href: "https://en.wikipedia.org/wiki/Bosphorus" },
-      { label: "伊斯坦堡（Goturkiye）", href: "https://goturkiye.com/istanbul" }
+      { label: "維基百科・伊斯坦堡", href: "https://zh.wikipedia.org/wiki/%E4%BC%8A%E6%96%AF%E5%9D%A6%E5%A0%A1" }
     ]
   },
   spice: {
@@ -253,7 +253,7 @@ window.TURKEY_PLACES = {
     learn: [
       { label: "Wikipedia (EN)", href: "https://en.wikipedia.org/wiki/Spice_Bazaar,_Istanbul" },
       { label: "維基百科・伊斯坦堡（中文）", href: "https://zh.wikipedia.org/wiki/%E4%BC%8A%E6%96%AF%E5%9D%A6%E5%A0%A1" },
-      { label: "伊斯坦堡（Goturkiye）", href: "https://goturkiye.com/istanbul" }
+      { label: "維基百科・伊斯坦堡", href: "https://zh.wikipedia.org/wiki/%E4%BC%8A%E6%96%AF%E5%9D%A6%E5%A0%A1" }
     ]
   }
 };

@@ -22,7 +22,7 @@ ITEMS = [
     ("hidirlik", "hidirlik-1.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/Safranbolu_Panorama.jpg/1280px-Safranbolu_Panorama.jpg", "Panorama over Safranbolu", "CC BY-SA"),
     ("anitkabir", "anitkabir-1.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/Ataturk%27s_Mausoleum_%286225341313%29.jpg/1280px-Ataturk%27s_Mausoleum_%286225341313%29.jpg", "Anitkabir mausoleum", "CC BY"),
     ("tuz", "tuz-1.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/Tuz_G%C3%B6l%C3%BC_2.jpg/1280px-Tuz_G%C3%B6l%C3%BC_2.jpg", "Lake Tuz salt flats", "CC BY-SA"),
-    ("tuz", "tuz-2.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/be/Satellite_image_of_Lake_Tuz%2C_Turkey.tif/lossy-page1-1280px-Satellite_image_of_Lake_Tuz%2C_Turkey.tif.jpg", "Lake Tuz aerial", "Public domain (NASA)"),
+    ("tuz", "tuz-2.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9f/Salt_tuz_g%C3%B6l%C3%BC.jpg/1280px-Salt_tuz_g%C3%B6l%C3%BC.jpg", "Lake Tuz landscape", "CC BY 2.0"),
     ("cappadocia", "cap-1.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e5/G%C3%B6reme_Valley_in_Cappadocia_edit1.jpg/1280px-G%C3%B6reme_Valley_in_Cappadocia_edit1.jpg", "Goreme valley chimneys", "CC BY-SA"),
     ("cappadocia", "cap-2.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e9/Castle_U%C3%A7hisar_in_Cappadocia.jpg/1280px-Castle_U%C3%A7hisar_in_Cappadocia.jpg", "Uchisar rock castle", "CC BY-SA"),
     ("cappadocia", "cap-3.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8a/Goreme_fairy_chimneys-3.jpg/1280px-Goreme_fairy_chimneys-3.jpg", "Fairy chimneys", "CC BY-SA"),
