@@ -4,8 +4,8 @@ window.TURKEY_PLACES = {
     title: "聖索菲亞大教堂",
     map: "Hagia Sophia Istanbul",
     photos: [
-      { src: "photos/hagia-1.jpg", alt: "聖索菲亞外觀", credit: "Wikimedia Commons · CC BY-SA 3.0" },
-      { src: "photos/hagia-2.jpg", alt: "歷史內部視角（版畫）", credit: "Wikimedia Commons · Public domain" }
+      { src: "photos/hagia-1.jpg", alt: "聖索菲亞外觀", credit: "Dosseman · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:Hagia_Sophia_Mars_2013.jpg" },
+      { src: "photos/hagia-2.jpg", alt: "歷史內部視角（版畫）", credit: "Gaspare Fossati · Public domain · https://commons.wikimedia.org/wiki/File:Gaspare_Fossati_-_Louis_Haghe_-_Vue_g%C3%A9n%C3%A9rale_de_la_grande_nef,_en_regardant_l%27occident_(Hagia_Sophia_-_Ayasofya_Mosque_nave).jpg" }
     ],
     themes: [
       { t: "拜占庭帝國宗教建築高峰", b: "公元 537 年由東羅馬皇帝查士丁尼一世下令落成，原名「神聖智慧」（Hagia Sophia），為君士坦丁堡東正教主教堂。建築師 Anthemius of Tralles 與 Isidore of Miletus 以中央圓頂搭配半圓頂與帆拱轉移重力，圓頂直徑約 31 公尺；在近代文藝復興大量採用較小尺度穹頂之前，其室內體積長期被視為歐亞宗教建築的標竿之一，見證拜占庭帝國宗教與工程實力的高峰。" },
@@ -23,8 +23,8 @@ window.TURKEY_PLACES = {
     title: "藍色清真寺（蘇丹艾哈邁德清真寺）",
     map: "Blue Mosque Istanbul",
     photos: [
-      { src: "photos/blue-1.jpg", alt: "清真寺庭院", credit: "Wikimedia Commons · CC BY-SA" },
-      { src: "photos/blue-2.jpg", alt: "清真寺外觀", credit: "Wikimedia Commons · CC BY-SA" }
+      { src: "photos/blue-1.jpg", alt: "清真寺庭院", credit: "Arild Vågen · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Blue_Mosque_Courtyard_Dusk_Wikimedia_Commons.jpg" },
+      { src: "photos/blue-2.jpg", alt: "清真寺外觀", credit: "Dosseman · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:Exterior_of_Sultan_Ahmed_I_Mosque_in_Istanbul,_Turkey_002.jpg" }
     ],
     themes: [
       { t: "鄂圖曼古典建築名作", b: "1609 年至 1617 年由蘇丹艾哈邁德一世下令建造，建築師 Sedefkâr Mehmed Ağa 承繼建築大師 Sinan 晚期的鄂圖曼古典語彙。因設有六座叫拜樓，又稱「六塔清真寺」，在數世紀來的都市傳說中常被與其他清真寺比較。建築位於競技場遺址南側，象徵 17 世紀新王朝在拜占庭都會核心確立宗教與政治能見度，與相隔一街的聖索菲亞形成歷史對話。" },
@@ -42,9 +42,9 @@ window.TURKEY_PLACES = {
     title: "番紅花城 Safranbolu",
     map: "Hidirlik Hill Safranbolu",
     photos: [
-      { src: "photos/safranbolu-1.jpg", alt: "UNESCO 山城", credit: "Wikimedia Commons · CC BY-SA" },
-      { src: "photos/safranbolu-2.jpg", alt: "木屋街道", credit: "Wikimedia Commons · CC BY-SA" },
-      { src: "photos/hidirlik-1.jpg", alt: "山城全景", credit: "Wikimedia Commons · CC BY-SA" }
+      { src: "photos/safranbolu-1.jpg", alt: "UNESCO 山城", credit: "GLOWA · CC BY-SA 3.0 de · https://commons.wikimedia.org/wiki/File:Safranbolu_-_Unesco_World_Heritage.jpg" },
+      { src: "photos/safranbolu-2.jpg", alt: "木屋街道", credit: "Arild Vågen · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Safranbolu_houses_in_2006_8307b.jpg" },
+      { src: "photos/hidirlik-1.jpg", alt: "山城全景", credit: "Engin Ozaltin · CC BY 3.0 · https://commons.wikimedia.org/wiki/File:Safranbolu_Panorama.jpg" }
     ],
     themes: [
       { t: "UNESCO 鄂圖曼山城", b: "Safranbolu 老城保存 13 至 20 世紀木石結構民居、清真寺、浴室與商隊設施，1994 年列入 UNESCO 世界遺產，理由在於「鄂圖曼城市紋理」的完整性。地名與歷史上番紅花（saffron）種植與貿易相關，Turkish safran 詞源亦見於地方經濟史。山城依坡地發展，紅瓦屋頂與木構外廊是安納托利亞內陸少見的大規模聚落標本，吸引建築與保存研究者。" },
@@ -61,7 +61,7 @@ window.TURKEY_PLACES = {
   anitkabir: {
     title: "凱莫爾陵寢紀念館 Anıtkabir",
     map: "Anitkabir Ankara",
-    photos: [{ src: "photos/anitkabir-1.jpg", alt: "國父陵寢", credit: "Wikimedia Commons · CC BY" }],
+    photos: [{ src: "photos/anitkabir-1.jpg", alt: "國父陵寢", credit: "Bilge Uyar · CC BY 2.0 · https://commons.wikimedia.org/wiki/File:Ataturk%27s_Mausoleum_(6225341313).jpg" }],
     themes: [
       { t: "土耳其共和國國父長眠地", b: "Mustafa Kemal Atatürk 於 1938 年逝世後，土耳其共和國在安卡拉北郊 Mourning Hill 上興建 Anıtkabir，1944 至 1953 年分階段完工，作為國父陵墓與國家象徵性紀念空間。每年 11 月 10 日上午九時零五分，全國與陵園同步舉行官方紀念儀式，紀念其 1938 年逝世時刻。場館亦設博物館，介紹獨立戰爭、建國歷程與凱末爾改革，是理解現代土耳其政治象徵學的重要地點。" },
       { t: "紀念性建築與象徵", b: "建築群沿勝利之路（Road of Lions）通往石灰石大廳與墓室，設計綜合新古典柱式、安納托利亞石材與紀念性軸線。守衛換崗儀式為常態展演之一，展示儀隊禮制；展覽館收藏獨立戰爭文物、照片與文件。整體配置強調莊嚴、對稱與視覺遠望，將軍事勝利、共和改制與世俗民族國家敘事嵌入城市地景，吸引國內外訪客與外交賓客朝覲。" }
@@ -93,9 +93,9 @@ window.TURKEY_PLACES = {
     title: "卡帕多奇亞奇岩・岩城・三姊妹",
     map: "Goreme Cappadocia",
     photos: [
-      { src: "photos/cap-1.jpg", alt: "戈雷梅谷地", credit: "Wikimedia Commons · CC BY-SA" },
-      { src: "photos/cap-2.jpg", alt: "烏奇希薩岩城", credit: "Wikimedia Commons · CC BY-SA" },
-      { src: "photos/cap-3.jpg", alt: "妖精煙囪", credit: "Wikimedia Commons · CC BY-SA · https://commons.wikimedia.org/wiki/File:Goreme_fairy_chimneys-3.jpg" }
+      { src: "photos/cap-1.jpg", alt: "戈雷梅谷地", credit: "GÜNGÖR BERG · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:G%C3%B6reme_Valley_in_Cappadocia_edit1.jpg" },
+      { src: "photos/cap-2.jpg", alt: "烏奇希薩岩城", credit: "Fulya Dalbul · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Castle_U%C3%A7hisar_in_Cappadocia.jpg" },
+      { src: "photos/cap-3.jpg", alt: "妖精煙囪", credit: "Alberto Loyo · CC BY-SA 2.0 · https://commons.wikimedia.org/wiki/File:Goreme_fairy_chimneys-3.jpg" }
     ],
     themes: [
       { t: "火山凝灰岩地形", b: "數百萬年前附近火山噴發堆積凝灰岩與火山灰，經風蝕、河流切割與溫差風化形成錐狀「妖精煙囪」（fairy chimneys）。岩層軟硬交替使上方較硬岩帽保留下方較軟柱身，造就帽蓋狀外形。這種地貌散布於戈雷梅山谷周邊，成為卡帕多奇亞最顯著的自然符號，也影響古人開鑿岩室、選址避難與農耕的空間策略。地質學文獻以本地凝灰岩分層解釋侵蝕速率差異，是地貌教材。" },
@@ -112,7 +112,7 @@ window.TURKEY_PLACES = {
   sultanhani: {
     title: "古驛站 Sultanhanı",
     map: "Sultanhani Caravanserai",
-    photos: [{ src: "photos/sultanhani-1.jpg", alt: "商隊驛站", credit: "Wikimedia Commons · CC BY" }],
+    photos: [{ src: "photos/sultanhani-1.jpg", alt: "商隊驛站", credit: "Georges Jansoone · CC BY 3.0 · https://commons.wikimedia.org/wiki/File:Sultanhani_Caravanserai_Aksaray.jpg" }],
     themes: [
       { t: "絲路商隊驛站", b: "Sultanhanı 驛站建於 13 世紀塞爾柱魯姆蘇丹國時期，位於阿克薩賴至孔亞古商道，是安納托利亞絲路（陸路貿易）上規模宏大的 caravanserai 之一。商隊在此過夜、歇馬、補給並受管制交易，方形大院落與高拱正門是該類型建築的典型格局。建築名稱與蘇丹贊助及沿途安全網絡相關，體現中世紀突厥－伊斯蘭政權對長途貿易基礎設施的投資。" },
       { t: "石造拱券結構", b: "入口石造大門與內院圍合的拱廊承載屋頂，側翼供商旅與牲畜遮蔽；中央清真寺廳或祈禱角落在部分驛站中亦可見。石材拱券結構歷經地震後曾修復，仍保留中世紀空間分區邏輯：人、馬、貨物動線分離。今日作為文化資產開放，是理解塞爾柱建築、貿易法規與伊斯蘭慷慨待客（傳統上對商旅提供庇護）制度的重要實例。學界常以 Sultan Han 與其他塞爾柱驛站比較門樓與中庭比例。" }
@@ -126,7 +126,7 @@ window.TURKEY_PLACES = {
   sille: {
     title: "錫萊村 Sille",
     map: "Sille Konya",
-    photos: [{ src: "photos/sille-1.jpg", alt: "石造小村", credit: "Wikimedia Commons · CC BY-SA" }],
+    photos: [{ src: "photos/sille-1.jpg", alt: "石造小村", credit: "R. Haussmann, Cesaraci und Kuestenchmied · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:Sille_Village,_Konya.jpg" }],
     themes: [
       { t: "孔亞近郊石隱聚落", b: "Sille 位於孔亞北郊山坡，歷史上曾有以希臘語為主的基督教社群居住，石灰岩與泥磚住宅沿狹巷攀爬，與岩壁共生。1923 年《洛桑條約》後希臘與土耳其人口交換，村落轉以土耳其穆斯林居民為主，部分教堂閒置或改作它用。石造立面、拱門與台階反映安納托利亞農村／城郊聚落在地形限制下的建築語彙，是孔亞近郊多元歷史的遺留景觀。" },
       { t: "多元宗教遺跡", b: "村內拜占庭時期的聖母教堂（Aya Elena／Aya Eleni）等宗教建築遺跡，見證塞爾柱首都郊區的宗教多元。孔亞地處中亞草原與地中海文化交會帶，歷史上突厥、波斯、希臘語文化重疊。今日步行村內可見清真寺、教堂殘跡與民居並存，適合對照中東與巴爾幹人口交換後村落身分轉換的案例研究；個別建築開放狀態以現場為準。" }
@@ -141,8 +141,8 @@ window.TURKEY_PLACES = {
     title: "梅夫拉納博物館",
     map: "Mevlana Museum Konya",
     photos: [
-      { src: "photos/mevlana-1.jpg", alt: "博物館建築", credit: "Wikimedia Commons · CC BY-SA" },
-      { src: "photos/mevlana-2.jpg", alt: "陵園庭院", credit: "Wikimedia Commons · CC BY" }
+      { src: "photos/mevlana-1.jpg", alt: "博物館建築", credit: "VikiPicture · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:Mevlana_M%C3%BCzesi_01.jpg" },
+      { src: "photos/mevlana-2.jpg", alt: "陵園庭院", credit: "Bernd Untiedt · CC BY 2.0 · https://commons.wikimedia.org/wiki/File:Mevlana_Mausoleum_Museum_-_52551844264.jpg" }
     ],
     themes: [
       { t: "魯米與旋轉舞傳統", b: "Jalal ad-Din Rumi（Mevlana，1207–1273）為 13 世紀詩人與神學家，逝後安葬於今梅夫拉納博物館陵區，其弟子發展梅夫維教團（Mevlevi Order），以旋轉儀式（Sema）聞名。魯米波斯語著作《瑪斯納維》等影響蘇菲思想與世界文學；孔亞長期為教團中心。旋轉舞象徵天文運行與對神之愛，現今公開展演多在文化活動中進行，與陵園宗教氛圍並讀。" },
@@ -179,8 +179,8 @@ window.TURKEY_PLACES = {
     title: "艾菲索斯古城 Ephesus",
     map: "Ephesus Turkey",
     photos: [
-      { src: "photos/eph-1.jpg", alt: "塞爾蘇斯圖書館", credit: "Wikimedia Commons · CC BY-SA · https://commons.wikimedia.org/wiki/File:Ephesus_Celsus_Library.jpg" },
-      { src: "photos/eph-2.jpg", alt: "大劇場", credit: "Wikimedia Commons · CC BY-SA · https://commons.wikimedia.org/wiki/File:Great_Theatre_of_Ephesus_2024.jpg" }
+      { src: "photos/eph-1.jpg", alt: "塞爾蘇斯圖書館", credit: "Ben Bender · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:Ephesus_Celsus_Library.jpg" },
+      { src: "photos/eph-2.jpg", alt: "大劇場", credit: "Zecemix · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Great_Theatre_of_Ephesus_2024.jpg" }
     ],
     themes: [
       { t: "愛奧尼亞海港城市", b: "Ephesus（艾菲索斯）遺跡可追溯至青銅時代，早期希臘殖民者建立愛奧尼亞城邦，後依羅馬帝國東方行省繁榮。港灣長期泥沙淤積使河道遠離海岸，促成城市最終衰敗；同一遺址可見希臘、羅馬與拜占庭多時期層位堆疊。考古工作自 19 世紀以來持續揭露大理石街、公共浴場與民居，是地中海東岸古典城市研究的標竿遺址。以弗所考古博物館收藏出土雕塑，補足遺址現場已移置文物。" },
@@ -198,8 +198,8 @@ window.TURKEY_PLACES = {
     title: "伊茲密爾鐘樓・阿珊索爾",
     map: "Izmir Clock Tower",
     photos: [
-      { src: "photos/izm-1.jpg", alt: "康納克鐘樓", credit: "Wikimedia Commons · CC BY-SA" },
-      { src: "photos/izm-2.jpg", alt: "阿珊索爾", credit: "Wikimedia Commons · CC BY-SA 4.0" }
+      { src: "photos/izm-1.jpg", alt: "康納克鐘樓", credit: "C T Johansson · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Izmir_square_clock_tower.jpg" },
+      { src: "photos/izm-2.jpg", alt: "阿珊索爾", credit: "A.Savin · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:TR_Izmir_asv2020-02_img52_Asans%C3%B6r.jpg" }
     ],
     themes: [
       { t: "康納克鐘樓", b: "伊茲密爾康納克鐘樓建於 1901 年，紀念鄂圖曼蘇丹阿卜杜勒－哈米德二世登基二十五週年，地點在 Konak 廣場水濱軸線，已成為城市符號。鐘樓由 Levantine 建築師 Raymond Charles Père 設計，融合奧地利折衷主義與鄂圖曼裝飾語彙；塔身設鐘與噴泉廣場結合。二次大戰後土耳其共和國時期仍為市民集會地標，象徵愛琴海港都現代化面貌。" },
@@ -214,7 +214,7 @@ window.TURKEY_PLACES = {
   ulu: {
     title: "布爾薩大清真寺",
     map: "Ulu Camii Bursa",
-    photos: [{ src: "photos/ulu-1.jpg", alt: "烏盧清真寺", credit: "Dosseman · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:Bursa_Ulu_Cami.jpg" }],
+    photos: [{ src: "photos/ulu-1.jpg", alt: "烏盧清真寺", credit: "Hcanardic · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Bursa_Ulu_Cami.jpg" }],
     themes: [
       { t: "早期鄂圖曼宗教建築", b: "布爾薩大清真寺（Ulu Camii）於 1396 至 1399 年由鄂圖曼蘇丹 Bayezid I（閃電）下令興建，是早期鄂圖曼首都布爾薩的集體禮拜清真寺。室內以二十座圓頂覆蓋寬廣方形禱告廳，繼承塞爾柱與早期鄂圖曼「多圓頂」傳統，不同於後來 Sinan 式單大穹頂。布爾薩為鄂圖曼首座首都，此寺展示公國時期宗教建築的尺度與裝飾語彙，亦為理解後續帝國清真寺演化的基準案例。" },
       { t: "書法與噴泉中庭", b: "內牆滿佈鄂圖曼書法銘文與幾何綿延彩繪，中庭設 ablution 噴泉供小淨儀式，為 14 世紀末清真寺庭院的典型配置。建築鄰近歷史市集與絲綢貿易區，反映布爾薩作為安納托利亞絲綢產地與貿易節點的地位。寺內於禱告時段可能限制非穆斯林進入禱告廳核心；外觀與庭院仍可見證早期鄂圖曼美學如何結合波斯書法與拜占庭裝飾傳統。" }
@@ -229,8 +229,8 @@ window.TURKEY_PLACES = {
     title: "博斯普魯斯海峽",
     map: "Bosphorus Cruise Istanbul",
     photos: [
-      { src: "photos/bos-1.jpg", alt: "海峽與城市天際線", credit: "Wikimedia Commons · CC BY-SA" },
-      { src: "photos/bos-2.jpg", alt: "博斯普魯斯大橋", credit: "Wikimedia Commons · CC BY-SA" }
+      { src: "photos/bos-1.jpg", alt: "海峽與城市天際線", credit: "Alexander Mondo · CC BY 2.5 · https://commons.wikimedia.org/wiki/File:Istanbul_and_Bosporus_big.jpg" },
+      { src: "photos/bos-2.jpg", alt: "博斯普魯斯大橋", credit: "Ben Bender · CC BY-SA 2.0 · https://commons.wikimedia.org/wiki/File:Bosphorus_Bridge_from_Ortak%C3%B6y_Istanbul.jpg" }
     ],
     themes: [
       { t: "歐亞分界水道", b: "博斯普魯斯（Bosporus）海峽北接黑海、南達馬爾馬拉海，土耳其境內段約三十公里，最窄處約七百公尺，是歐洲與亞洲的著名水文分界。海峽自古為黑海穀物、木材與能源航運要道，伊斯坦堡港區經濟高度依賴通航安全。《蒙特勒公約》等 20 世紀條約仍影響非黑海國家軍艦通過規則，使此地緣兼具觀光與戰略意義。君士坦丁堡海峽博物館與相關檔案介紹近代航運與條約沿革。" },
@@ -247,7 +247,7 @@ window.TURKEY_PLACES = {
   spice: {
     title: "香料市集",
     map: "Spice Bazaar Istanbul",
-    photos: [{ src: "photos/spice-1.jpg", alt: "香料市集", credit: "Wikimedia Commons · CC BY-SA · https://commons.wikimedia.org/wiki/File:Spices_on_Spice_Bazaar_in_Istanbul_02.jpg" }],
+    photos: [{ src: "photos/spice-1.jpg", alt: "香料市集", credit: "Svein-Magne Tunli · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Spices_on_Spice_Bazaar_in_Istanbul_02.jpg" }],
     themes: [
       { t: "埃及市集別名", b: "香料市集土耳其語 Mısır Çarşısı，意為「埃及市集」，建於 1664 年鄂圖曼蘇丹 Mehmed IV 時期，收益曾撥予新清真寺（Yeni Cami）維護與社會福利，故得別名。L 形有頂拱廊約容八十五間店鋪，位於加拉塔橋近端金角灣側，與大巴扎互補。建築結構以磚拱與採光穹頂組合，展示 17 世紀伊斯坦堡市集型商業建築的標準格局。" },
       { t: "香料與鄂圖曼貿易網", b: "歷史上交易香料、乾果、藥草、乳香與番紅花等，來自鄂圖曼帝國廣袤貿易網與印度洋—地中海轉運；今日店鋪多以土耳其軟糖、茶葉、彩色香料堆疊與觀光紀念品為主。市集氛圍折射帝國時期「東方香料」想像與當代旅遊消費並存。價格與品項須自行比較；建築本身仍是理解伊斯坦堡港口貿易史與瓦克夫基金維護制度的實地案例。鄂圖曼瓦克夫檔案記錄市集租金如何支應清真寺維修，是制度史材料。" }
@@ -255,7 +255,7 @@ window.TURKEY_PLACES = {
     learn: [
       { label: "Wikipedia (EN)", href: "https://en.wikipedia.org/wiki/Spice_Bazaar,_Istanbul" },
       { label: "維基百科・伊斯坦堡", href: "https://zh.wikipedia.org/wiki/%E4%BC%8A%E6%96%AF%E5%9D%A6%E5%A0%A1" },
-      { label: "Wikipedia (EN)・Egyptian Bazaar", href: "https://en.wikipedia.org/wiki/Egyptian_Bazaar" }
+      { label: "Wikipedia (EN)・New Mosque", href: "https://en.wikipedia.org/wiki/New_Mosque,_Istanbul" }
     ]
   }
 };

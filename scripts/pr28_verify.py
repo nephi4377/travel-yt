@@ -7,7 +7,8 @@ import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SIMPLIFIED = re.compile(r"(牛头宗|发|团|东|观|头|后|乐|园|门|广|县|灭)")
+SIMPLIFIED = re.compile(r"(牛头宗|滩地|滩涂|盐官[^鎮])")
+DISAMBIG = re.compile(r"(盐官 - |青山湖 - )")
 PRIVACY = re.compile(
     r"(?<![/\w])(1[3-9]\d{9})(?!\d)|房号|护照号|(?<![\w])订单(?![号號])|(?<![\w])訂單(?![号號])|收據|凭证|憑證|800-0885|(?<![\w./])@[\w]",
     re.I,
@@ -52,6 +53,9 @@ def main() -> int:
                 info = fetch_title(href)
                 if "404" in info or "錯誤" in info or "Error" in info:
                     errors.append(f"{trip} bad link {href} -> {info}")
+                if DISAMBIG.search(info) and "disambiguation" not in info.lower():
+                    if "青山湖 -" in info or "盐官 - " in info:
+                        errors.append(f"{trip} disambiguation? {href} -> {info}")
             except Exception as e:
                 errors.append(f"{trip} link fail {href}: {e}")
 
@@ -74,6 +78,13 @@ def main() -> int:
             for key in ("alt", "credit"):
                 if key not in row or not row[key]:
                     errors.append(f"manifest missing {key}: {row.get('file')}")
+            if row.get("bytes", 0) > 200_000:
+                errors.append(f"manifest bytes>200KB: {row.get('file')} {row.get('bytes')}")
+            credit = row.get("credit", "")
+            if "commons.wikimedia.org" not in credit:
+                errors.append(f"manifest credit no commons url: {row.get('file')}")
+            if "Wikimedia Commons · CC" in credit and "· https://" not in credit:
+                errors.append(f"manifest generic credit: {row.get('file')}")
 
     if errors:
         print("\n".join(errors))
