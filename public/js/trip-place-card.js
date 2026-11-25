@@ -106,10 +106,10 @@
   }
 
   /**
-   * Keep card.detail.intro / detail.shots visible outside history.
-   * - No places: always show (hotels / airports / meals).
-   * - With places: only show leftovers not already covered by place guides
-   *   (so logistics notes like room lottery are not dropped).
+   * Keep card.detail.intro visible outside history (logistics notes).
+   * Do NOT resurface card.detail.shots — photo tips only come from place
+   * guides (§3.2). Hotels / airports / assembly / shops must not get
+   * suggested shots from leftover card.detail data.
    */
   function appendCardDetailExtras(parent, card, placesCatalog) {
     var d = card && card.detail;
@@ -124,23 +124,6 @@
           return p.indexOf(intro) !== -1 || intro.indexOf(p) !== -1;
         });
       if (!introCovered) parent.append(el("p", "meta card-note", intro));
-    }
-    var leftoverShots = (d.shots || []).filter(function (s) {
-      return s && !covered.shots[String(s).trim()];
-    });
-    if (leftoverShots.length) {
-      parent.append(
-        el(
-          "p",
-          "meta card-shots",
-          "<b>建議拍照：</b>" +
-            leftoverShots
-              .map(function (s) {
-                return "・" + s;
-              })
-              .join(" ")
-        )
-      );
     }
   }
 
