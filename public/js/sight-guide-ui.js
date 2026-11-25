@@ -40,14 +40,6 @@
       );
     if (g.pending)
       box.append(el("p", "meta", '<span class="pending">' + g.pending + "</span>"));
-    if (g.photosPending)
-      box.append(
-        el(
-          "p",
-          "meta",
-          '<span class="pending">待確認</span>：尚無合適的公開風景照可放入 repo'
-        )
-      );
     parent.append(box);
   }
 
