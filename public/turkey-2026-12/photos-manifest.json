@@ -1,163 +1,272 @@
 [
   {
-    "place": "hagia",
-    "file": "hagia-1.jpg",
-    "alt": "Hagia Sophia exterior",
-    "credit": "Wikimedia Commons · CC BY-SA 3.0",
-    "bytes": 192599
-  },
-  {
-    "place": "hagia",
-    "file": "hagia-2.jpg",
-    "alt": "Historic interior view",
-    "credit": "Wikimedia Commons · Public domain",
-    "bytes": 197548
+    "place": "anitkabir",
+    "file": "anitkabir-1.jpg",
+    "bytes": 128431,
+    "alt": "國父陵寢",
+    "credit": "William Neuheisel from DC, US · CC BY 2.0 · https://commons.wikimedia.org/wiki/File:Ataturk%27s_Mausoleum_(6225341313).jpg",
+    "commons_file": "Ataturk's_Mausoleum_(6225341313).jpg",
+    "artist": "William Neuheisel from DC, US",
+    "license": "CC BY 2.0"
   },
   {
     "place": "blue",
     "file": "blue-1.jpg",
-    "alt": "Blue Mosque courtyard",
-    "credit": "Wikimedia Commons · CC BY-SA",
-    "bytes": 195588
+    "bytes": 195588,
+    "alt": "清真寺庭院",
+    "credit": "Benh LIEU SONG (Flickr) · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:Blue_Mosque_Courtyard_Dusk_Wikimedia_Commons.jpg",
+    "commons_file": "Blue_Mosque_Courtyard_Dusk_Wikimedia_Commons.jpg",
+    "artist": "Benh LIEU SONG (Flickr)",
+    "license": "CC BY-SA 3.0"
   },
   {
     "place": "blue",
     "file": "blue-2.jpg",
-    "alt": "Sultan Ahmed Mosque",
-    "credit": "Wikimedia Commons · CC BY-SA",
-    "bytes": 165031
-  },
-  {
-    "place": "safranbolu",
-    "file": "safranbolu-1.jpg",
-    "alt": "Safranbolu UNESCO town",
-    "credit": "Wikimedia Commons · CC BY-SA",
-    "bytes": 189752
-  },
-  {
-    "place": "safranbolu",
-    "file": "safranbolu-2.jpg",
-    "alt": "Ottoman wooden houses",
-    "credit": "Wikimedia Commons · CC BY-SA",
-    "bytes": 191399
-  },
-  {
-    "place": "hidirlik",
-    "file": "hidirlik-1.jpg",
-    "alt": "Panorama over Safranbolu",
-    "credit": "Wikimedia Commons · CC BY-SA",
-    "bytes": 109744
-  },
-  {
-    "place": "anitkabir",
-    "file": "anitkabir-1.jpg",
-    "alt": "Anitkabir mausoleum",
-    "credit": "Wikimedia Commons · CC BY",
-    "bytes": 128431
-  },
-  {
-    "place": "tuz",
-    "file": "tuz-1.jpg",
-    "alt": "Lake Tuz salt flats",
-    "credit": "Wikimedia Commons · CC BY-SA",
-    "bytes": 98655
-  },
-  {
-    "place": "tuz",
-    "file": "tuz-2.jpg",
-    "alt": "Lake Tuz aerial",
-    "credit": "Wikimedia Commons · Public domain (NASA)",
-    "bytes": 198558
-  },
-  {
-    "place": "cappadocia",
-    "file": "cap-1.jpg",
-    "alt": "Goreme valley chimneys",
-    "credit": "Wikimedia Commons · CC BY-SA",
-    "bytes": 195010
-  },
-  {
-    "place": "cappadocia",
-    "file": "cap-2.jpg",
-    "alt": "Uchisar rock castle",
-    "credit": "Wikimedia Commons · CC BY-SA",
-    "bytes": 194269
-  },
-  {
-    "place": "sultanhani",
-    "file": "sultanhani-1.jpg",
-    "alt": "Sultanhani caravanserai",
-    "credit": "Wikimedia Commons · CC BY",
-    "bytes": 414945
-  },
-  {
-    "place": "sille",
-    "file": "sille-1.jpg",
-    "alt": "Sille stone village",
-    "credit": "Wikimedia Commons · CC BY-SA",
-    "bytes": 190041
-  },
-  {
-    "place": "mevlana",
-    "file": "mevlana-1.jpg",
-    "alt": "Mevlana Museum",
-    "credit": "Wikimedia Commons · CC BY-SA",
-    "bytes": 197310
-  },
-  {
-    "place": "mevlana",
-    "file": "mevlana-2.jpg",
-    "alt": "Mausoleum courtyard",
-    "credit": "Wikimedia Commons · CC BY",
-    "bytes": 193645
-  },
-  {
-    "place": "pamukkale",
-    "file": "pam-1.jpg",
-    "alt": "White travertine terraces",
-    "credit": "Wikimedia Commons · CC BY-SA 4.0",
-    "bytes": 194622
-  },
-  {
-    "place": "pamukkale",
-    "file": "pam-2.jpg",
-    "alt": "Hierapolis Roman theatre",
-    "credit": "Wikimedia Commons · CC BY",
-    "bytes": 194968
-  },
-  {
-    "place": "ephesus",
-    "file": "eph-2.jpg",
-    "alt": "Great Theatre",
-    "credit": "Wikimedia Commons · CC BY-SA",
-    "bytes": 192586
-  },
-  {
-    "place": "izmir",
-    "file": "izm-1.jpg",
-    "alt": "Konak Clock Tower",
-    "credit": "Wikimedia Commons · CC BY-SA",
-    "bytes": 199589
-  },
-  {
-    "place": "izmir",
-    "file": "izm-2.jpg",
-    "alt": "Asansor elevator",
-    "credit": "Wikimedia Commons · CC BY-SA 4.0",
-    "bytes": 195247
+    "bytes": 165031,
+    "alt": "清真寺外觀",
+    "credit": "Moonik · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:Exterior_of_Sultan_Ahmed_I_Mosque_in_Istanbul,_Turkey_002.jpg",
+    "commons_file": "Exterior_of_Sultan_Ahmed_I_Mosque_in_Istanbul,_Turkey_002.jpg",
+    "artist": "Moonik",
+    "license": "CC BY-SA 3.0"
   },
   {
     "place": "bosphorus",
     "file": "bos-1.jpg",
-    "alt": "Bosphorus and skyline",
-    "credit": "Wikimedia Commons · CC BY-SA",
-    "bytes": 196090
+    "bytes": 93646,
+    "alt": "海峽與城市天際線",
+    "credit": "NASA · Public domain · https://commons.wikimedia.org/wiki/File:ISS008-E-21752.jpg",
+    "commons_file": "ISS008-E-21752.jpg",
+    "artist": "NASA",
+    "license": "Public domain"
+  },
+  {
+    "place": "bosphorus",
+    "file": "bos-2.jpg",
+    "bytes": 144439,
+    "alt": "步道望大橋與渡輪",
+    "credit": "Myself · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:Bosporus_Bridge_from_Ortak%C3%B6y_01.JPG",
+    "commons_file": "Bosporus Bridge from Ortaköy 01.JPG",
+    "artist": "Myself",
+    "license": "CC BY-SA 3.0"
+  },
+  {
+    "place": "cappadocia",
+    "file": "cap-1.jpg",
+    "bytes": 195010,
+    "alt": "戈雷梅谷地",
+    "credit": "Brocken Inaglory · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:G%C3%B6reme_Valley_in_Cappadocia_edit1.jpg",
+    "commons_file": "Göreme_Valley_in_Cappadocia_edit1.jpg",
+    "artist": "Brocken Inaglory",
+    "license": "CC BY-SA 3.0"
+  },
+  {
+    "place": "cappadocia",
+    "file": "cap-2.jpg",
+    "bytes": 194269,
+    "alt": "烏奇希薩岩城",
+    "credit": "This Photo was taken by Wolfgang Moroder. Feel free to use my photos, but please mention me as the author and send me a  · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:Castle_U%C3%A7hisar_in_Cappadocia.jpg",
+    "commons_file": "Castle_Uçhisar_in_Cappadocia.jpg",
+    "artist": "This Photo was taken by Wolfgang Moroder. Feel free to use my photos, but please mention me as the author and send me a ",
+    "license": "CC BY-SA 3.0"
+  },
+  {
+    "place": "cappadocia",
+    "file": "cap-3.jpg",
+    "bytes": 133911,
+    "alt": "妖精煙囪",
+    "credit": "Dosseman · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:U%C3%A7hisar_View_from_castle_top_to_east_side_panorama_0300.jpg",
+    "commons_file": "Uçhisar View from castle top to east side panorama 0300.jpg",
+    "artist": "Dosseman",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "place": "ephesus",
+    "file": "eph-1.jpg",
+    "bytes": 192485,
+    "alt": "塞爾蘇斯圖書館",
+    "credit": "Benh LIEU SONG · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:Ephesus_Celsus_Library_Fa%C3%A7ade.jpg",
+    "commons_file": "Ephesus Celsus Library Façade.jpg",
+    "artist": "Benh LIEU SONG",
+    "license": "CC BY-SA 3.0"
+  },
+  {
+    "place": "ephesus",
+    "file": "eph-2.jpg",
+    "bytes": 192586,
+    "alt": "大劇場",
+    "credit": "Furkan Akkurt · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Great_Theatre_of_Ephesus_2024.jpg",
+    "commons_file": "Great_Theatre_of_Ephesus_2024.jpg",
+    "artist": "Furkan Akkurt",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "place": "hagia",
+    "file": "hagia-1.jpg",
+    "bytes": 192599,
+    "alt": "聖索菲亞外觀",
+    "credit": "Arild Vågen · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:Hagia_Sophia_Mars_2013.jpg",
+    "commons_file": "Hagia_Sophia_Mars_2013.jpg",
+    "artist": "Arild Vågen",
+    "license": "CC BY-SA 3.0"
+  },
+  {
+    "place": "hagia",
+    "file": "hagia-2.jpg",
+    "bytes": 197548,
+    "alt": "歷史內部視角（版畫）",
+    "credit": "Gaspare Fossati (artist, 1809-1883) Louis Haghe (lithographer, 1806-1885) Adam Cuerden (restoration) · Public domain · https://commons.wikimedia.org/wiki/File:Gaspare_Fossati_-_Louis_Haghe_-_Vue_g%C3%A9n%C3%A9rale_de_la_grande_nef,_en_regardant_l%27occident_(Hagia_Sophia_-_Ayasofya_Mosque_nave).jpg",
+    "commons_file": "Gaspare_Fossati_-_Louis_Haghe_-_Vue_générale_de_la_grande_nef,_en_regardant_l'occident_(Hagia_Sophia_-_Ayasofya_Mosque_nave).jpg",
+    "artist": "Gaspare Fossati (artist, 1809-1883) Louis Haghe (lithographer, 1806-1885) Adam Cuerden (restoration)",
+    "license": "Public domain"
+  },
+  {
+    "place": "hidirlik",
+    "file": "hidirlik-1.jpg",
+    "bytes": 109744,
+    "alt": "山城全景",
+    "credit": "Uğur Başak · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Safranbolu_Panorama.jpg",
+    "commons_file": "Safranbolu Panorama.jpg",
+    "artist": "Uğur Başak",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "place": "izmir",
+    "file": "izm-1.jpg",
+    "bytes": 199589,
+    "alt": "康納克鐘樓",
+    "credit": "User:Sailko · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:Izmir_square_clock_tower.jpg",
+    "commons_file": "Izmir_square_clock_tower.jpg",
+    "artist": "User:Sailko",
+    "license": "CC BY-SA 3.0"
+  },
+  {
+    "place": "izmir",
+    "file": "izm-2.jpg",
+    "bytes": 195247,
+    "alt": "阿珊索爾",
+    "credit": "A.Savin · FAL · https://commons.wikimedia.org/wiki/File:TR_Izmir_asv2020-02_img52_Asans%C3%B6r.jpg",
+    "commons_file": "TR_Izmir_asv2020-02_img52_Asansör.jpg",
+    "artist": "A.Savin",
+    "license": "FAL"
+  },
+  {
+    "place": "mevlana",
+    "file": "mevlana-1.jpg",
+    "bytes": 197310,
+    "alt": "博物館建築",
+    "credit": "Bernard Gagnon · CC BY-SA 3.0 · https://commons.wikimedia.org/wiki/File:Mevlana_M%C3%BCzesi_01.jpg",
+    "commons_file": "Mevlana_Müzesi_01.jpg",
+    "artist": "Bernard Gagnon",
+    "license": "CC BY-SA 3.0"
+  },
+  {
+    "place": "mevlana",
+    "file": "mevlana-2.jpg",
+    "bytes": 193645,
+    "alt": "陵園庭院",
+    "credit": "Joe Wallace · CC BY-SA 2.0 · https://commons.wikimedia.org/wiki/File:Mevlana_Mausoleum_Museum_-_52551844264.jpg",
+    "commons_file": "Mevlana_Mausoleum_Museum_-_52551844264.jpg",
+    "artist": "Joe Wallace",
+    "license": "CC BY-SA 2.0"
+  },
+  {
+    "place": "pamukkale",
+    "file": "pam-1.jpg",
+    "bytes": 194622,
+    "alt": "石灰梯級",
+    "credit": "A.Savin · FAL · https://commons.wikimedia.org/wiki/File:TR_Pamukkale_White_Terraces_asv2020-02_img16.jpg",
+    "commons_file": "TR_Pamukkale_White_Terraces_asv2020-02_img16.jpg",
+    "artist": "A.Savin",
+    "license": "FAL"
+  },
+  {
+    "place": "pamukkale",
+    "file": "pam-2.jpg",
+    "bytes": 194968,
+    "alt": "希拉波里斯劇場",
+    "credit": "Carole Raddato · CC BY-SA 2.0 · https://commons.wikimedia.org/wiki/File:The_Roman_theatre,_built_in_the_2nd_century_AD_under_Hadrian_on_the_ruins_of_an_earlier_theatre,_later_renovated_under_Septimius_Severus,_Hierapolis,_Turkey_-_17033619498.jpg",
+    "commons_file": "The_Roman_theatre,_built_in_the_2nd_century_AD_under_Hadrian_on_the_ruins_of_an_earlier_theatre,_later_renovated_under_Septimius_Severus,_Hierapolis,_Turkey_-_17033619498.jpg",
+    "artist": "Carole Raddato",
+    "license": "CC BY-SA 2.0"
+  },
+  {
+    "place": "safranbolu",
+    "file": "safranbolu-1.jpg",
+    "bytes": 189752,
+    "alt": "UNESCO 山城",
+    "credit": "İmmortalance · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Safranbolu_-_Unesco_World_Heritage.jpg",
+    "commons_file": "Safranbolu_-_Unesco_World_Heritage.jpg",
+    "artist": "İmmortalance",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "place": "safranbolu",
+    "file": "safranbolu-2.jpg",
+    "bytes": 188974,
+    "alt": "木屋街道",
+    "credit": "Dosseman · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Safranbolu_walk_about_town_8279.jpg",
+    "commons_file": "Safranbolu walk about town 8279.jpg",
+    "artist": "Dosseman",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "place": "sille",
+    "file": "sille-1.jpg",
+    "bytes": 190041,
+    "alt": "石造小村",
+    "credit": "Wiki leylek · CC BY 4.0 · https://commons.wikimedia.org/wiki/File:Sille_Village,_Konya.jpg",
+    "commons_file": "Sille_Village,_Konya.jpg",
+    "artist": "Wiki leylek",
+    "license": "CC BY 4.0"
   },
   {
     "place": "spice",
     "file": "spice-1.jpg",
-    "alt": "Spice Bazaar",
-    "credit": "Wikimedia Commons · CC BY-SA",
-    "bytes": 197076
+    "bytes": 197076,
+    "alt": "香料市集",
+    "credit": "Miomir Magdevski · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Spices_on_Spice_Bazaar_in_Istanbul_02.jpg",
+    "commons_file": "Spices_on_Spice_Bazaar_in_Istanbul_02.jpg",
+    "artist": "Miomir Magdevski",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "place": "sultanhani",
+    "file": "sultanhani-1.jpg",
+    "bytes": 197051,
+    "alt": "商隊驛站",
+    "credit": "zolakoma · CC BY 2.0 · https://commons.wikimedia.org/wiki/File:Sultanhani_Caravanserai_Aksaray.jpg",
+    "commons_file": "Sultanhani_Caravanserai_Aksaray.jpg",
+    "artist": "zolakoma",
+    "license": "CC BY 2.0"
+  },
+  {
+    "place": "tuz",
+    "file": "tuz-1.jpg",
+    "bytes": 70121,
+    "alt": "鹽湖地景",
+    "credit": "Wokege · CC0 · https://commons.wikimedia.org/wiki/File:Tuz_G%C3%B6l%C3%BC_2.jpg",
+    "commons_file": "Tuz_Gölü_2.jpg",
+    "artist": "Wokege",
+    "license": "CC0"
+  },
+  {
+    "place": "tuz",
+    "file": "tuz-2.jpg",
+    "bytes": 172482,
+    "alt": "鹽湖地景",
+    "credit": "Lethiciasouza · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Salt_lake,_Tuz_golu.jpg",
+    "commons_file": "Salt_lake,_Tuz_golu.jpg",
+    "artist": "Lethiciasouza",
+    "license": "CC BY-SA 4.0"
+  },
+  {
+    "place": "ulu",
+    "file": "ulu-1.jpg",
+    "bytes": 104485,
+    "alt": "烏盧清真寺",
+    "credit": "Hcanardic · CC BY-SA 4.0 · https://commons.wikimedia.org/wiki/File:Bursa_Ulu_Cami.jpg",
+    "commons_file": "Bursa_Ulu_Cami.jpg",
+    "artist": "Hcanardic",
+    "license": "CC BY-SA 4.0"
   }
 ]

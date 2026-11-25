@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>土耳其 2026.12｜豪哥旅遊手冊</title>
+<link rel="stylesheet" href="../css/photomosaic.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
 :root{--bg:#f7f5f0;--card:#fff;--ink:#191919;--muted:#6b6b6b;--line:#e7e2d8;--red:#9f2d20;--green:#315c43;--blue:#1f4f7a;--amber:#8a6320;--accent:#233f36}
@@ -71,23 +72,6 @@ body.has-trip-day-nav{padding-bottom:72px}
 .themebox p{margin:0;padding:0 0 8px;font-size:.86rem;line-height:1.62;color:#555}
 .learnrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .learnrow a{display:inline-block;padding:9px 11px;background:#f4f8fa;border:1px solid #d9e6ee;border-radius:10px;text-decoration:none;color:#1e4a63;font-weight:700;font-size:.82rem}
-.photomosaic{width:100%;aspect-ratio:4/3;max-height:min(62vw,360px);border-radius:14px;overflow:hidden;background:#e9e6df;display:grid;gap:3px;margin-top:10px}
-.photomosaic img{width:100%;height:100%;object-fit:cover;display:block}
-.photomosaic .pm-cell{margin:0;overflow:hidden}
-.photocap{font-size:.72rem;color:#888;line-height:1.45;margin:6px 2px 0}
-.pm--1{grid-template:1fr/1fr}
-.pm--2{grid-template:1fr/1fr 1fr}
-.pm--3{grid-template:1fr 1fr/1fr 1.15fr}
-.pm--3 .pm-cell-1{grid-row:1;grid-column:1}
-.pm--3 .pm-cell-2{grid-row:2;grid-column:1}
-.pm--3 .pm-cell-3{grid-row:1/span 2;grid-column:2}
-.pm--4a{grid-template:1fr 1fr 1fr/1.25fr 1fr}
-.pm--4a .pm-cell-1{grid-row:1/span 3;grid-column:1}
-.pm--4a .pm-cell-2{grid-row:1;grid-column:2}
-.pm--4a .pm-cell-3{grid-row:2;grid-column:2}
-.pm--4a .pm-cell-4{grid-row:3;grid-column:2}
-.pm--4b{grid-template:1fr 1fr/1fr 1fr}
-.pm--4c{grid-template:1fr 1fr/1fr 1fr}
 .sightguide{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)}
 </style>
 </head>
@@ -140,8 +124,8 @@ body.has-trip-day-nav{padding-bottom:72px}
 <section class="panel" id="practical" hidden>
   <h2 class="sectiontitle">時差・天氣・穿衣</h2>
   <div class="card">
-    <p>時差：土耳其比台灣<strong>慢 5 小時</strong>。伊斯坦堡參考約 <strong>7–12°C</strong>。請備<strong>外套、雨傘、球鞋</strong>與個人藥品。</p>
-    <p class="meta"><span class="pending">待確認：</span>出發前 3–5 天各地實際預報。</p>
+    <p>時差：土耳其比台灣<strong>慢 5 小時</strong>。12 月中旬多年平均（Open-Meteo Historical API，<strong>2019-01-01～2025-12-31</strong> 逐日資料，取<strong>12/12–12/20</strong>各年平均日最低／日最高，時區 Europe/Istanbul）：伊斯坦堡（41.01°N,28.98°E）約 <strong>6.3–12.1°C</strong>；戈雷梅／卡帕（38.64°N,34.83°E）約 <strong>-0.6–8.7°C</strong>（極端低溫曾至約 <strong>-6°C</strong>）；孔亞（37.87°N,32.49°E）約 <strong>0.9–9.4°C</strong>；棉堡（37.91°N,29.12°E）約 <strong>5.8–14.1°C</strong>；庫薩達西（37.86°N,27.26°E）約 <strong>9.7–16.0°C</strong>。卡帕請備<strong>洋蔥式穿法、圍巾／毛帽</strong>；石灰岩步道需防滑鞋。</p>
+    <p class="meta">氣候參考：<a href="https://open-meteo.com/en/docs/historical-weather-api" target="_blank" rel="noopener">Open-Meteo Historical API</a>（archive-api.open-meteo.com）。<span class="pending">出發前 3–5 天仍以實際預報為準。</span></p>
   </div>
   <h2 class="sectiontitle">行李精簡</h2>
   <div class="card">
@@ -240,6 +224,7 @@ body.has-trip-day-nav{padding-bottom:72px}
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="../js/trip-day-nav.js"></script>
+<script src="../js/trip-hero-status.js"></script>
 <script src="../js/sight-guide-ui.js"></script>
 <script src="places-data.js"></script>
 <script src="sight-guides.js"></script>
@@ -598,6 +583,18 @@ renderDays();renderSights();
       paintTodayMarks();
     }
   });
+  if(window.TripHeroStatus){
+    TripHeroStatus.apply({
+      timezone:"Asia/Taipei",
+      start:"2026-12-12",
+      end:"2026-12-21",
+      range:"2026/12/12–12/21",
+      during:"進行中",
+      before:"跟團・行前",
+      after:"已完成",
+      suffix:"公開不含私人聯絡"
+    });
+  }
 })();
 </script>
 </body>

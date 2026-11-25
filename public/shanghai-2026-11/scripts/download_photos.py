@@ -15,11 +15,11 @@ ROOT.mkdir(parents=True, exist_ok=True)
 ITEMS = [
     ("nanhu", "nanhu-1.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/32/South_Lake_%28Jiaxing%29.jpg/1280px-South_Lake_%28Jiaxing%29.jpg", "嘉興南湖", "CC BY-SA"),
     ("nanhu", "nanhu-2.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/11/20240120_Wanghu_Pavilion_in_South_Lake%2C_Jiaxing.jpg/1280px-20240120_Wanghu_Pavilion_in_South_Lake%2C_Jiaxing.jpg", "煙雨樓一帶", "CC BY-SA"),
-    ("jingshan", "jingshan-1.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0c/Main_gate_of_Jingshan_Temple_1.jpg/1280px-Main_gate_of_Jingshan_Temple_1.jpg", "徑山寺山門", "CC BY-SA"),
+    ("jingshan", "jingshan-1.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0c/Main_gate_of_Jingshan_Temple_1.jpg/1280px-Main_gate_of_Jingshan_Temple_1.jpg", "徑山寺山門", "CatOnMars · CC BY-SA 3.0"),
     ("qingshan", "qingshan-1.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/16/Qingshanhu_Guojia_Senlin_Gongyuan.jpg/1280px-Qingshanhu_Guojia_Senlin_Gongyuan.jpg", "青山湖森林", "CC BY-SA"),
     ("keyan", "keyan-1.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0e/Towpath_in_Keyan_Scenic_Area%2C_Shaoxing.jpg/1280px-Towpath_in_Keyan_Scenic_Area%2C_Shaoxing.jpg", "柯岩步道", "CC BY-SA"),
     ("keyan", "keyan-2.jpg", "https://upload.wikimedia.org/wikipedia/commons/0/0e/%E6%9F%AF%E5%B2%A9%E5%A4%A7%E4%BD%9B_-_panoramio.jpg", "柯岩大佛", "CC BY-SA"),
-    ("lanting", "lanting-1.jpg", "https://upload.wikimedia.org/wikipedia/commons/a/ad/Zhuxi_Lanting.JPG", "蘭亭曲水", "CC BY-SA"),
+    ("lanting", "lanting-1.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8c/Lanting%2C_2021-04-17_01.jpg/1280px-Lanting%2C_2021-04-17_01.jpg", "蘭亭園景", "CC BY 3.0 · Gisling"),
     ("shenyuan", "shenyuan-1.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/Shen_Garden_in_Shaoxing_2012-07.JPG/1280px-Shen_Garden_in_Shaoxing_2012-07.JPG", "沈園", "CC BY-SA"),
     ("yanguan", "yanguan-1.jpg", "https://upload.wikimedia.org/wikipedia/commons/f/f6/Yanguan_Town_Haining_2016.jpg", "鹽官古城", "CC BY-SA"),
     ("yanguan", "yanguan-2.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c4/Tidal_Bore_Qiantang_River.png/1280px-Tidal_Bore_Qiantang_River.png", "錢塘涌潮示意", "CC BY-SA"),
@@ -28,7 +28,7 @@ ITEMS = [
     ("nanxun", "nanxun-3.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b7/Nanxun_-_Ancient_water_town_-_0333.jpg/1280px-Nanxun_-_Ancient_water_town_-_0333.jpg", "廊橋石橋", "CC BY-SA"),
     ("gongqing", "gongqing-1.jpg", "https://upload.wikimedia.org/wikipedia/commons/8/87/%E5%85%B1%E9%9D%92%E6%A3%AE%E6%9E%97%E5%85%AC%E5%9B%AD%EF%BC%8CGongqing_Forest_Park_-_panoramio.jpg", "共青森林公園", "CC BY-SA"),
     ("dishui", "dishui-1.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/201812_Dishui_Lake_from_35L_Final_Approach_Kopie.jpg/1280px-201812_Dishui_Lake_from_35L_Final_Approach_Kopie.jpg", "滴水湖空拍", "CC BY-SA"),
-    ("duoyun", "duoyun-1.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/78/Dishui_Lake_Station.jpg/1280px-Dishui_Lake_Station.jpg", "臨港湖區", "CC BY-SA"),
+    ("nanhui", "nanhui-1.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6d/Donghai_Bridge.jpg/1280px-Donghai_Bridge.jpg", "東海大橋遠景", "Natuur12 · Public domain"),
 ]
 
 

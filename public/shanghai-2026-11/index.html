@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>上海江南 2026.11｜豪哥旅遊手冊</title>
+<link rel="stylesheet" href="../css/photomosaic.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
 :root{--bg:#f7f5f0;--card:#fff;--ink:#191919;--muted:#6b6b6b;--line:#e7e2d8;--red:#9f2d20;--green:#315c43;--blue:#1f4f7a;--amber:#8a6320;--accent:#233f36}
@@ -83,23 +84,6 @@ body.has-trip-day-nav{padding-bottom:72px}
 .themebox p{margin:0;padding:0 0 8px;font-size:.86rem;line-height:1.62;color:#555}
 .learnrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .learnrow a{display:inline-block;padding:9px 11px;background:#f4f8fa;border:1px solid #d9e6ee;border-radius:10px;text-decoration:none;color:#1e4a63;font-weight:700;font-size:.82rem}
-.photomosaic{width:100%;aspect-ratio:4/3;max-height:min(62vw,360px);border-radius:14px;overflow:hidden;background:#e9e6df;display:grid;gap:3px;margin-top:10px}
-.photomosaic img{width:100%;height:100%;object-fit:cover;display:block}
-.photomosaic .pm-cell{margin:0;overflow:hidden}
-.photocap{font-size:.72rem;color:#888;line-height:1.45;margin:6px 2px 0}
-.pm--1{grid-template:1fr/1fr}
-.pm--2{grid-template:1fr/1fr 1fr}
-.pm--3{grid-template:1fr 1fr/1fr 1.15fr}
-.pm--3 .pm-cell-1{grid-row:1;grid-column:1}
-.pm--3 .pm-cell-2{grid-row:2;grid-column:1}
-.pm--3 .pm-cell-3{grid-row:1/span 2;grid-column:2}
-.pm--4a{grid-template:1fr 1fr 1fr/1.25fr 1fr}
-.pm--4a .pm-cell-1{grid-row:1/span 3;grid-column:1}
-.pm--4a .pm-cell-2{grid-row:1;grid-column:2}
-.pm--4a .pm-cell-3{grid-row:2;grid-column:2}
-.pm--4a .pm-cell-4{grid-row:3;grid-column:2}
-.pm--4b{grid-template:1fr 1fr/1fr 1fr}
-.pm--4c{grid-template:1fr 1fr/1fr 1fr}
 .sightguide{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)}
 </style>
 </head>
@@ -124,6 +108,7 @@ body.has-trip-day-nav{padding-bottom:72px}
   <button type="button" data-tab="sights">景點速覽</button>
   <button type="button" data-tab="practical">實用資訊</button>
   <button type="button" data-tab="info">航班・住宿</button>
+  <button type="button" data-tab="extras">自費選項</button>
   <button type="button" data-tab="ideas">旅行想法</button>
   <button type="button" data-tab="history">歷史記錄</button>
 </nav>
@@ -153,8 +138,8 @@ body.has-trip-day-nav{padding-bottom:72px}
 <section class="panel" id="practical" hidden>
   <h2 class="sectiontitle">天氣與穿衣</h2>
   <div class="card">
-    <p>brief 約略：上海 <strong>7–13°C</strong>、杭州 <strong>4–13°C</strong>、紹興 <strong>5–15°C</strong>（整趟約 <strong>4–15°C</strong>）。無時差。請備<strong>外套、球鞋、雨傘</strong>與個人藥品。</p>
-    <p class="meta"><span class="pending">待確認：</span>出發前 3–5 天實際預報。</p>
+    <p>11 月下旬多年平均（Open-Meteo 2019–2025，11/23–11/29）：上海約 <strong>8–16°C</strong>、杭州約 <strong>7–16°C</strong>、紹興約 <strong>8–16°C</strong>（整趟約 <strong>7–16°C</strong>）。無時差。請備<strong>外套、球鞋、雨傘</strong>與個人藥品。</p>
+    <p class="meta">氣候參考：<a href="https://open-meteo.com/en/docs/historical-weather-api" target="_blank" rel="noopener">Open-Meteo Historical API</a>（彙整 ARCHIVE 日最高／最低）。<span class="pending">出發前 3–5 天仍以實際預報為準。</span></p>
   </div>
   <h2 class="sectiontitle">行李精簡</h2>
   <div class="card">
@@ -223,6 +208,25 @@ body.has-trip-day-nav{padding-bottom:72px}
   </div>
 </section>
 
+<section class="panel" id="extras" hidden>
+  <h2 class="sectiontitle">自費與可選加價（依正式行程）</h2>
+  <div class="notice">以下非團費必含；不需要可拒。價錢以出發前 brief／現場公告為準。</div>
+  <div class="card">
+    <h3>D6 宮宴・漢服／妝髮加價</h3>
+    <p class="why">午餐宮宴（RMB 398）含在團餐內；可選加價：漢服 <strong>+RMB 100／人</strong>、髮飾化妝 <strong>+RMB 100／人</strong>。想拍再加，不必視為必買。</p>
+    <div class="tags"><span class="tag warn">可選加價</span><span class="tag opt">現場決定</span></div>
+  </div>
+  <div class="card">
+    <h3>D7 比斯特購物村</h3>
+    <p class="why">奧特萊斯型休息站；奢侈品 outlet 心態，先列清單再買。團安排停留，<strong>不需要可不買</strong>、不拆隊。</p>
+    <div class="tags"><span class="tag opt">可跳過購物</span></div>
+  </div>
+  <div class="card">
+    <h3>車上特產與購物站</h3>
+    <p class="why">跟團旅途可能安排土產介紹或購物停；可用口令婉拒：「我在車上／門口等，不進店。」特產自由選購，不需要可不買。</p>
+  </div>
+</section>
+
 <section class="panel" id="ideas" hidden>
   <h2 class="sectiontitle">隨時記錄旅行想法</h2>
   <div class="card">
@@ -276,6 +280,7 @@ body.has-trip-day-nav{padding-bottom:72px}
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="../js/trip-day-nav.js"></script>
+<script src="../js/trip-hero-status.js"></script>
 <script src="../js/sight-guide-ui.js"></script>
 <script src="./notes-config.js"></script>
 <script src="places-data.js"></script>
@@ -593,7 +598,7 @@ function showIdeasPanel(){
   if(!nav||!window.TripDayNav)return;
   nav.hidden=false;
   document.body.classList.add("has-trip-day-nav");
-  TripDayNav.init({
+  var navState=TripDayNav.init({
     timezone:"Asia/Taipei",
     days:days,
     travelogueHref:TRAVELOGUE_HREF,
@@ -619,6 +624,18 @@ function showIdeasPanel(){
       paintTodayMarks();
     }
   });
+  if(window.TripHeroStatus){
+    TripHeroStatus.apply({
+      timezone:"Asia/Taipei",
+      start:"2026-11-23",
+      end:"2026-11-29",
+      range:"2026/11/23–11/29",
+      during:"進行中",
+      before:"已確認梯次・行前",
+      after:"已完成",
+      suffix:"公開不含私人聯絡"
+    });
+  }
 })();
 
 const IDEAS_API=(window.ShanghaiNotesConfig&&ShanghaiNotesConfig.endpoint)||"";
